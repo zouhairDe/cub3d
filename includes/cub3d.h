@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/17 00:37:21 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/17 04:56:28 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,11 @@ typedef struct s_game
 	t_map		map;
 	t_map		check_map;
 }				t_game;
+
+int count_char(char *str, char c);
+char *ft_replace(char *str, char c, char *news);
+int dump_spaces(char **line);
+int ft_line_value(char *line, char **value);
+int check_map(t_game *game);
 
 #endif

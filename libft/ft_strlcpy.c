@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 02:15:24 by zouddach          #+#    #+#             */
-/*   Updated: 2023/11/03 20:59:38 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/17 04:33:29 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,3 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	*dest = '\0';
 	return (len);
 }
-
-// int main()
-// {
-// 	char src[] = "Hello World";
-// 	char dest[5];
-// 	printf("%zu\n", strlcpy(dest, src, 0));
-// 	printf("%s\n", dest);
-// 	return (0);
-// }

@@ -6,41 +6,11 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/17 01:42:45 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/17 05:15:24 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
-// #include <cctype>
-#include <stdio.h>
-
-int dump_spaces(char **line) {
-  while (**line == ' ' || **line == '\t')
-    (*line)++;
-  if (**line == '\0')
-    return (1);
-  return (0);
-}
-
-int ft_line_value(char *line, char **value) {
-  char *tmp;
-
-  tmp = *value;
-  if (!*line)
-    return (1);
-  while (*line <= 'Z' && *line >= 'A')
-    line++;
-  if (*line == '\0')
-    return (1);
-  dump_spaces(&line);
-  if (*line == '\0')
-    return (1);
-  *value = ft_strdup(line);
-  if (!*value)
-    return (1);
-  free(tmp);
-  return (0);
-}
 
 int start_map_allocation(t_game *game, char **line) {
   char **tmp;
@@ -52,6 +22,7 @@ int start_map_allocation(t_game *game, char **line) {
       return (1);
     game->map.map[0] = ft_strdup(*line);
     game->map.rows++;
+    game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
     return (0);
   }
   i = 0;
@@ -67,6 +38,7 @@ int start_map_allocation(t_game *game, char **line) {
   game->map.rows++;
   if (game->map.cols < (int)ft_strlen(*line))
     game->map.cols = ft_strlen(*line) - 1;
+  game->map.map[i] = ft_replace(game->map.map[i], '\t', "    ");
   free(tmp);
   return (0);
 }
@@ -171,6 +143,8 @@ int init(char *path, t_game *game) {
     return (1);
   if (ft_parse_map(game))
     return (1);
+  if (check_map(game))
+    return (1);
   return (0);
 }
 
@@ -190,14 +164,14 @@ void free_game(t_game *game) {
 }
 
 int main(int ac, char **av) {
-  atexit(fff);
+  //   atexit(fff);
   t_game game;
 
   if (ac != 2)
     return (printf("Error\nInvalid number of arguments\n"));
   if (init(av[1], &game))
     return (printf("Error\nParsing error\n"));
-  printGame(game);
+//   printGame(game);
   free_game(&game);
   return (0);
 }

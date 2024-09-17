@@ -1,5 +1,5 @@
 CC = cc
-FLAGS = #-g -fsanitize=address#-Wall -Wextra -Werror
+FLAGS = -g -fsanitize=address#-Wall -Wextra -Werror
 # LIBS =  -L ./lib -lmlx -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -13,7 +13,7 @@ HEADER_DIR = includes/
 
 SRC_DIR = mandatory/src/
 OBJ_DIR = mandatory/obj/
-FILES = main.c
+FILES = main.c utils1.c map_check1.c
 
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))
