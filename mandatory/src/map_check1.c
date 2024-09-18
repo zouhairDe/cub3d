@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/17 05:41:11 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 03:02:49 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	copy_map(t_game *game)
 		i++;
 	}
 	game->check_map.rows = game->map.rows;
-	game->check_map.cols = game->map.cols;
+	game->check_map.maxCols = game->map.maxCols;
 	return (0);
 }
 
@@ -56,7 +56,7 @@ int	setPlayer(t_game *game)
 	
 	i = 0;
 	posSet = false;
-	while (game->check_map.map[i])//wtf why is this not working
+	while (i < game->check_map.rows)
 	{
 		if (ft_find(game->check_map.map[i], 'N') != -1 ||
 			ft_find(game->check_map.map[i], 'S') != -1 ||
@@ -86,7 +86,11 @@ int	setPlayer(t_game *game)
 
 void	floodfill(t_map *map, int x, int y)
 {
-	if (x < 0 || y < 0 || x >= map->rows || map->map[x][y] == '1' || map->map[x][y] == ' ')
+	if (x < 0 || y < 0 || x >= map->rows || y >= ft_strlen(map->map[x]))
+		return ;
+	if (map->map[x] == NULL)
+		return ;
+	if (map->map[x][y] == '1' || map->map[x][y] == '*')
 		return ;
 	map->map[x][y] = '*';
 	floodfill(map, x + 1, y);
@@ -119,17 +123,123 @@ int	check_chars(t_map *map)
 	return (0);
 }
 
-int check_map(t_game *game)
+int	ft_ignore_space(char *str)
+{
+	int i;
+	
+	i = 0;
+	while (str[i] == ' ')
+		i++;
+	return (i);
+}
+
+int	notSurrounded(t_map *map)
+{
+	int i;
+	int j;
+	
+	i = 0;
+	if (ft_strchr(map->map[0], '*') || ft_strchr(map->map[map->rows - 1], '*'))
+		return (printf("Error\nMap not surrounded by walls\n"));
+	while (i < map->rows)
+	{
+		if ((map->map[i][ft_strlen(map->map[i]) - 1] == '*') ||
+			(map->map[i][ft_ignore_space(map->map[i])] == '*'))
+			return (printf("Error\nMap not surrounded by walls\n"));
+		i++;
+	}
+	return (0);
+}
+
+int	setTextures(t_game *game)
+{	
+	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.no,
+		&game->walls.no.width, &game->walls.no.height);
+	game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.so,
+		&game->walls.so.width, &game->walls.so.height);
+	game->walls.we.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.we,
+		&game->walls.we.width, &game->walls.we.height);
+	game->walls.ea.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.ea,
+		&game->walls.ea.width, &game->walls.ea.height);
+	if (!game->walls.so.img)
+		return (printf("Error\nCouldn't load SO texture\n"));
+	if (!game->walls.no.img)
+		return (printf("Error\nCouldn't load NO texture\n"));
+	if (!game->walls.we.img)
+		return (printf("Error\nCouldn't load WE texture\n"));
+	if (!game->walls.ea.img)
+		return (printf("Error\nCouldn't load EA texture\n"));
+	game->walls.no.addr = mlx_get_data_addr(game->walls.no.img, &game->walls.no.bits_per_pixel,
+		&game->walls.no.line_length, &game->walls.no.endian);
+	game->walls.so.addr = mlx_get_data_addr(game->walls.so.img, &game->walls.so.bits_per_pixel,
+		&game->walls.so.line_length, &game->walls.so.endian);
+	game->walls.we.addr = mlx_get_data_addr(game->walls.we.img, &game->walls.we.bits_per_pixel,
+		&game->walls.we.line_length, &game->walls.we.endian);
+	game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel,
+		&game->walls.ea.line_length, &game->walls.ea.endian);
+	return (0);
+}
+
+int quite(t_game *game)
+{
+	int i;
+	
+	i = 0;
+	printf("Exiting\n");
+	mlx_destroy_window(game->mlx.mlx, game->mlx.win);
+	while (i < game->check_map.rows)
+	{
+		free(game->check_map.map[i]);
+		i++;
+	}
+	free(game->check_map.map);
+	free(game->map.no);
+	free(game->map.so);
+	free(game->map.we);
+	free(game->map.ea);
+	free(game->mlx.mlx);
+	exit(0);
+	return (0);
+}
+
+int handlePress(int keycode, void *param)
+{
+	printf("Key Pressed: %d\n", keycode);
+	if (keycode == 53)
+		quite(param);
+	return (0);
+}
+
+int setMLX(t_game *game)
+{
+	game->mlx.mlx = mlx_init();
+	if (!game->mlx.mlx)
+		return (printf("Error\nCouldn't initialize mlx\n"));
+	game->mlx.win = mlx_new_window(game->mlx.mlx, game->map.maxCols * 48, game->map.rows * 64, "Cub3D");
+	if (!game->mlx.win)
+		return (printf("Error\nCouldn't create window\n"));
+	mlx_hook(game->mlx.win, 2, 0L, handlePress, game);
+	mlx_hook(game->mlx.win, 17, 0, quite, game);
+	mlx_loop(game->mlx.mlx);
+	return (0);
+}
+
+int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 {
 	if (copy_map(game))
 		return (1);
 	if (check_chars(&game->check_map))
 		return (1);
-	//chhad lmlawi
-	// if (setPlayer(game))
-	// 	return (1);
-	// floodfill(&game->check_map, 5, 13);
-	// for (int i = 0; i < game->check_map.rows; i++)
-	// 	printf("%s\n", game->check_map.map[i]);
+	if (setPlayer(game))
+		return (1);
+	floodfill(&game->check_map, 5, 13);
+	if (notSurrounded(&game->check_map))
+		return (1);
+	if (setMLX(game))
+		return (1);
+	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL || game->map.ea == NULL)
+		return (printf("Error\nMissing texture path\n"));
+	if (setTextures(game))
+		return (1);
 	return (0);
 }

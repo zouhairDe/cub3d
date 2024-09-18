@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 22:47:05 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/15 03:07:03 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 01:03:37 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ char	*ft_gnl_strdup(char *str)
         return (NULL);
     while (*str && *str != '\n')
 		*dest++ = *str++;
-	if (*str == '\n')
-		*dest++ = *str++;
+	// if (*str == '\n')
+	// 	*dest++ = *str++;
 	*dest = '\0';
     return (dest);
 }

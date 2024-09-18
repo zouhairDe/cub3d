@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/17 05:15:24 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 01:45:37 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ int start_map_allocation(t_game *game, char **line) {
     game->map.map[0] = ft_strdup(*line);
     game->map.rows++;
     game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
+	if (!game->map.map[0])
+		return (1);
+	ft_cut_char(game->map.map[0], '\n');
     return (0);
   }
   i = 0;
@@ -36,9 +39,12 @@ int start_map_allocation(t_game *game, char **line) {
   }
   game->map.map[i] = ft_strdup(*line);
   game->map.rows++;
-  if (game->map.cols < (int)ft_strlen(*line))
-    game->map.cols = ft_strlen(*line) - 1;
+  if (game->map.maxCols < (int)ft_strlen(*line))
+    game->map.maxCols = ft_strlen(*line) - 1;
   game->map.map[i] = ft_replace(game->map.map[i], '\t', "    ");
+  if (!game->map.map[i])
+    return (1);
+  ft_cut_char(game->map.map[i], '\n');
   free(tmp);
   return (0);
 }
@@ -99,7 +105,7 @@ void init_game(t_game *game) {
   game->map.F = NULL;
   game->map.map = NULL;
   game->map.rows = 0;
-  game->map.cols = 0;
+  game->map.maxCols = 0;
   game->check_map.fd = 0;
   game->check_map.no = NULL;
   game->check_map.so = NULL;
@@ -109,18 +115,19 @@ void init_game(t_game *game) {
   game->check_map.F = NULL;
   game->check_map.map = NULL;
   game->check_map.rows = 0;
-  game->check_map.cols = 0;
+  game->check_map.maxCols = 0;
   game->player.pos.x = 0;
   game->player.pos.y = 0;
   game->player.dir = 0;
   game->player.fov = 0;
   game->mlx.mlx = NULL;
   game->mlx.win = NULL;
-  game->img.img = NULL;
-  game->img.addr = NULL;
-  game->img.bits_per_pixel = 0;
-  game->img.line_length = 0;
-  game->img.endian = 0;
+  game->setting.width = 0;
+  game->setting.height = 0;
+  game->setting.title = NULL;
+  game->setting.player_speed = 1;
+  game->setting.mlx.mlx = NULL;
+  game->setting.mlx.win = NULL;
 }
 
 void printGame(t_game game) {
@@ -131,7 +138,7 @@ void printGame(t_game game) {
   printf("C: %s\n", game.map.C);
   printf("F: %s\n", game.map.F);
   printf("rows: %d\n", game.map.rows);
-  printf("cols: %d\n", game.map.cols);
+  printf("maxCols: %d\n", game.map.maxCols);
   for (int j = 0; j < game.map.rows; j++)
     printf("%s", game.map.map[j]);
   puts("");
@@ -171,7 +178,7 @@ int main(int ac, char **av) {
     return (printf("Error\nInvalid number of arguments\n"));
   if (init(av[1], &game))
     return (printf("Error\nParsing error\n"));
-//   printGame(game);
+  //   printGame(game);
   free_game(&game);
   return (0);
 }

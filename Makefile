@@ -1,6 +1,6 @@
 CC = cc
 FLAGS = -g -fsanitize=address#-Wall -Wextra -Werror
-# LIBS =  -L ./lib -lmlx -framework OpenGL -framework AppKit
+LIBS =   -lmlx -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
 GNL_DIR = gnl/
@@ -51,10 +51,10 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(FLAGS) $(OBJ) $(LIBFT) $(GNL) -o $(NAME)
+	@$(CC) $(LIBS) $(FLAGS) $(OBJ) $(LIBFT) $(GNL) -o $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(CUB3D_HEADER) $(GNL_HEADER)
-	@$(CC) $(FLAGS) -I $(HEADER_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) -c $< -o $@
+	@$(CC) -Imlx $(FLAGS) -I $(HEADER_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) -c $< -o $@
 	$(update_progress)
 
 clean:
