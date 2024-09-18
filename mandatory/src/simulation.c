@@ -6,13 +6,11 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 07:27:27 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:35:34 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../includes/cub3d.h"
-
-#include "../../includes/cub3d.h"
 
 #define SCALE 20
 #define RAY_STEP 0.1
@@ -61,45 +59,176 @@ void drawRay(t_game *game, t_ray ray)
     }
 }
 
+void collorCeilling(t_game *game)
+{
+	int i;
+	int j;
+	bool	toggle = false;
+	
+	i = 0;
+	while (i < WINDOW_WIDTH)
+	{
+		j = 0;
+		while (j < WINDOW_HEIGHT / 2)
+		{
+			mlx_pixel_put(game->mlx.mlx, game->mlx.win, i, j, game->walls.ceilling);
+			j++;
+		}
+		i++;
+	}
+}
+
+void collorFloor(t_game *game)
+{
+	int i;
+	int j;
+	
+	i = 0;
+	while (i < WINDOW_WIDTH)
+	{
+		j = WINDOW_HEIGHT / 2;
+		while (j < WINDOW_HEIGHT)
+		{
+			mlx_pixel_put(game->mlx.mlx, game->mlx.win, i, j, game->walls.floor);
+			j++;
+		}
+		i++;
+	}
+}
+
+void drawMiniMapBorders(t_game *game)
+{
+	int i;
+	int j;
+	
+	i = 0;
+	while (i < MINIMAP_WIDTH)
+	{
+		j = 0;
+		while (j < MINIMAP_HEIGHT)
+		{
+			if (i == 0 || j == 0 || i == MINIMAP_WIDTH - 1 || j == MINIMAP_HEIGHT - 1)
+			{
+				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i, j, 0X00FFFFFF);
+				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i + 1, j + 1, 0X00FFFFFF);
+				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i + 2, j + 2, 0X00FFFFFF);
+			}
+			else
+				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i, j, 0X00000000);
+			j++;
+		}
+		i++;
+	}
+}
+
+// Setting scale factor
+// Calculate player's position on minimap
+// Draw player as a small square
+// void drawPlayerOnMiniMap(t_game *game)
+// {
+//     int x, y;
+//     int playerSize = 4;
+//     float scale;
+	
+// 	scale = (float)MINIMAP_WIDTH / game->map.maxCols;
+// 	x = game->player.x * scale;
+// 	y = game->player.y * scale;
+// 	for (int dy = 0; dy < playerSize; dy++)
+// 	{
+// 		for (int dx = 0; dx < playerSize; dx++)
+// 		{
+// 			int drawX = x + dx;
+// 			int drawY = y + dy;
+// 			if (drawX >= 0 && drawX < MINIMAP_WIDTH && drawY >= 0 && drawY < MINIMAP_HEIGHT)
+// 			{
+// 				mlx_pixel_put(game->mlx.mlx, game->mlx.win, drawX, drawY, 0X00FF0000);
+// 			}
+// 		}
+// 	}
+// }
+
+// void drawWallsOnMiniMap(t_game *game)
+// {
+//     int i, j;
+//     float scale;
+    
+//     scale = (float)MINIMAP_WIDTH / game->map.maxCols;
+//     for (i = 0; i < game->map.rows; i++)
+//     {
+//         for (j = 0; j < game->map.maxCols; j++)
+//         {
+//             if (j < ft_strlen(game->map.map[i]) && game->map.map[i][j] == '1')
+//             {
+//                 int x = j * scale;
+//                 int y = i * scale;
+//                 for (int dy = 0; dy < scale; dy++)
+//                 {
+//                     for (int dx = 0; dx < scale; dx++)
+//                     {
+//                         int drawX = x + dx;
+//                         int drawY = y + dy;
+//                         if (drawX >= 0 && drawX < MINIMAP_WIDTH && drawY >= 0 && drawY < MINIMAP_HEIGHT)
+//                         {
+//                             mlx_pixel_put(game->mlx.mlx, game->mlx.win, drawX, drawY, 0X00FFFFFF);
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// void drawMiniMap(t_game *game)
+// {
+//     drawMiniMapBorders(game);
+//     drawWallsOnMiniMap(game);
+//     drawPlayerOnMiniMap(game);
+// }
+
+void	CenterPlayerInMiniMap(t_game *game)
+{
+	int x;
+	int y;
+	int playerSize = 4;
+	float scale;
+	
+	scale = (float)MINIMAP_WIDTH / game->map.maxCols;
+	x = game->player.x * scale;
+	y = game->player.y * scale;
+	for (int dy = 0; dy < playerSize; dy++)
+	{
+		for (int dx = 0; dx < playerSize; dx++)
+		{
+			int drawX = x + dx;
+			int drawY = y + dy;
+			if (drawX >= 0 && drawX < MINIMAP_WIDTH && drawY >= 0 && drawY < MINIMAP_HEIGHT)
+			{
+				mlx_pixel_put(game->mlx.mlx, game->mlx.win, drawX, drawY, 0X00FF0000);
+			}
+		}
+	}
+}
+
 int simulate(t_game *game)
 {   
     int i;
     double rayAngle;
     
     mlx_clear_window(game->mlx.mlx, game->mlx.win);
+	
+	collorCeilling(game);
+	collorFloor(game);
+	drawMiniMapBorders(game);
+	// drawMiniMap(game);
+	CenterPlayerInMiniMap(game);
     
-    for (i = 0; i < WINDOW_WIDTH; i++)
-    {
-        rayAngle = game->player.dir - game->player.fov / 2 + (i * game->player.fov / WINDOW_WIDTH);
-        t_ray ray = castRay(game, rayAngle);
-        drawRay(game, ray);
-    }
+    // for (i = 0; i < WINDOW_WIDTH; i++)
+    // {
+    //     rayAngle = game->player.dir - game->player.fov / 2 + (i * game->player.fov / WINDOW_WIDTH);
+    //     t_ray ray = castRay(game, rayAngle);
+    //     drawRay(game, ray);
+    // }
     
     mlx_do_sync(game->mlx.mlx);
-    return 0;
-}
-
-int key_hook(int keycode, t_game *game)
-{
-    double moveSpeed = 0.1;
-    double rotSpeed = 0.1;
-
-    if (keycode == 65361) // Left arrow
-        game->player.dir -= rotSpeed;
-    else if (keycode == 65363) // Right arrow
-        game->player.dir += rotSpeed;
-    else if (keycode == 65362) // Up arrow
-    {
-        game->player.x += cos(game->player.dir) * moveSpeed;
-        game->player.y += sin(game->player.dir) * moveSpeed;
-    }
-    else if (keycode == 65364) // Down arrow
-    {
-        game->player.x -= cos(game->player.dir) * moveSpeed;
-        game->player.y -= sin(game->player.dir) * moveSpeed;
-    }
-    
-    game->player.dir = normalizeAngle(game->player.dir);
-    simulate(game);  // Redraw after movement
     return 0;
 }

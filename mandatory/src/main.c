@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 07:23:17 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:15:06 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ void init_game(t_game *game) {
   game->player.y = 0.0;
   game->player.dir = 0;
   game->player.fov = 0;
+  game->player.moveSpeed = 0.1;
+  game->player.rotSpeed = 0.1;
   game->mlx.mlx = NULL;
   game->mlx.win = NULL;
   game->setting.width = 0;

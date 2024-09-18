@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 07:25:03 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:25:27 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,10 +205,28 @@ int quite(t_game *game)
 
 int handlePress(int keycode, void *param)
 {
+	t_game *game = (t_game *)param;
 	printf("Key Pressed: %d\n", keycode);
 	if (keycode == 53)
 		return (quite(param));
-	return (0);
+    if (keycode == LEFT_BUTTON)
+        game->player.dir -= game->player.rotSpeed;
+    else if (keycode == RIGHT_BUTTON)
+        game->player.dir += game->player.rotSpeed;
+    else if (keycode == UP_BUTTON)
+    {
+        game->player.x += cos(game->player.dir) * game->player.moveSpeed;
+        game->player.y += sin(game->player.dir) * game->player.moveSpeed;
+    }
+    else if (keycode == DOWN_BUTTON)
+    {
+        game->player.x -= cos(game->player.dir) * game->player.moveSpeed;
+        game->player.y -= sin(game->player.dir) * game->player.moveSpeed;
+    }
+    
+    game->player.dir = normalizeAngle(game->player.dir);
+    simulate(game);
+    return 0;
 }
 
 int setMLX(t_game *game)
@@ -219,10 +237,32 @@ int setMLX(t_game *game)
 	game->mlx.win = mlx_new_window(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3D");
 	if (!game->mlx.win)
 		return (printf("Error\nCouldn't create window\n"));
-	mlx_loop_hook(game->mlx.mlx, simulate, game);
 	mlx_hook(game->mlx.win, 2, 0L, handlePress, game);
 	mlx_hook(game->mlx.win, 17, 0, quite, game);
+	mlx_loop_hook(game->mlx.mlx, simulate, game);
 	mlx_loop(game->mlx.mlx);
+	return (0);
+}
+
+int	convertToHex(t_game *game)
+{
+	char	**floor;
+	char	**ceilling;
+
+	floor = ft_split(game->map.F, ',');
+	if (!floor)
+		return (1);
+	ceilling = ft_split(game->map.C, ',');
+	if (!ceilling)
+		return (1);//free floor...
+	if (twoDArrSize(floor) != 3 || twoDArrSize(ceilling) != 3)
+		return (printf("Error\nInvalid color format\n"));
+	game->walls.floor = rgb_to_hex(ft_atoi(floor[0]), ft_atoi(floor[1]), ft_atoi(floor[2]));
+	game->walls.ceilling = rgb_to_hex(ft_atoi(ceilling[0]), ft_atoi(ceilling[1]), ft_atoi(ceilling[2]));
+	for (int i = 0; i < 3; i++)
+		printf("Ceilling collor is %x\n", *ceilling[i]);
+	for (int i = 0; i < 3; i++)
+		printf("Floor collor is %x\n", *floor[i]);
 	return (0);
 }
 
@@ -237,13 +277,15 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 	floodfill(&game->check_map, 5, 13);
 	if (notSurrounded(&game->check_map))
 		return (1);
+	if (convertToHex(game))
+		return (1);
 	if (setMLX(game))
 		return (1);
 	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL || game->map.ea == NULL)
 		return (printf("Error\nMissing texture path\n"));
 	if (setTextures(game))
 		return (1);
-	// if (simulate(game))
-	// 	return (1);
+	if (simulate(game))
+		return (1);
 	return (0);
 }

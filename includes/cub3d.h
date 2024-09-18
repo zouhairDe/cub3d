@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 07:22:31 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:36:09 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 
 # define WINDOW_WIDTH 1280
 # define WINDOW_HEIGHT 1024
+# define MINIMAP_WIDTH 250
+# define MINIMAP_HEIGHT 250
 
 typedef struct s_point {
   int x;
@@ -90,6 +92,8 @@ typedef struct s_player {
   double y;
   double dir;
   double fov;
+  double moveSpeed;
+  double rotSpeed;
 } t_player;
 
 typedef struct s_texture {
@@ -97,6 +101,8 @@ typedef struct s_texture {
   t_data so;
   t_data we;
   t_data ea;
+  unsigned int ceilling;
+  unsigned int floor;
 } t_texture;
 
 typedef struct s_setting {
@@ -124,5 +130,8 @@ int check_map(t_game *game);
 void ft_cut_char(char *str, char c);
 int	simulate(t_game *game);
 void printGame(t_game game);
+unsigned int rgb_to_hex(int r, int g, int b);
+int twoDArrSize(char **arr);
+double normalizeAngle(double angle);
 
 #endif
