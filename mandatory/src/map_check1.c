@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 03:02:49 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 07:25:03 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,20 +65,20 @@ int	setPlayer(t_game *game)
 		{
 			if (posSet == true)
 				return (printf("Error\nMultiple player starting positions\n"));
-			game->player.pos.x = i;
-			game->player.pos.y = ft_find(game->check_map.map[i], 'N');
+			game->player.x = i + 0.5;
 			if (ft_find(game->check_map.map[i], 'S') != -1)
-				game->player.dir = 180;
+				(game->player.dir = 180, game->player.y = ft_find(game->check_map.map[i], 'S') + 0.5);
 			else if (ft_find(game->check_map.map[i], 'E') != -1)
-				game->player.dir = 90;
+				(game->player.dir = 90, game->player.y = ft_find(game->check_map.map[i], 'E') + 0.5);
 			else if (ft_find(game->check_map.map[i], 'W') != -1)
-				game->player.dir = 270;
+				(game->player.dir = 270, game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
 			else
-				game->player.dir = 0;
+				(game->player.dir = 0, game->player.y = ft_find(game->check_map.map[i], 'N') + 0.5);
 			posSet = true;
 		}
 		i++;
 	}
+	printf("Player position: %f, %f\n", game->player.x, game->player.y);
 	if (!posSet)
 		return (printf("Error\nNo player starting position\n"));
 	return (0);
@@ -186,6 +186,7 @@ int quite(t_game *game)
 	
 	i = 0;
 	printf("Exiting\n");
+	// printGame(*game);
 	mlx_destroy_window(game->mlx.mlx, game->mlx.win);
 	while (i < game->check_map.rows)
 	{
@@ -206,7 +207,7 @@ int handlePress(int keycode, void *param)
 {
 	printf("Key Pressed: %d\n", keycode);
 	if (keycode == 53)
-		quite(param);
+		return (quite(param));
 	return (0);
 }
 
@@ -215,9 +216,10 @@ int setMLX(t_game *game)
 	game->mlx.mlx = mlx_init();
 	if (!game->mlx.mlx)
 		return (printf("Error\nCouldn't initialize mlx\n"));
-	game->mlx.win = mlx_new_window(game->mlx.mlx, game->map.maxCols * 48, game->map.rows * 64, "Cub3D");
+	game->mlx.win = mlx_new_window(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3D");
 	if (!game->mlx.win)
 		return (printf("Error\nCouldn't create window\n"));
+	mlx_loop_hook(game->mlx.mlx, simulate, game);
 	mlx_hook(game->mlx.win, 2, 0L, handlePress, game);
 	mlx_hook(game->mlx.win, 17, 0, quite, game);
 	mlx_loop(game->mlx.mlx);
@@ -241,5 +243,7 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 		return (printf("Error\nMissing texture path\n"));
 	if (setTextures(game))
 		return (1);
+	// if (simulate(game))
+	// 	return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 01:45:37 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 07:23:17 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ void init_game(t_game *game) {
   game->check_map.map = NULL;
   game->check_map.rows = 0;
   game->check_map.maxCols = 0;
-  game->player.pos.x = 0;
-  game->player.pos.y = 0;
+  game->player.x = 0.0;
+  game->player.y = 0.0;
   game->player.dir = 0;
   game->player.fov = 0;
   game->mlx.mlx = NULL;
@@ -131,17 +131,17 @@ void init_game(t_game *game) {
 }
 
 void printGame(t_game game) {
-  printf("NO: %s\n", game.map.no);
-  printf("SO: %s\n", game.map.so);
-  printf("WE: %s\n", game.map.we);
-  printf("EA: %s\n", game.map.ea);
-  printf("C: %s\n", game.map.C);
-  printf("F: %s\n", game.map.F);
-  printf("rows: %d\n", game.map.rows);
-  printf("maxCols: %d\n", game.map.maxCols);
-  for (int j = 0; j < game.map.rows; j++)
-    printf("%s", game.map.map[j]);
-  puts("");
+  fprintf(stderr, "NO: %s\n", game.map.no);
+  fprintf(stderr, "SO: %s\n", game.map.so);
+  fprintf(stderr, "WE: %s\n", game.map.we);
+  fprintf(stderr, "EA: %s\n", game.map.ea);
+  fprintf(stderr, "C: %s\n", game.map.C);
+  fprintf(stderr, "F: %s\n", game.map.F);
+  fprintf(stderr, "rows: %d\n", game.map.rows);
+  fprintf(stderr, "maxCols: %d\n", game.map.maxCols);
+  fprintf(stderr, "Player pos: %f %f\n", game.player.x, game.player.y);
+  fprintf(stderr, "Player dir: %f\n", game.player.dir);
+  fprintf(stderr, "Player fov: %f\n", game.player.fov);
 }
 
 int init(char *path, t_game *game) {
@@ -178,7 +178,6 @@ int main(int ac, char **av) {
     return (printf("Error\nInvalid number of arguments\n"));
   if (init(av[1], &game))
     return (printf("Error\nParsing error\n"));
-  //   printGame(game);
   free_game(&game);
   return (0);
 }

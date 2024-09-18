@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 02:36:12 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/18 07:22:31 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,18 @@
 # define RIGHT_BUTTON 124
 # define QUIT_BUTTON 12
 
+# define WINDOW_WIDTH 1280
+# define WINDOW_HEIGHT 1024
+
 typedef struct s_point {
   int x;
   int y;
 } t_point;
 
 typedef struct s_ray {
+  double x;
+  double y;
+  double dir;
   double angle;
   double dist;
   int hit;
@@ -80,7 +86,8 @@ typedef struct s_map {
 } t_map;
 
 typedef struct s_player {
-  t_point pos;
+  double x;
+  double y;
   double dir;
   double fov;
 } t_player;
@@ -115,5 +122,7 @@ int dump_spaces(char **line);
 int ft_line_value(char *line, char **value);
 int check_map(t_game *game);
 void ft_cut_char(char *str, char c);
+int	simulate(t_game *game);
+void printGame(t_game game);
 
 #endif
