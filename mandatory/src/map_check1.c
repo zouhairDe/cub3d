@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 11:25:27 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/19 09:42:14 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,22 +209,22 @@ int handlePress(int keycode, void *param)
 	printf("Key Pressed: %d\n", keycode);
 	if (keycode == 53)
 		return (quite(param));
-    if (keycode == LEFT_BUTTON)
-        game->player.dir -= game->player.rotSpeed;
-    else if (keycode == RIGHT_BUTTON)
-        game->player.dir += game->player.rotSpeed;
-    else if (keycode == UP_BUTTON)
-    {
-        game->player.x += cos(game->player.dir) * game->player.moveSpeed;
-        game->player.y += sin(game->player.dir) * game->player.moveSpeed;
-    }
-    else if (keycode == DOWN_BUTTON)
-    {
-        game->player.x -= cos(game->player.dir) * game->player.moveSpeed;
-        game->player.y -= sin(game->player.dir) * game->player.moveSpeed;
-    }
+    // if (keycode == LEFT_BUTTON)
+    //     game->player.dir -= game->player.rotSpeed;
+    // else if (keycode == RIGHT_BUTTON)
+    //     game->player.dir += game->player.rotSpeed;
+    // else if (keycode == UP_BUTTON)
+    // {
+    //     game->player.x += cos(game->player.dir) * game->player.moveSpeed;
+    //     game->player.y += sin(game->player.dir) * game->player.moveSpeed;
+    // }
+    // else if (keycode == DOWN_BUTTON)
+    // {
+    //     game->player.x -= cos(game->player.dir) * game->player.moveSpeed;
+    //     game->player.y -= sin(game->player.dir) * game->player.moveSpeed;
+    // }
     
-    game->player.dir = normalizeAngle(game->player.dir);
+    // game->player.dir = normalizeAngle(game->player.dir);
     simulate(game);
     return 0;
 }
@@ -284,8 +284,6 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL || game->map.ea == NULL)
 		return (printf("Error\nMissing texture path\n"));
 	if (setTextures(game))
-		return (1);
-	if (simulate(game))
 		return (1);
 	return (0);
 }

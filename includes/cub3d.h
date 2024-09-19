@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 11:36:09 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/19 13:02:02 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@
 # define WINDOW_HEIGHT 1024
 # define MINIMAP_WIDTH 250
 # define MINIMAP_HEIGHT 250
+# define SCALE 10
+# define MINIMAP_SCALE 20
+# define RAY_STEP 0.1
 
 typedef struct s_point {
   int x;
@@ -133,5 +136,5 @@ void printGame(t_game game);
 unsigned int rgb_to_hex(int r, int g, int b);
 int twoDArrSize(char **arr);
 double normalizeAngle(double angle);
-
+void	drawWalls(t_game *game);
 #endif

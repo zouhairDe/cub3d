@@ -6,14 +6,11 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 12:35:34 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/19 13:01:03 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../includes/cub3d.h"
-
-#define SCALE 20
-#define RAY_STEP 0.1
+#include "../../includes/cub3d.h"
 
 double normalizeAngle(double angle)
 {
@@ -23,58 +20,23 @@ double normalizeAngle(double angle)
     return angle;
 }
 
-t_ray castRay(t_game *game, double angle)
-{
-    t_ray ray;
-    
-    ray.dir = normalizeAngle(angle);
-    ray.dist = 0;
-    ray.hit = 0;
-    while (!ray.hit)
-    {
-        ray.dist += RAY_STEP;
-        ray.x = game->player.x + cos(ray.dir) * ray.dist;
-        ray.y = game->player.y + sin(ray.dir) * ray.dist;
-        int mapX = (int)ray.x;
-        int mapY = (int)ray.y;
-        if (mapX < 0 || mapY < 0 || mapX >= game->map.maxCols || mapY >= game->map.rows || game->map.map[mapY][mapX] == '1')
-            ray.hit = 1;
-    }
-    return ray;
-}
-
-void drawRay(t_game *game, t_ray ray)
-{
-    int j;
-    int screenX, screenY;
-    
-    for (j = 0; j < ray.dist * SCALE; j++)
-    {
-        screenX = (int)((game->player.x + cos(ray.dir) * j / SCALE) * SCALE);
-        screenY = (int)((game->player.y + sin(ray.dir) * j / SCALE) * SCALE);
-        if (screenX >= 0 && screenX < WINDOW_WIDTH && screenY >= 0 && screenY < WINDOW_HEIGHT)
-        {
-            mlx_pixel_put(game->mlx.mlx, game->mlx.win, screenX, screenY, 0X00FF0000);
-        }
-    }
-}
-
 void collorCeilling(t_game *game)
 {
 	int i;
 	int j;
 	bool	toggle = false;
-	
+
 	i = 0;
-	while (i < WINDOW_WIDTH)
+	while (i++ < WINDOW_WIDTH)
 	{
 		j = 0;
-		while (j < WINDOW_HEIGHT / 2)
+		while (j++ < WINDOW_HEIGHT / 2)
 		{
-			mlx_pixel_put(game->mlx.mlx, game->mlx.win, i, j, game->walls.ceilling);
-			j++;
+			if (i < MINIMAP_HEIGHT && j < MINIMAP_HEIGHT)
+				continue ;
+			else
+				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i, j, game->walls.ceilling);
 		}
-		i++;
 	}
 }
 
@@ -82,7 +44,7 @@ void collorFloor(t_game *game)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	while (i < WINDOW_WIDTH)
 	{
@@ -100,7 +62,7 @@ void drawMiniMapBorders(t_game *game)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	while (i < MINIMAP_WIDTH)
 	{
@@ -121,114 +83,84 @@ void drawMiniMapBorders(t_game *game)
 	}
 }
 
-// Setting scale factor
-// Calculate player's position on minimap
-// Draw player as a small square
-// void drawPlayerOnMiniMap(t_game *game)
-// {
-//     int x, y;
-//     int playerSize = 4;
-//     float scale;
-	
-// 	scale = (float)MINIMAP_WIDTH / game->map.maxCols;
-// 	x = game->player.x * scale;
-// 	y = game->player.y * scale;
-// 	for (int dy = 0; dy < playerSize; dy++)
-// 	{
-// 		for (int dx = 0; dx < playerSize; dx++)
-// 		{
-// 			int drawX = x + dx;
-// 			int drawY = y + dy;
-// 			if (drawX >= 0 && drawX < MINIMAP_WIDTH && drawY >= 0 && drawY < MINIMAP_HEIGHT)
-// 			{
-// 				mlx_pixel_put(game->mlx.mlx, game->mlx.win, drawX, drawY, 0X00FF0000);
-// 			}
-// 		}
-// 	}
-// }
-
-// void drawWallsOnMiniMap(t_game *game)
-// {
-//     int i, j;
-//     float scale;
-    
-//     scale = (float)MINIMAP_WIDTH / game->map.maxCols;
-//     for (i = 0; i < game->map.rows; i++)
-//     {
-//         for (j = 0; j < game->map.maxCols; j++)
-//         {
-//             if (j < ft_strlen(game->map.map[i]) && game->map.map[i][j] == '1')
-//             {
-//                 int x = j * scale;
-//                 int y = i * scale;
-//                 for (int dy = 0; dy < scale; dy++)
-//                 {
-//                     for (int dx = 0; dx < scale; dx++)
-//                     {
-//                         int drawX = x + dx;
-//                         int drawY = y + dy;
-//                         if (drawX >= 0 && drawX < MINIMAP_WIDTH && drawY >= 0 && drawY < MINIMAP_HEIGHT)
-//                         {
-//                             mlx_pixel_put(game->mlx.mlx, game->mlx.win, drawX, drawY, 0X00FFFFFF);
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// void drawMiniMap(t_game *game)
-// {
-//     drawMiniMapBorders(game);
-//     drawWallsOnMiniMap(game);
-//     drawPlayerOnMiniMap(game);
-// }
-
-void	CenterPlayerInMiniMap(t_game *game)
+void drawRotatedMap(t_game *game)
 {
-	int x;
-	int y;
-	int playerSize = 4;
-	float scale;
-	
-	scale = (float)MINIMAP_WIDTH / game->map.maxCols;
-	x = game->player.x * scale;
-	y = game->player.y * scale;
-	for (int dy = 0; dy < playerSize; dy++)
+    t_point P;
+    P = (t_point){game->player.y, game->player.x};
+    
+    int i, j, x, y;
+    int centerX = MINIMAP_WIDTH / 2;
+    int centerY = MINIMAP_HEIGHT / 2;
+
+    for (i = 0; i < game->map.rows; i++)
+    {
+        for (j = 0; j < ft_strlen(game->map.map[i]); j++)
+        {
+            int mapX = centerX + (j - P.x) * MINIMAP_SCALE;
+            int mapY = centerY + (i - P.y) * MINIMAP_SCALE;
+
+            if (mapX < 0 || mapY < 0 || mapX >= MINIMAP_WIDTH || mapY >= MINIMAP_HEIGHT)
+                continue;
+
+            if (game->map.map[i][j] == '1')
+            {
+                for (x = 0; x < MINIMAP_SCALE; x++)
+                {
+                    for (y = 0; y < MINIMAP_SCALE; y++)
+                    {
+                        int pixelX = mapX + x;
+                        int pixelY = mapY + y;
+                        if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
+                        {
+                            mlx_pixel_put(game->mlx.mlx, game->mlx.win, pixelX, pixelY, 0X00FFFFFF);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+void centerPlayerInMap(t_game *game)
+{
+	int i;
+	int j;
+	int centerX = MINIMAP_WIDTH / 2;
+	int centerY = MINIMAP_HEIGHT / 2;
+
+	int height = 2 * 4;
+	int halfBase = 3;
+
+	for (i = 0; i < height; i++)
 	{
-		for (int dx = 0; dx < playerSize; dx++)
+		for (j = -i; j <= i; j++)
 		{
-			int drawX = x + dx;
-			int drawY = y + dy;
-			if (drawX >= 0 && drawX < MINIMAP_WIDTH && drawY >= 0 && drawY < MINIMAP_HEIGHT)
-			{
-				mlx_pixel_put(game->mlx.mlx, game->mlx.win, drawX, drawY, 0X00FF0000);
-			}
+			mlx_pixel_put(game->mlx.mlx, game->mlx.win, centerX + j, centerY + i, 0xFF0000);
 		}
 	}
 }
 
+void drawMap(t_game *game)
+{
+	drawMiniMapBorders(game);
+	drawRotatedMap(game);
+	centerPlayerInMap(game);
+}
+
 int simulate(t_game *game)
-{   
-    int i;
-    double rayAngle;
-    
-    mlx_clear_window(game->mlx.mlx, game->mlx.win);
-	
+{
+	int i;
+	double rayAngle;
+
+	mlx_clear_window(game->mlx.mlx, game->mlx.win);
+
 	collorCeilling(game);
 	collorFloor(game);
-	drawMiniMapBorders(game);
-	// drawMiniMap(game);
-	CenterPlayerInMiniMap(game);
-    
-    // for (i = 0; i < WINDOW_WIDTH; i++)
-    // {
-    //     rayAngle = game->player.dir - game->player.fov / 2 + (i * game->player.fov / WINDOW_WIDTH);
-    //     t_ray ray = castRay(game, rayAngle);
-    //     drawRay(game, ray);
-    // }
-    
-    mlx_do_sync(game->mlx.mlx);
-    return 0;
+	drawMap(game);
+	drawWalls(game);
+
+	mlx_do_sync(game->mlx.mlx);
+	return 0;
 }
