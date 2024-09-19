@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/19 09:42:14 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/19 14:23:14 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,10 +223,26 @@ int handlePress(int keycode, void *param)
     //     game->player.x -= cos(game->player.dir) * game->player.moveSpeed;
     //     game->player.y -= sin(game->player.dir) * game->player.moveSpeed;
     // }
+	else if (keycode == W_BUTTON)
+	{
+		game->player.x -= 1 /** game->player.moveSpeed*/;
+	}
+	else if (keycode == S_BUTTON)
+	{
+		game->player.x += 1 /** game->player.moveSpeed*/;
+	}
+		
     
     // game->player.dir = normalizeAngle(game->player.dir);
     simulate(game);
     return 0;
+}
+
+int handleRelease(int keycode, void *param)
+{
+	t_game *game = (t_game *)param;
+	printf("Key Released: %d\n", keycode);
+	return 0;
 }
 
 int setMLX(t_game *game)
@@ -237,7 +253,11 @@ int setMLX(t_game *game)
 	game->mlx.win = mlx_new_window(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3D");
 	if (!game->mlx.win)
 		return (printf("Error\nCouldn't create window\n"));
+	// game->mlx.data.img = mlx_new_image(game->mlx.mlx, MINIMAP_WIDTH, MINIMAP_HEIGHT);
+	// if (!game->mlx.data.img)//shit is so fkng t9il
+	// 	return (printf("Error\nCouldn't create image\n"));
 	mlx_hook(game->mlx.win, 2, 0L, handlePress, game);
+	mlx_hook(game->mlx.win, 3, 0L, handleRelease, game);
 	mlx_hook(game->mlx.win, 17, 0, quite, game);
 	mlx_loop_hook(game->mlx.mlx, simulate, game);
 	mlx_loop(game->mlx.mlx);

@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/19 13:02:02 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/19 14:11:06 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 #define CUB3D_H
 
 #include "../gnl/get_next_line_bonus.h"
-# include "/usr/local/include/mlx.h"
-#include "../libft/libft.h"
-#include <errno.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <math.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+# include "mlx.h"
+# include "../libft/libft.h"
+# include <errno.h>
+# include <fcntl.h>
+# include <limits.h>
+# include <math.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
 # define ESCAPE_BUTTON 53
 # define W_BUTTON 13
@@ -75,6 +75,7 @@ typedef struct s_data {
 typedef struct s_mlx {
   void *mlx;
   void *win;
+  t_data data;
 } t_mlx;
 
 typedef struct s_map {
@@ -137,4 +138,6 @@ unsigned int rgb_to_hex(int r, int g, int b);
 int twoDArrSize(char **arr);
 double normalizeAngle(double angle);
 void	drawWalls(t_game *game);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+
 #endif

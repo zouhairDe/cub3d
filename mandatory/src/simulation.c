@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/19 13:01:03 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/19 14:23:00 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ void drawMiniMapBorders(t_game *game)
 				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i + 1, j + 1, 0X00FFFFFF);
 				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i + 2, j + 2, 0X00FFFFFF);
 			}
-			else
-				mlx_pixel_put(game->mlx.mlx, game->mlx.win, i, j, 0X00000000);
 			j++;
 		}
 		i++;
@@ -159,8 +157,6 @@ int simulate(t_game *game)
 	collorCeilling(game);
 	collorFloor(game);
 	drawMap(game);
-	drawWalls(game);
-
-	mlx_do_sync(game->mlx.mlx);
+	// drawWalls(game);
 	return 0;
 }
