@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/19 14:11:06 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:32:13 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_ray {
   int wallHitX;
   int wallHitY;
   int wallContent;
+  double wallStripHeight;
 } t_ray;
 
 typedef struct s_data {
@@ -137,7 +138,8 @@ void printGame(t_game game);
 unsigned int rgb_to_hex(int r, int g, int b);
 int twoDArrSize(char **arr);
 double normalizeAngle(double angle);
-void	drawWalls(t_game *game);
+void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	cast_ray(t_game *game, t_ray *ray);
 
 #endif

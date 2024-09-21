@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/21 09:15:07 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:34:30 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,17 +153,37 @@ void drawMap(t_game *game)
 	centerPlayerInMap(game);
 }
 
+void clean_window(t_data *data)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < WINDOW_WIDTH)
+	{
+		j = 0;
+		while (j < WINDOW_HEIGHT)
+		{
+			my_mlx_pixel_put(data, i, j, 0);
+			j++;
+		}
+		i++;
+	}
+}
+
 int simulate(t_game *game)
 {
 	int i;
 	double rayAngle;
+	t_ray ray;
 
 	mlx_clear_window(game->mlx.mlx, game->mlx.win);
+	clean_window(&game->mlx.data);
 
 	collorCeilling(game);
 	collorFloor(game);
 	drawMap(game);
 	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0);
-	// drawWalls(game);
+	// cast_ray(game, &ray);
 	return 0;
 }

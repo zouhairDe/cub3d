@@ -1,0 +1,8 @@
+Player position: 5.500000, 13.500000
+Floor: ff00
+Ceilling: a00fa
+Ray: x=5.600000, y=13.600000, dir=270.000000, dist=0.100000, wallStripHeight=40.000000
+Ray: x=5.700000, y=13.700000, dir=270.000000, dist=0.100000, wallStripHeight=40.000000
+Ray: x=5.800000, y=13.800000, dir=270.000000, dist=0.100000, wallStripHeight=40.000000
+Ray: x=5.900000, y=13.900000, dir=270.000000, dist=0.100000, wallStripHeight=40.000000
+Ray: x=6.000000, y=14.000000, dir=270.000000, dist=0.100000, wallStripHeight=40.000000
