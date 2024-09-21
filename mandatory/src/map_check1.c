@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/19 14:23:14 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/09/21 09:20:49 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,9 +253,12 @@ int setMLX(t_game *game)
 	game->mlx.win = mlx_new_window(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3D");
 	if (!game->mlx.win)
 		return (printf("Error\nCouldn't create window\n"));
-	// game->mlx.data.img = mlx_new_image(game->mlx.mlx, MINIMAP_WIDTH, MINIMAP_HEIGHT);
-	// if (!game->mlx.data.img)//shit is so fkng t9il
-	// 	return (printf("Error\nCouldn't create image\n"));
+	game->mlx.data.img = mlx_new_image(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!game->mlx.data.img)//shit is so fkng t9il
+		return (printf("Error\nCouldn't create image\n"));
+	game->mlx.data.addr = mlx_get_data_addr(game->mlx.data.img, &game->mlx.data.bits_per_pixel, &game->mlx.data.line_length, &game->mlx.data.endian);
+	if (!game->mlx.data.addr)
+		return (printf("Error\nCouldn't create image\n"));
 	mlx_hook(game->mlx.win, 2, 0L, handlePress, game);
 	mlx_hook(game->mlx.win, 3, 0L, handleRelease, game);
 	mlx_hook(game->mlx.win, 17, 0, quite, game);

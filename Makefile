@@ -7,7 +7,7 @@ GNL_DIR = gnl/
 GNL = $(GNL_DIR)get_next_line_bonus.c $(GNL_DIR)get_next_line_utils_bonus.c
 GNL_HEADER = $(GNL_DIR)get_next_line_bonus.h
 
-NAME = cub3d
+NAME = cub3D
 CUB3D_HEADER = $(HEADER_DIR)cub3d.h
 HEADER_DIR = includes/
 
