@@ -209,10 +209,10 @@ int handlePress(int keycode, void *param)
 	printf("Key Pressed: %d\n", keycode);
 	if (keycode == 53)
 		return (quite(param));
-    // if (keycode == LEFT_BUTTON)
-    //     game->player.dir -= game->player.rotSpeed;
-    // else if (keycode == RIGHT_BUTTON)
-    //     game->player.dir += game->player.rotSpeed;
+    if (keycode == LEFT_BUTTON)
+        game->player.dir -= game->player.rotSpeed;
+    else if (keycode == RIGHT_BUTTON)
+        game->player.dir += game->player.rotSpeed;
     // else if (keycode == UP_BUTTON)
     // {
     //     game->player.x += cos(game->player.dir) * game->player.moveSpeed;
@@ -224,16 +224,16 @@ int handlePress(int keycode, void *param)
     //     game->player.y -= sin(game->player.dir) * game->player.moveSpeed;
     // }
 	else if (keycode == W_BUTTON)
-	{
-		game->player.x -= 1 /** game->player.moveSpeed*/;
-	}
+		game->player.x -= 1 * game->player.moveSpeed;
 	else if (keycode == S_BUTTON)
-	{
-		game->player.x += 1 /** game->player.moveSpeed*/;
-	}
+		game->player.x += 1 * game->player.moveSpeed;
+	else if (keycode == A_BUTTON)
+		game->player.y -= 1 * game->player.moveSpeed;
+	else if (keycode == D_BUTTON)
+		game->player.y += 1 * game->player.moveSpeed;
 		
     
-    // game->player.dir = normalizeAngle(game->player.dir);
+    game->player.dir = normalizeAngle(game->player.dir);
     simulate(game);
     return 0;
 }

@@ -44,6 +44,7 @@
 # define SCALE 10
 # define MINIMAP_SCALE 20
 # define RAY_STEP 0.1
+# define NUM_RAYS WINDOW_WIDTH
 
 typedef struct s_point {
   int x;
@@ -140,6 +141,6 @@ int twoDArrSize(char **arr);
 double normalizeAngle(double angle);
 void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	cast_ray(t_game *game, t_ray *ray);
+void	cast_ray(t_game *game);
 
 #endif
