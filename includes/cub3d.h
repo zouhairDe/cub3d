@@ -47,19 +47,17 @@
 # define NUM_RAYS WINDOW_WIDTH
 
 typedef struct s_point {
-  int x;
-  int y;
+  double x;
+  double y;
 } t_point;
 
 typedef struct s_ray {
-  double x;
-  double y;
-  double dir;
+  t_point origin;
+  t_point Dir;
   double angle;
   double dist;
   int hit;
-  int wallHitX;
-  int wallHitY;
+  t_point wallHit;
   int wallContent;
   double wallStripHeight;
 } t_ray;
@@ -141,6 +139,6 @@ int twoDArrSize(char **arr);
 double normalizeAngle(double angle);
 void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	cast_ray(t_game *game);
-
+void	cast_minimap_rays(t_game *game);
+void	init_ray(t_ray *ray, t_game *game);
 #endif

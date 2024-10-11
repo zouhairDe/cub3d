@@ -206,23 +206,13 @@ int quite(t_game *game)
 int handlePress(int keycode, void *param)
 {
 	t_game *game = (t_game *)param;
-	printf("Key Pressed: %d\n", keycode);
+
 	if (keycode == 53)
 		return (quite(param));
-    if (keycode == LEFT_BUTTON)
-        game->player.dir -= game->player.rotSpeed;
+    else if (keycode == LEFT_BUTTON)
+		game->player.dir -= game->player.rotSpeed;
     else if (keycode == RIGHT_BUTTON)
-        game->player.dir += game->player.rotSpeed;
-    // else if (keycode == UP_BUTTON)
-    // {
-    //     game->player.x += cos(game->player.dir) * game->player.moveSpeed;
-    //     game->player.y += sin(game->player.dir) * game->player.moveSpeed;
-    // }
-    // else if (keycode == DOWN_BUTTON)
-    // {
-    //     game->player.x -= cos(game->player.dir) * game->player.moveSpeed;
-    //     game->player.y -= sin(game->player.dir) * game->player.moveSpeed;
-    // }
+		game->player.dir += game->player.rotSpeed;
 	else if (keycode == W_BUTTON)
 		game->player.x -= 1 * game->player.moveSpeed;
 	else if (keycode == S_BUTTON)
@@ -231,8 +221,6 @@ int handlePress(int keycode, void *param)
 		game->player.y -= 1 * game->player.moveSpeed;
 	else if (keycode == D_BUTTON)
 		game->player.y += 1 * game->player.moveSpeed;
-		
-    
     game->player.dir = normalizeAngle(game->player.dir);
     simulate(game);
     return 0;
@@ -282,10 +270,6 @@ int	convertToHex(t_game *game)
 		return (printf("Error\nInvalid color format\n"));
 	game->walls.floor = rgb_to_hex(ft_atoi(floor[0]), ft_atoi(floor[1]), ft_atoi(floor[2]));
 	game->walls.ceilling = rgb_to_hex(ft_atoi(ceilling[0]), ft_atoi(ceilling[1]), ft_atoi(ceilling[2]));
-	for (int i = 0; i < 3; i++)
-		printf("Ceilling collor is %x\n", *ceilling[i]);
-	for (int i = 0; i < 3; i++)
-		printf("Floor collor is %x\n", *floor[i]);
 	return (0);
 }
 
