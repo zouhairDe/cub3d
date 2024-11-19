@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/21 21:32:13 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:48:24 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define LEFT_BUTTON 123
 # define RIGHT_BUTTON 124
 # define QUIT_BUTTON 12
+
+# define FOV 90
 
 # define WINDOW_WIDTH 1280
 # define WINDOW_HEIGHT 1024
@@ -124,6 +126,7 @@ typedef struct s_game {
   t_map map;
   t_map check_map;
   t_setting setting;
+  t_point    dir_end;
 } t_game;
 
 int count_char(char *str, char c);
@@ -139,6 +142,6 @@ int twoDArrSize(char **arr);
 double normalizeAngle(double angle);
 void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	cast_minimap_rays(t_game *game);
+void    draw_rays(t_game *game);
 void	init_ray(t_ray *ray, t_game *game);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/21 09:20:49 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:11:44 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,9 +209,9 @@ int handlePress(int keycode, void *param)
 
 	if (keycode == 53)
 		return (quite(param));
-    else if (keycode == LEFT_BUTTON)
+	else if (keycode == LEFT_BUTTON)
 		game->player.dir -= game->player.rotSpeed;
-    else if (keycode == RIGHT_BUTTON)
+	else if (keycode == RIGHT_BUTTON)
 		game->player.dir += game->player.rotSpeed;
 	else if (keycode == W_BUTTON)
 		game->player.x -= 1 * game->player.moveSpeed;
@@ -221,9 +221,9 @@ int handlePress(int keycode, void *param)
 		game->player.y -= 1 * game->player.moveSpeed;
 	else if (keycode == D_BUTTON)
 		game->player.y += 1 * game->player.moveSpeed;
-    game->player.dir = normalizeAngle(game->player.dir);
-    simulate(game);
-    return 0;
+	game->player.dir = normalizeAngle(game->player.dir);
+	simulate(game);
+	return 0;
 }
 
 int handleRelease(int keycode, void *param)
@@ -273,9 +273,73 @@ int	convertToHex(t_game *game)
 	return (0);
 }
 
+char *equalize_map_row(const char *row, int max_length)
+{
+    char *new_row = calloc(max_length + 1, sizeof(char));
+    if (!new_row)
+        return NULL;
+    
+    int i = 0;
+    // Copy existing content
+    while (row[i] && i < max_length)
+    {
+        if (row[i] != ' ' && row[i] != '\t')  // Skip spaces and tabs
+            new_row[i] = row[i];
+        else
+            new_row[i] = '0';  // Replace spaces/tabs with '0'
+        i++;
+    }
+    
+    // Fill remaining space with '0's
+    while (i < max_length)
+    {
+        new_row[i] = '0';
+        i++;
+    }
+    new_row[i] = '\0';
+    
+    return new_row;
+}
+
+char **equalize_map(char **map, int row_count)
+{
+	char **new_map;
+    if (!map || row_count <= 0)
+        return NULL;
+    
+    int max_length = 0;
+    for (int i = 0; i < row_count; i++)
+    {
+        int len = strlen(map[i]);
+        if (len > max_length)
+            max_length = len;
+    }
+    new_map = malloc((row_count + 1) * sizeof(char *));
+    if (!new_map)
+        return NULL;
+    
+    for (int i = 0; i < row_count; i++)
+    {
+        new_map[i] = equalize_map_row(map[i], max_length);
+        if (!new_map[i])
+        {
+            for (int j = 0; j < i; j++)
+                free(new_map[j]);
+            free(new_map);
+            return NULL;
+        }
+    }
+    new_map[row_count] = NULL;
+    
+    return new_map;
+}
+
 int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 {
 	if (copy_map(game))
+		return (1);
+	game->map.map = equalize_map(game->map.map, game->map.rows);
+	if (!game->map.map)
 		return (1);
 	if (check_chars(&game->check_map))
 		return (1);
