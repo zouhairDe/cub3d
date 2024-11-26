@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/11/19 10:11:44 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:44:58 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	setPlayer(t_game *game)
 			else if (ft_find(game->check_map.map[i], 'E') != -1)
 				(game->player.dir = 90, game->player.y = ft_find(game->check_map.map[i], 'E') + 0.5);
 			else if (ft_find(game->check_map.map[i], 'W') != -1)
-				(game->player.dir = 270, game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
+				(game->player.dir = 0, game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
 			else
 				(game->player.dir = 0, game->player.y = ft_find(game->check_map.map[i], 'N') + 0.5);
 			posSet = true;
@@ -214,7 +214,7 @@ int handlePress(int keycode, void *param)
 	else if (keycode == RIGHT_BUTTON)
 		game->player.dir += game->player.rotSpeed;
 	else if (keycode == W_BUTTON)
-		game->player.x -= 1 * game->player.moveSpeed;
+		game->player.x -= 1 * game->player.moveSpeed ;
 	else if (keycode == S_BUTTON)
 		game->player.x += 1 * game->player.moveSpeed;
 	else if (keycode == A_BUTTON)

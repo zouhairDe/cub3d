@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2024/11/18 14:58:33 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/11/25 16:44:21 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int manage_line_logic(char *line, t_game *game) {
 int ft_parse_map(t_game *game) {
   char *line;
   char *tmp;
-
+(void)tmp;
   while ((line = get_next_line(game->map.fd)) != NULL) {
     if (manage_line_logic(line, game))
       return (free(line), 1);

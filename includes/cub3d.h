@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/11/19 09:48:24 by zouddach         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:20:41 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+
+#define DEG_TO_RAD(angle) ((double)(angle) * M_PI / 180.0)
+#define RAD_TO_DEG(angle) ((double)(angle) *  180.0 / M_PI)
 
 # define ESCAPE_BUTTON 53
 # define W_BUTTON 13
@@ -144,4 +147,12 @@ void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void    draw_rays(t_game *game);
 void	init_ray(t_ray *ray, t_game *game);
+
+// added
+void 	drawAngleInMap(t_game *game);
+void	drawFovInMap(t_game *game);
+void	castRays(t_game *game);
+double	deg2rad(double deg);
+double	rad2deg(double rad);
+double distance(double x1, double y1, double x2, double y2);
 #endif
