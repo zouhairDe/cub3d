@@ -46,8 +46,8 @@
 # define WINDOW_HEIGHT 1024
 # define MINIMAP_WIDTH 250
 # define MINIMAP_HEIGHT 250
-# define SCALE 10
 # define MINIMAP_SCALE 20
+# define SCALE 20
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
 
@@ -59,12 +59,16 @@ typedef struct s_point {
 typedef struct s_ray {
   t_point origin;
   t_point Dir;
-  double angle;
+  int angle;
   double dist;
   int hit;
   t_point wallHit;
   int wallContent;
   double wallStripHeight;
+  bool isRayFacingDown;
+  bool isRayFacingUp;
+  bool isRayFacingRight;
+  bool isRayFacingLeft;
 } t_ray;
 
 typedef struct s_data {
@@ -152,7 +156,5 @@ void	init_ray(t_ray *ray, t_game *game);
 void 	drawAngleInMap(t_game *game);
 void	drawFovInMap(t_game *game);
 void	castRays(t_game *game);
-double	deg2rad(double deg);
-double	rad2deg(double rad);
 double distance(double x1, double y1, double x2, double y2);
 #endif

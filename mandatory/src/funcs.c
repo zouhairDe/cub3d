@@ -116,8 +116,9 @@ t_point	*castRay(t_game *game, double angle) // for each point on the ray check 
 			contact_point->y = pointY;
 			break;
 		}
-		//drawLine(game, centerX, centerY, pointX, pointY, 0XFF0000);
-		my_mlx_pixel_put(&game->mlx.data, pointX, pointY, 0X00FF0000);
+		//check if the point is outside the minimap bounds
+		if (!(pointX < 0 || pointX >= MINIMAP_WIDTH || pointY < 0 || pointY >= MINIMAP_HEIGHT) )
+			my_mlx_pixel_put(&game->mlx.data, pointX, pointY, 0X00FF0000);
 		p++;
 	}
 	return (contact_point);
@@ -125,11 +126,13 @@ t_point	*castRay(t_game *game, double angle) // for each point on the ray check 
 
 void	draw_strip(t_game *game,int x, double length, int color)
 {
-	double v = length /2;
+	double v = length / 2;
 	for(int i = 0; i < v;i++)
 	{
-		my_mlx_pixel_put(&game->mlx.data, x, (WINDOW_HEIGHT / 2 ) - i, color);
 		my_mlx_pixel_put(&game->mlx.data, x, (WINDOW_HEIGHT / 2 ) + i, color);
+		if ((WINDOW_HEIGHT / 2 ) - i < MINIMAP_HEIGHT && x < MINIMAP_WIDTH)
+			continue;
+		my_mlx_pixel_put(&game->mlx.data, x, (WINDOW_HEIGHT / 2 ) - i, color);
 	}
 }
 
@@ -151,6 +154,7 @@ void	castRays(t_game *game)
 		printf("x y px yx ray size %f\n", dist);
 		draw_strip(game, i, (int)(WINDOW_HEIGHT - (int)(dist * (WINDOW_HEIGHT / MINIMAP_HEIGHT))) , 0x808080);
 		angle += DEG_TO_RAD(ratio);
+		free(contact);
 		//printf("angle:%f\n",angle);
 	}
 }

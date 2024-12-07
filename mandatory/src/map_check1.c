@@ -67,11 +67,11 @@ int	setPlayer(t_game *game)
 				return (printf("Error\nMultiple player starting positions\n"));
 			game->player.x = i + 0.5;
 			if (ft_find(game->check_map.map[i], 'S') != -1)
-				(game->player.dir = 180, game->player.y = ft_find(game->check_map.map[i], 'S') + 0.5);
+				(game->player.dir = 270, game->player.y = ft_find(game->check_map.map[i], 'S') + 0.5);
 			else if (ft_find(game->check_map.map[i], 'E') != -1)
-				(game->player.dir = 90, game->player.y = ft_find(game->check_map.map[i], 'E') + 0.5);
+				(game->player.dir = 180, game->player.y = ft_find(game->check_map.map[i], 'E') + 0.5);
 			else if (ft_find(game->check_map.map[i], 'W') != -1)
-				(game->player.dir = 0, game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
+				(game->player.dir = 90, game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
 			else
 				(game->player.dir = 0, game->player.y = ft_find(game->check_map.map[i], 'N') + 0.5);
 			posSet = true;
@@ -205,27 +205,34 @@ int quite(t_game *game)
 
 int handlePress(int keycode, void *param)
 {
-	t_game *game = (t_game *)param;
+    t_game *game = (t_game *)param;
 
-	if (keycode == 53)
-		return (quite(param));
-	else if (keycode == LEFT_BUTTON)
-		game->player.dir -= game->player.rotSpeed;
-	else if (keycode == RIGHT_BUTTON)
-		game->player.dir += game->player.rotSpeed;
-	else if (keycode == W_BUTTON)
-		game->player.x -= 1 * game->player.moveSpeed ;
-	else if (keycode == S_BUTTON)
-		game->player.x += 1 * game->player.moveSpeed;
-	else if (keycode == A_BUTTON)
-		game->player.y -= 1 * game->player.moveSpeed;
-	else if (keycode == D_BUTTON)
-		game->player.y += 1 * game->player.moveSpeed;
-	game->player.dir = normalizeAngle(game->player.dir);
-	simulate(game);
-	return 0;
+    if (keycode == 53)
+        return (quite(param));
+    else if (keycode == LEFT_BUTTON)
+        game->player.dir -= game->player.rotSpeed;
+    else if (keycode == RIGHT_BUTTON)
+        game->player.dir += game->player.rotSpeed;
+    else if (keycode == W_BUTTON) {
+        game->player.x += game->player.moveSpeed * sin(game->player.dir);
+        game->player.y += game->player.moveSpeed * cos(game->player.dir);
+    }
+    else if (keycode == S_BUTTON) {
+        game->player.x -= game->player.moveSpeed * sin(game->player.dir);
+        game->player.y -= game->player.moveSpeed * cos(game->player.dir);
+    }
+    else if (keycode == A_BUTTON) {
+        game->player.x -= game->player.moveSpeed * cos(game->player.dir);
+        game->player.y += game->player.moveSpeed * sin(game->player.dir);
+    }
+    else if (keycode == D_BUTTON) {
+		game->player.x += game->player.moveSpeed * cos(game->player.dir);
+        game->player.y -= game->player.moveSpeed * sin(game->player.dir);
+    }
+    game->player.dir = normalizeAngle(game->player.dir);
+    simulate(game);
+    return 0;
 }
-
 int handleRelease(int keycode, void *param)
 {
 	t_game *game = (t_game *)param;
@@ -280,17 +287,14 @@ char *equalize_map_row(const char *row, int max_length)
         return NULL;
     
     int i = 0;
-    // Copy existing content
     while (row[i] && i < max_length)
     {
-        if (row[i] != ' ' && row[i] != '\t')  // Skip spaces and tabs
+        if (row[i] != ' ' && row[i] != '\t')
             new_row[i] = row[i];
         else
-            new_row[i] = '0';  // Replace spaces/tabs with '0'
+            new_row[i] = '0';
         i++;
     }
-    
-    // Fill remaining space with '0's
     while (i < max_length)
     {
         new_row[i] = '0';

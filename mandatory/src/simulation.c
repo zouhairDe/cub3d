@@ -151,12 +151,12 @@ void centerPlayerInMap(t_game *game)
 
 void drawMap(t_game *game)
 {
-	castRays(game);
 	drawMiniMapBorders(game);
 	drawRotatedMap(game);
 	centerPlayerInMap(game);
 	drawAngleInMap(game); // done
 	drawFovInMap(game);
+	castRays(game);
 }
 
 void clean_window(t_data *data)
@@ -187,15 +187,9 @@ void draw_rayOnMinimap(t_game *game, double rayX, double rayY)
     pixelY = (int)(rayY * MINIMAP_SCALE);
 
     if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
-    {
         for (i = 0; i < MINIMAP_SCALE; i++)
-        {
             for (j = 0; j < MINIMAP_SCALE; j++)
-            {
-                my_mlx_pixel_put(&game->mlx.data, pixelX + i, pixelY + j, 0x00FF0000); // Draw the ray in red
-            }
-        }
-    }
+                my_mlx_pixel_put(&game->mlx.data, pixelX + i, pixelY + j, 0x00FF0000);
 }
 
 
@@ -209,8 +203,6 @@ int simulate(t_game *game)
 
 	collorCeilling(game);
 	collorFloor(game);
-    //draw_rays(game);
-	//printf("player x: %f playery %f\n", game->player.x, game->player.y);
 	drawMap(game);
 	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0);
 	return 0;
