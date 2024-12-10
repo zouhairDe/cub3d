@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/11/25 20:20:41 by mait-lah         ###   ########.fr       */
+/*   Updated: 2024/12/10 08:56:16 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 # define MINIMAP_WIDTH 250
 # define MINIMAP_HEIGHT 250
 # define MINIMAP_SCALE 20
-# define SCALE 20
+# define SCALE 10
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
 
@@ -55,6 +55,16 @@ typedef struct s_point {
   double x;
   double y;
 } t_point;
+
+typedef struct s_dda
+{
+    t_point hp;
+    t_point vp;
+    double	hdist;
+    double	vdist;
+    double   initial_x;
+    double   initial_y;
+}t_dda;
 
 typedef struct s_ray {
   t_point origin;

@@ -1,5 +1,5 @@
 CC = cc
-FLAGS =  -g #-fsanitize=address#-Wall -Wextra -Werror
+FLAGS =  -g -fsanitize=address#-Wall -Wextra -Werror
 LIBS = -framework OpenGL -framework AppKit -lmlx
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a

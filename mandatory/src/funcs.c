@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2024/11/26 15:10:47 by mait-lah         ###   ########.fr       */
+/*   Updated: 2024/12/10 11:08:54 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,35 +93,70 @@ void drawFovInMap(t_game *game)
     drawLine(game, centerX, centerY, endX, endY, 0X00FF00);
 	
 }
-int DEBUG =  true;
+int	is_wall(t_game *game, double playerX, double playerY)
+{
+	printf("X %f y %f \n", floor(playerX), floor(playerY));
+	return (game->map.map[(int)floor(playerX)][(int)floor(playerY)] == '1');
+}
 
+void	dda(t_game *game, double x ,double y,double angle)
+{
+	t_dda info;
+	
+	info.hp.x = x;
+	info.hp.y = y;
+	info.vp.x = x;
+	info.vp.y = y;
+	info.initial_x = x;
+	info.initial_y = y;
+	printf("angle %f px %f py %f\n", angle, game->player.x, game->player.y);
+	while (!is_wall(game, info.hp.x, info.hp.y))
+	{
+		if (floor(y) == y)
+			info.hp.y = y - 1;
+		else 
+			info.hp.y = floor(y);
+		info.hp.x = x + ((y - info.hp.y) / tan(angle));
+		x = info.hp.x;
+		y = info.hp.y;
+		info.hdist = distance(info.initial_x, info.initial_y, info.hp.x, info.hp.y);
+		//putCircle(game,info.hp.x,info.hp.y);
+	}
+	x = info.initial_x;
+	y = info.initial_y;
+	while (!is_wall(game ,info.vp.x, info.vp.y))
+	{
+		if (floor(x / 1) == x)
+			info.vp.x = x + 1;
+		else
+			info.vp.x = floor((x + 1));
+		info.vp.y = y + (tan(angle) * (x - info.vp.x));
+		x = info.vp.x;
+		y = info.vp.y;
+		info.vdist = distance(info.initial_x, info.initial_y, info.vp.x, info.vp.y);  
+		//putCircle(game,info.vp.x,info.vp.y);
+	}
+	if (info.hdist < info.vdist)
+	{
+		printf("hdist %f \n" , info.hdist);
+		//drawLine(game, game->player.x * MINIMAP_SCALE, game->player.y * MINIMAP_SCALE, info.hp.x , info.hp.y, 0xFF0000);
+	}
+	else
+	{
+		//drawLine(game, game->player.x * MINIMAP_SCALE, game->player.y * MINIMAP_SCALE, info.vp.x , info.vp.y, 0xFF0000);
+		printf("vdist %f \n" , info.hdist);
+	}
+
+}
 
 t_point	*castRay(t_game *game, double angle) // for each point on the ray check if its inside a block if so return its x and y since it will the the contact point
 {
 	t_point *contact_point = malloc(sizeof(t_point));
-	int centerX = MINIMAP_WIDTH / 2;
-    int centerY = MINIMAP_HEIGHT / 2;
-	double p = 1;
-	// do logic
-	while(1)//p < 50)
-	{
-		int pointX = centerX + p * cos(angle);
-    	int pointY = centerY + p * sin(angle);
-		int playerX = (game->player.x * SCALE) +  p * (sin(angle) / 2 );
-    	int playerY = (game->player.y * SCALE) +  p * (cos(angle) / 2 );
-		//printf("cx: %d cy: %d x: %d y: %d square?: '%c'\n", centerX, centerY, pointX1 , pointY1, game->map.map[squareY][squareX]);
-		if (game->map.map[(int)(playerX / SCALE)][(int)(playerY / SCALE)] == '1')
-		{
-			contact_point->x = pointX;
-			contact_point->y = pointY;
-			break;
-		}
-		//check if the point is outside the minimap bounds
-		if (!(pointX < 0 || pointX >= MINIMAP_WIDTH || pointY < 0 || pointY >= MINIMAP_HEIGHT) )
-			my_mlx_pixel_put(&game->mlx.data, pointX, pointY, 0X00FF0000);
-		p++;
-	}
-	return (contact_point);
+	//dda algo
+	printf("angle %f\n",angle);
+    dda(game, game->player.x, game->player.y, angle);
+	
+    return (contact_point);
 }
 
 void	draw_strip(t_game *game,int x, double length, int color)
@@ -144,17 +179,17 @@ void	castRays(t_game *game)
 	int lineLength = 100;
 	double angle = game->player.dir - DEG_TO_RAD(FOV / 2);
 	double ratio = (double)(FOV) / WINDOW_WIDTH;
-	for(int i  = 0; i < WINDOW_WIDTH;i++)
+	for(int i  = 0; i < 1;i++)
 	{
 		int pointX = centerX + lineLength * (cos(angle));
     	int pointY = centerY + lineLength * (sin(angle));
 		double dist;
 		contact = castRay(game, angle);
-		dist = distance(centerX, contact->y, contact->x, contact->y);
-		printf("x y px yx ray size %f\n", dist);
-		draw_strip(game, i, (int)(WINDOW_HEIGHT - (int)(dist * (WINDOW_HEIGHT / MINIMAP_HEIGHT))) , 0x808080);
+		//dist = distance(centerX, contact->y, contact->x, contact->y);
+		//printf("x y px yx ray size %f\n", dist);
+		//draw_strip(game, i, (int)(WINDOW_HEIGHT - (int)(dist * (WINDOW_HEIGHT / MINIMAP_HEIGHT))) , 0x808080);
 		angle += DEG_TO_RAD(ratio);
-		free(contact);
+		//free(contact);
 		//printf("angle:%f\n",angle);
 	}
 }
