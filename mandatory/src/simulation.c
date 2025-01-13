@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2024/11/25 20:35:35 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/11 19:33:42 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ void drawRotatedMap(t_game *game)
             if (screenX < 0 || screenY < 0 || screenX >= MINIMAP_WIDTH || screenY >= MINIMAP_HEIGHT)
                 continue;
 
+			for (int a =0 ;a < MINIMAP_SCALE;a++) // remove later Grid.
+			{
+				my_mlx_pixel_put(&game->mlx.data, screenX+a, screenY, 0X000000);
+				my_mlx_pixel_put(&game->mlx.data, screenX, screenY+a, 0X000000);
+			}
             if (game->map.map[i][j] == '1')
             {
                 for (int x = 0; x < MINIMAP_SCALE; x++)
@@ -156,7 +161,6 @@ void drawMap(t_game *game)
 	centerPlayerInMap(game);
 	drawAngleInMap(game); // done
 	drawFovInMap(game);
-	castRays(game);
 }
 
 void clean_window(t_data *data)
@@ -170,7 +174,7 @@ void clean_window(t_data *data)
 		j = 0;
 		while (j < WINDOW_HEIGHT)
 		{
-			my_mlx_pixel_put(data, i, j, 0);
+			my_mlx_pixel_put(data, i, j, 0X00CDD0D4);
 			j++;
 		}
 		i++;
@@ -200,10 +204,10 @@ int simulate(t_game *game)
 
 	mlx_clear_window(game->mlx.mlx, game->mlx.win);
 	clean_window(&game->mlx.data);
-
 	collorCeilling(game);
 	collorFloor(game);
 	drawMap(game);
+	castRays(game);
 	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0);
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/11/25 20:44:58 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/12 20:00:48 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	setPlayer(t_game *game)
 		}
 		i++;
 	}
+	game->player.dir = normalizeAngle(game->player.dir); // added this so that the angle is normalized even if no key is pressed
 	printf("Player position: %f, %f\n", game->player.x, game->player.y);
 	if (!posSet)
 		return (printf("Error\nNo player starting position\n"));

@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2024/11/25 16:44:21 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/12 20:02:01 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ int main(int ac, char **av) {
   //   atexit(fff);
   t_game game;
 
+  printf("\n"); // remove later.
   if (ac != 2)
     return (printf("Error\nInvalid number of arguments\n"));
   if (init(av[1], &game))

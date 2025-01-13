@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2024/12/10 08:56:16 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/11 19:37:33 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,16 @@ typedef struct s_dda
 typedef struct s_ray {
   t_point origin;
   t_point Dir;
-  int angle;
+  double angle;
   double dist;
   int hit;
   t_point wallHit;
   int wallContent;
   double wallStripHeight;
-  bool isRayFacingDown;
-  bool isRayFacingUp;
-  bool isRayFacingRight;
-  bool isRayFacingLeft;
+  bool is_facing_down;
+  bool is_facing_up;
+  bool is_facing_right;
+  bool is_facing_left;
 } t_ray;
 
 typedef struct s_data {
@@ -160,7 +160,7 @@ double normalizeAngle(double angle);
 void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void    draw_rays(t_game *game);
-void	init_ray(t_ray *ray, t_game *game);
+void	init_ray(t_ray *ray, double angle);
 
 // added
 void 	drawAngleInMap(t_game *game);
