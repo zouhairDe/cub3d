@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/14 06:44:04 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/16 20:29:49 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,8 @@ void	castRays(t_game *game)
 	{
 		double dist;
 		ray = malloc(sizeof(t_ray));
-		printf("initial angle %f\n", angle);
-		init_ray(ray, angle);
+		printf(" ------------------- initial angle %f --- - - - - - - - - -\n", angle);
+		init_ray(ray, normalizeAngle((angle)));
 		dda(game, ray);
 		printf("player at %f %f hit wall at %f %f with dist %f\n", game->player.y,game->player.x,ray->wallHit.x, ray->wallHit.y, ray->dist);
 
@@ -274,11 +274,11 @@ void	castRays(t_game *game)
 		//double y2 = (ray->wallHit.y * MINIMAP_SCALE) + centerY;
 		//drawLine(game, x1, y1, x2, y2, 0xFF0000);
 		
-		double projectionPlaneDist = (WINDOW_WIDTH / 2) / tan(FOV/2);
-		printf("proj plane  dist %f\n", projectionPlaneDist);
-		double stripHeight = (20 * projectionPlaneDist) / (ray->dist * 20);
+		
+		printf("proj plane  dist %f\n", PROJECTION_PLANE_DIST);
+		double stripHeight = (20 * PROJECTION_PLANE_DIST) / (ray->dist * 20);
 		printf("strip height %f\n", stripHeight);
-		draw_strip(game, i, stripHeight , 0x000000);
+		draw_strip(game, i, stripHeight , 0x101010);
 		angle += DEG_TO_RAD(ratio);
 		//free(contact);
 		//printf("angle:%f\n",angle);

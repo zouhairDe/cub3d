@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/14 06:30:15 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:16:32 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@
 # define SCALE 10
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
+// check if this is corrent
+# define PROJECTION_PLANE_DIST  ((WINDOW_WIDTH / 2) / tan(FOV/2))
 
 typedef struct s_point {
   double x;
