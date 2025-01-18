@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/16 20:29:49 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/16 21:41:52 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,11 +252,12 @@ void	init_ray(t_ray *ray, double angle)
 void	castRays(t_game *game)
 {
 	t_ray *ray;
+	t_point player = {game->player.y, game->player.x};
 	int lineLength = 100;
 	double angle = game->player.dir - DEG_TO_RAD(FOV / 2);
 	double centerX = MINIMAP_WIDTH / 2;
     double centerY = MINIMAP_HEIGHT / 2;
-	
+
 	double ratio = (double)(FOV) / NUM_RAYS;
 	for(int i  = 0; i < NUM_RAYS;i++)
 	{
@@ -274,11 +275,19 @@ void	castRays(t_game *game)
 		//double y2 = (ray->wallHit.y * MINIMAP_SCALE) + centerY;
 		//drawLine(game, x1, y1, x2, y2, 0xFF0000);
 		
-		
 		printf("proj plane  dist %f\n", PROJECTION_PLANE_DIST);
-		double stripHeight = (20 * PROJECTION_PLANE_DIST) / (ray->dist * 20);
+		double px = player.x;
+		double py = player.y;
+		//if (ray->is_facing_up)
+		//	px = ray->wallHit.x;
+		//if (ray->is_facing_left || ray->is_facing_right)
+		//	py = ray->wallHit.y;
+		
+		double ray_dist = distance(px, py, ray->wallHit.x, ray->wallHit.y);
+		printf("ray dist %f\n",ray_dist);
+		double stripHeight = (20 * PROJECTION_PLANE_DIST) / (ray_dist * 20);
 		printf("strip height %f\n", stripHeight);
-		draw_strip(game, i, stripHeight , 0x101010);
+		draw_strip(game, i, stripHeight , 0x646464);
 		angle += DEG_TO_RAD(ratio);
 		//free(contact);
 		//printf("angle:%f\n",angle);
