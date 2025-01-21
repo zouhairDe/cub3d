@@ -25,6 +25,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/stat.h>
 
 #define DEG_TO_RAD(angle) ((double)(angle) * M_PI / 180.0)
 #define RAD_TO_DEG(angle) ((double)(angle) *  180.0 / M_PI)
@@ -34,29 +35,35 @@
 # define A_BUTTON 0
 # define S_BUTTON 1
 # define D_BUTTON 2
+# define H_BUTTON 4
 # define UP_BUTTON 126
+# define ON_MOUSEMOVE 6
 # define DOWN_BUTTON 125
 # define LEFT_BUTTON 123
 # define RIGHT_BUTTON 124
 # define QUIT_BUTTON 12
-
 # define FOV 90
-
 # define WINDOW_WIDTH 1280
 # define WINDOW_HEIGHT 1024
 # define MINIMAP_WIDTH 250
 # define MINIMAP_HEIGHT 250
 # define MINIMAP_SCALE 20
-# define SCALE 10
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
 // check if this is corrent
-# define PROJECTION_PLANE_DIST  ((WINDOW_WIDTH / 2) / tan(FOV/2))
+# define PROJECTION_PLANE_DIST  ((double)(WINDOW_WIDTH / 2) / tan(FOV/2))
+// # define TILE_SIZE 20
+# define WALL_STRIP_WIDTH 1  // Since you're drawing one pixel wide strips
 
 typedef struct s_point {
   double x;
   double y;
 } t_point;
+
+typedef struct s_intPoint {
+  int x;
+  int y;
+} t_intPoint;
 
 typedef struct s_dda
 {
@@ -138,15 +145,26 @@ typedef struct s_setting {
   t_mlx mlx;
 } t_setting;
 
+typedef struct s_crosshair
+{
+	int	size;
+	int	thickness;
+}	t_crosshair;
+
 typedef struct s_game {
-  t_mlx mlx;
-  t_texture walls;
-  t_player player;
-  t_map map;
-  t_map check_map;
-  t_setting setting;
-  t_point    dir_end;
+  t_mlx			mlx;
+  t_texture		walls;
+  t_player		player;
+  t_map			map;
+  t_map			check_map;
+  t_setting		setting;
+  t_point		dir_end;
+  t_crosshair	crosshair;
+  bool			mouse;
+  int			mouseX;
+  int			mouseY;
 } t_game;
+
 
 int count_char(char *str, char c);
 char *ft_replace(char *str, char c, char *news);
@@ -169,4 +187,5 @@ void 	drawAngleInMap(t_game *game);
 void	drawFovInMap(t_game *game);
 void	castRays(t_game *game);
 double distance(double x1, double y1, double x2, double y2);
+
 #endif
