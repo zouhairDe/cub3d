@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/22 17:57:10 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 18:54:10 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	is_wall(t_game *game, double playerX, double playerY)
 	//printf("X %f y %f \n", floor(playerX), floor(playerY));
 	if (playerX<=0 || playerX>game->map.maxCols || playerY<=0 || playerY>=game->map.rows)
 	{
-		//printf("out of bounds wall check.\n");
+		// printf("out of bounds wall check.\n");
 		return true;
 	}
 	return ((game->map.map[(int)(playerY-0.000000000001)][(int)(playerX-0.000000000001)] == '1') || (game->map.map[(int)(playerY+0.000000000001)][(int)(playerX+0.000000000001)] == '1'));
@@ -119,6 +119,7 @@ void	info_init(t_dda *info)
     info->initial_x = 0;
     info->initial_y = 0;
 }
+
 void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 {
 	double xintercept = 0;
@@ -193,7 +194,6 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 	}
 	
 	// draw vertical points
-	
 	info->vp.x = next_vert_touchx;
 	info->vp.y = next_vert_touchy;
 }
@@ -279,6 +279,28 @@ void	init_ray(t_ray *ray, double angle)
 	ray->dist = 0;
 	ray->wallHit.x = 0;
 	ray->wallHit.y = 0;
+}
+
+void logs(double angle, double ray_dist, double stripHeight, t_game *game, t_ray *ray)
+{
+    struct stat st = {0};
+    if (stat("logs", &st) == -1) {
+        mkdir("logs", 0700);
+    }
+
+    FILE *f = fopen("logs/logs.log", "a");
+    if (!f) {
+        perror("Error opening log file");
+        return;
+    }
+
+    fprintf(f, " ------------------- initial angle %f --- - - - - - - - - -\n", angle);
+    fprintf(f, "player at %f %f hit wall at %f %f with dist %f\n", game->player.y, game->player.x, ray->wallHit.x, ray->wallHit.y, ray->dist);
+    //fprintf(f, "proj plane  dist %f\n", PROJECTION_PLANE_DIST);
+    fprintf(f, "ray dist %f\n", ray_dist);
+    fprintf(f, "strip height %f\n", stripHeight);
+
+    fclose(f);
 }
 
 void	castRays(t_game *game)

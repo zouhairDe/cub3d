@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 17:57:53 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:00:13 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/stat.h>
 
 #define DEG_TO_RAD(angle) ((double)(angle) * M_PI / 180.0)
 #define RAD_TO_DEG(angle) ((double)(angle) *  180.0 / M_PI)
@@ -34,7 +35,9 @@
 # define A_BUTTON 0
 # define S_BUTTON 1
 # define D_BUTTON 2
+# define H_BUTTON 4
 # define UP_BUTTON 126
+# define ON_MOUSEMOVE 6
 # define DOWN_BUTTON 125
 # define LEFT_BUTTON 123
 # define RIGHT_BUTTON 124
@@ -47,18 +50,19 @@
 # define MINIMAP_WIDTH 250
 # define MINIMAP_HEIGHT 250
 # define MINIMAP_SCALE 20
-# define SCALE 10
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
 # define WALL_SIZE 64
-
-
-// check if this is corrent
 
 typedef struct s_point {
   double x;
   double y;
 } t_point;
+
+typedef struct s_intPoint {
+  int x;
+  int y;
+} t_intPoint;
 
 typedef struct s_dda
 {
@@ -140,15 +144,26 @@ typedef struct s_setting {
   t_mlx mlx;
 } t_setting;
 
+typedef struct s_crosshair
+{
+	int	size;
+	int	thickness;
+}	t_crosshair;
+
 typedef struct s_game {
-  t_mlx mlx;
-  t_texture walls;
-  t_player player;
-  t_map map;
-  t_map check_map;
-  t_setting setting;
-  t_point    dir_end;
+  t_mlx			mlx;
+  t_texture		walls;
+  t_player		player;
+  t_map			map;
+  t_map			check_map;
+  t_setting		setting;
+  t_point		dir_end;
+  t_crosshair	crosshair;
+  bool			mouse;
+  int			mouseX;
+  int			mouseY;
 } t_game;
+
 
 int count_char(char *str, char c);
 char *ft_replace(char *str, char c, char *news);
@@ -167,6 +182,7 @@ void    draw_rays(t_game *game);
 void	init_ray(t_ray *ray, double angle);
 int handlePress(int keycode, void *param);
 int handleRelease(int keycode, void *param);
+int handle_mouse(int x, int y, void *param);
 int quite(t_game *game);
 
 // added
@@ -174,4 +190,5 @@ void 	drawAngleInMap(t_game *game);
 void	drawFovInMap(t_game *game);
 void	castRays(t_game *game);
 double distance(double x1, double y1, double x2, double y2);
+
 #endif

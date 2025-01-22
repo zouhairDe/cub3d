@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 17:58:24 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:05:33 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ void drawMiniMapBorders(t_game *game)
 				my_mlx_pixel_put(&game->mlx.data, i + 1, j + 1, 0X00FFFFFF);
 				my_mlx_pixel_put(&game->mlx.data, i + 2, j + 2, 0X00FFFFFF);
 			}
+			else
+			{
+				my_mlx_pixel_put(&game->mlx.data, i, j, 0X00000000); // background
+			}
 			j++;
 		}
 		i++;
@@ -109,8 +113,8 @@ void drawRotatedMap(t_game *game)
 
 			for (int a =0 ;a < MINIMAP_SCALE;a++) // remove later Grid.
 			{
-				my_mlx_pixel_put(&game->mlx.data, screenX+a, screenY, 0X000000);
-				my_mlx_pixel_put(&game->mlx.data, screenX, screenY+a, 0X000000);
+				my_mlx_pixel_put(&game->mlx.data, screenX+a, screenY, 0Xe5e5e5);
+				my_mlx_pixel_put(&game->mlx.data, screenX, screenY+a, 0Xe5e5e5);
 			}
             if (game->map.map[i][j] == '1')
             {
@@ -196,17 +200,61 @@ void draw_rayOnMinimap(t_game *game, double rayX, double rayY)
                 my_mlx_pixel_put(&game->mlx.data, pixelX + i, pixelY + j, 0x00FF0000);
 }
 
+void	draw_diagonal_lines(t_game *game, int center_x, 
+			int center_y, int i)
+{
+	int			j;
+	int			k;
+	t_intPoint	point1;
+	t_intPoint	point2;
+
+	j = -(game->crosshair.thickness / 2);
+	while (j <= game->crosshair.thickness / 2)
+	{
+		k = -(game->crosshair.thickness / 2);
+		while (k <= game->crosshair.thickness / 2)
+		{
+			point1.x = center_x + i + j;
+			point1.y = center_y + i + k;
+			if (point1.x >= 0 && point1.x < WINDOW_WIDTH && point1.y >= 0 && point1.y < WINDOW_HEIGHT)
+				my_mlx_pixel_put(&game->mlx.data, point1.x, point1.y, 0X00FFFFFF);
+			point2.x = center_x + i + j;
+			point2.y = center_y - i + k;
+			if (point2.x >= 0 && point2.x < WINDOW_WIDTH && point2.y >= 0 && point2.y < WINDOW_HEIGHT)
+				my_mlx_pixel_put(&game->mlx.data, point2.x, point2.y, 0X00FFFFFF);
+			k++;
+		}
+		j++;
+	}
+}
+
+void	draw_crosshair(t_game *game)
+{
+	int			center_x;
+	int			center_y;
+	int			i;
+
+	center_x = WINDOW_WIDTH / 2;
+	center_y = WINDOW_HEIGHT / 2;
+	i = -game->crosshair.size;
+	while (i <= game->crosshair.size)
+	{
+		draw_diagonal_lines(game, center_x, center_y, i);
+		i++;
+	}
+}
 
 int simulate(t_game *game)
 {
 	int i;
 	double rayAngle;
-
+	// printGame(*game);//debuging data (appenfing to file)
 	mlx_clear_window(game->mlx.mlx, game->mlx.win);
 	clean_window(&game->mlx.data);
 	collorCeilling(game);
 	collorFloor(game);
 	castRays(game);
+	draw_crosshair(game);
 	drawMap(game);
 	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0);
 	return 0;

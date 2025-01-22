@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/21 18:31:28 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:07:47 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	setPlayer(t_game *game)
 		i++;
 	}
 	game->player.dir = normalizeAngle(game->player.dir); // added this so that the angle is normalized even if no key is pressed
-	printf("Player position: %f, %f\n", game->player.x, game->player.y);
+	// printf("Player position: %f, %f\n", game->player.x, game->player.y);
 	if (!posSet)
 		return (printf("Error\nNo player starting position\n"));
 	return (0);
@@ -205,45 +205,73 @@ int quite(t_game *game)
 
 int handlePress(int keycode, void *param)
 {
+	printf("keycode: %d\n", keycode);
     t_game *game = (t_game *)param;
 
     if (keycode == 53)
         return (quite(param));
-    else if (keycode == LEFT_BUTTON)
-        game->player.dir -= game->player.rotSpeed;
-    else if (keycode == RIGHT_BUTTON)
-        game->player.dir += game->player.rotSpeed;
-    else if (keycode == W_BUTTON) {
-        game->player.x += game->player.moveSpeed * sin(game->player.dir);
-        game->player.y += game->player.moveSpeed * cos(game->player.dir);
-    }
-    else if (keycode == S_BUTTON) {
-        game->player.x -= game->player.moveSpeed * sin(game->player.dir);
-        game->player.y -= game->player.moveSpeed * cos(game->player.dir);
-    }
-    else if (keycode == A_BUTTON) {
-        game->player.x -= game->player.moveSpeed * cos(game->player.dir);
-        game->player.y += game->player.moveSpeed * sin(game->player.dir);
-    }
-    else if (keycode == D_BUTTON) {
+	if (keycode == H_BUTTON)
+	{
+		if (game->mouse)
+			mlx_mouse_hide(), game->mouse = !game->mouse;
+		else
+			mlx_mouse_show(), game->mouse = !game->mouse;
+	}
+	else if (keycode == LEFT_BUTTON)
+		game->player.dir -= game->player.rotSpeed;
+	else if (keycode == RIGHT_BUTTON)
+		game->player.dir += game->player.rotSpeed;
+	else if (keycode == W_BUTTON){
+		game->player.x += game->player.moveSpeed * sin(game->player.dir);
+		game->player.y += game->player.moveSpeed * cos(game->player.dir);
+	}
+	else if (keycode == S_BUTTON){
+		game->player.x -= game->player.moveSpeed * sin(game->player.dir);
+		game->player.y -= game->player.moveSpeed * cos(game->player.dir);
+	}
+	else if (keycode == A_BUTTON){
+		game->player.x -= game->player.moveSpeed * cos(game->player.dir);
+		game->player.y += game->player.moveSpeed * sin(game->player.dir);
+	}
+	else if (keycode == D_BUTTON){
 		game->player.x += game->player.moveSpeed * cos(game->player.dir);
-        game->player.y -= game->player.moveSpeed * sin(game->player.dir);
-    }
-    game->player.dir = normalizeAngle(game->player.dir);
-    simulate(game);
-    return 0;
+		game->player.y -= game->player.moveSpeed * sin(game->player.dir);
+	}
+	game->player.dir = normalizeAngle(game->player.dir);
+	simulate(game);
+	return 0;
 }
 
 int handleRelease(int keycode, void *param)
 {
 	t_game *game = (t_game *)param;
-	printf("Key Released: %d\n", keycode);
 	return 0;
+}
+
+
+int handle_mouse(int x, int y, void *param)
+{
+    t_game	*game;
+    int		diff_x;
+    static int last_x;
+
+	game = (t_game *)param;
+	last_x = WINDOW_WIDTH / 2;
+	diff_x = x - last_x;
+	if (game->mouse)
+		return (0);
+    if (diff_x != 0)
+    {
+        game->player.dir += (diff_x * 0.001);
+        game->player.dir = normalizeAngle(game->player.dir);
+        last_x = x;
+    }
+    mlx_mouse_move(game->mlx.win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    return (0);
 }
 
 int setMLX(t_game *game)
 {
-	printf("hi from setmlx\n");
 	game->mlx.mlx = mlx_init();
 	if (!game->mlx.mlx)
 		return (printf("Error\nCouldn't initialize mlx\n"));

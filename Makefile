@@ -1,6 +1,6 @@
 CC = cc
 FLAGS =  -g -fsanitize=address#-Wall -Wextra -Werror
-LIBS = -framework OpenGL -framework AppKit -lmlx
+LIBS = -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
 GNL_DIR = gnl/
