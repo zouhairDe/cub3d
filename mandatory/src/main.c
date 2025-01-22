@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/12 20:02:01 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:24:48 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,13 +147,17 @@ void printGame(t_game game) {
 }
 
 int init(char *path, t_game *game) {
+  printf("in init \n");
   init_game(game);
   if (ft_path(path, game))
     return (1);
+	printf("1\n");
   if (ft_parse_map(game))
     return (1);
+  printf("2 \n");
   if (check_map(game))
     return (1);
+  printf("done initing\n");
   return (0);
 }
 
@@ -181,6 +185,13 @@ int main(int ac, char **av) {
     return (printf("Error\nInvalid number of arguments\n"));
   if (init(av[1], &game))
     return (printf("Error\nParsing error\n"));
+
+	mlx_hook(game.mlx.win, 2, 0L, handlePress, &game);
+	mlx_hook(game.mlx.win, 3, 0L, handleRelease, &game);
+	mlx_hook(game.mlx.win, 17, 0, quite, &game);
+	mlx_loop_hook(game.mlx.mlx, simulate, &game);
+	mlx_loop(game.mlx.mlx);
+
   free_game(&game);
   return (0);
 }

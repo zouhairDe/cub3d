@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/11 19:33:42 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:58:24 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void collorCeilling(t_game *game)
 		j = 0;
 		while (j++ < WINDOW_HEIGHT / 2)
 		{
-			if (i < MINIMAP_HEIGHT && j < MINIMAP_HEIGHT)
-				continue ;
-			else
-				my_mlx_pixel_put(&game->mlx.data, i, j, 0x00F3FF);//game->walls.ceilling);
+			//if (i < MINIMAP_HEIGHT && j < MINIMAP_HEIGHT)
+			//	continue ;
+			//else
+			my_mlx_pixel_put(&game->mlx.data, i, j, 0x00F3FF);//game->walls.ceilling);
 		}
 	}
 }
@@ -206,8 +206,8 @@ int simulate(t_game *game)
 	clean_window(&game->mlx.data);
 	collorCeilling(game);
 	collorFloor(game);
-	drawMap(game);
 	castRays(game);
+	drawMap(game);
 	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0);
 	return 0;
 }

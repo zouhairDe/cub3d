@@ -13,7 +13,7 @@ HEADER_DIR = includes/
 
 SRC_DIR = mandatory/src/
 OBJ_DIR = mandatory/obj/
-FILES = main.c utils1.c map_check1.c simulation.c rays_painter.c math.c funcs.c
+FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c
 
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:45:13 by zouddach          #+#    #+#             */
-/*   Updated: 2024/10/25 11:56:21 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:51:36 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
-  if (x<0 || x>WINDOW_WIDTH || y<0 || y>WINDOW_WIDTH)
+  if (x<0 || x>=WINDOW_WIDTH || y<0 || y>=WINDOW_HEIGHT)
     return ;
 	char	*dst;
 

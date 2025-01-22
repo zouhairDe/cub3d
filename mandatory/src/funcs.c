@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/16 21:41:52 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:57:10 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,28 +87,28 @@ void drawFovInMap(t_game *game)
     int lineLength = 60;
 
 
-    int endX = centerX + lineLength * (cos(game->player.dir - DEG_TO_RAD(FOV / 2)));
-    int endY = centerY + lineLength * (sin(game->player.dir - DEG_TO_RAD(FOV / 2)));
+    int endX = centerX + lineLength * (cos(game->player.dir - FOV / 2));
+    int endY = centerY + lineLength * (sin(game->player.dir - FOV / 2));
 
     drawLine(game, centerX, centerY, endX, endY, 0X00FF00);
 	
-	endX = centerX + lineLength * (cos(game->player.dir + DEG_TO_RAD(FOV / 2)) );
-    endY = centerY + lineLength * (sin(game->player.dir + DEG_TO_RAD(FOV / 2) ) );
+	endX = centerX + lineLength * (cos(game->player.dir + FOV / 2) );
+    endY = centerY + lineLength * (sin(game->player.dir + FOV / 2) );
 
     drawLine(game, centerX, centerY, endX, endY, 0X00FF00);
-	
 }
 int	is_wall(t_game *game, double playerX, double playerY)
 {
 	//printf("X %f y %f \n", floor(playerX), floor(playerY));
-	if (playerX<=0 || playerX>game->map.maxCols || playerY<=0 || playerY>game->map.rows)
+	if (playerX<=0 || playerX>game->map.maxCols || playerY<=0 || playerY>=game->map.rows)
 	{
 		//printf("out of bounds wall check.\n");
 		return true;
 	}
 	return ((game->map.map[(int)(playerY-0.000000000001)][(int)(playerX-0.000000000001)] == '1') || (game->map.map[(int)(playerY+0.000000000001)][(int)(playerX+0.000000000001)] == '1'));
 }
-info_init(t_dda *info)
+
+void	info_init(t_dda *info)
 {
 	info->hp.x = 0;
 	info->hp.y = 0;
@@ -156,7 +156,6 @@ void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 		next_horz_touchy += ystep;
 	}
 	
-		
 	info->hp.x = next_horz_touchx;
 	info->hp.y = next_horz_touchy;
 }
@@ -175,6 +174,9 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 	xstep = 1 + (ray->is_facing_left * -2);
 	ystep = (xstep * angle_tan);
 
+	if ((ray->is_facing_up && ystep > 0) || (ray->is_facing_down && ystep < 0))
+		ystep *= -1;
+	
 	info->vdist += distance(player.x, player.y , xintercept ,yintercept);
 	double	next_vert_touchx = xintercept;
 	double	next_vert_touchy = yintercept;
@@ -209,33 +211,60 @@ void	dda(t_game *game, t_ray *ray)
 	
 	get_horizontal_info(game , ray, &info);
 	get_vertical_info(game , ray, &info);
-	printf("got vdist %f hdist %f \n", info.vdist, info.hdist);
 	if (info.vdist < info.hdist)
 	{
 		ray->dist = info.vdist;
 		ray->wallHit.x = info.vp.x;
 		ray->wallHit.y = info.vp.y;
+		ray->vertical_hit = true;
 	}
 	else
 	{
 		ray->dist = info.hdist;
 		ray->wallHit.x = info.hp.x;
 		ray->wallHit.y = info.hp.y;
+		ray->vertical_hit = false;
 	}
 }
 
 
-void	draw_strip(t_game *game,int x, double length, int color)
+void	draw_strip(t_game *game,int x, t_ray *ray)
 {
-	double v = length / 2;
-	if (v > WINDOW_HEIGHT/2)
-		v = WINDOW_HEIGHT/2;
-	for(int i = 0; i < v;i++)
+	int middle = WINDOW_HEIGHT / 2;
+
+	double angle_diff =  ray->angle - game->player.dir;
+	double fixedist = cos(angle_diff) * ray->dist;
+	double PROJECTION_PLANE_DIST  = ((double)WINDOW_WIDTH / 2) / tan((double)FOV/2);
+	double stripHeight = PROJECTION_PLANE_DIST / fixedist;
+
+	if (stripHeight > WINDOW_HEIGHT)
+		stripHeight = WINDOW_HEIGHT;
+	int start = middle - (stripHeight/2);
+
+	int tx = -1;
+	
+	if (ray->vertical_hit)
 	{
-		my_mlx_pixel_put(&game->mlx.data, x, (WINDOW_HEIGHT / 2 ) + i, color);
-		if ((WINDOW_HEIGHT / 2 ) - i < MINIMAP_HEIGHT && x < MINIMAP_WIDTH)
-			continue;
-		my_mlx_pixel_put(&game->mlx.data, x, (WINDOW_HEIGHT / 2 ) - i, color);
+		tx = (int)floor(ray->wallHit.y * WALL_SIZE) % WALL_SIZE;
+	}
+	else
+	{
+		tx = (int)floor(ray->wallHit.x * WALL_SIZE) % WALL_SIZE;
+	}
+	
+	printf("ray dist %f strip Height %f tx  %d pplan  %f\n", ray->dist, stripHeight, tx, PROJECTION_PLANE_DIST);
+	for(int y = start; y < (start + stripHeight);y++)
+	{
+		int ty =floor((double)(y - start) * ((double)WALL_SIZE / stripHeight));
+		//printf("addr %p  height %d width %d tx %d ty %d \n", game->walls.no.addr , game->walls.no.height,game->walls.no.width, tx , ty);
+
+		unsigned int c = ((unsigned int *)game->walls.no.addr)[ty * WALL_SIZE + tx];
+
+		c += ((int)(ray->dist * 5) << 24); // alpha
+		
+		if (ray->dist == 0.0) // darken inside walls or outside bounds
+			c = 0x00000000;
+		my_mlx_pixel_put(&game->mlx.data, x, y, c);
 	}
 }
 
@@ -246,51 +275,31 @@ void	init_ray(t_ray *ray, double angle)
 	ray->is_facing_up = !ray->is_facing_down;
 	ray->is_facing_right = angle < (M_PI / 2) || angle > (M_PI * 1.5);
 	ray->is_facing_left = !ray->is_facing_right;
-	
+	ray->vertical_hit = false;
+	ray->dist = 0;
+	ray->wallHit.x = 0;
+	ray->wallHit.y = 0;
 }
 
 void	castRays(t_game *game)
 {
 	t_ray *ray;
 	t_point player = {game->player.y, game->player.x};
-	int lineLength = 100;
-	double angle = game->player.dir - DEG_TO_RAD(FOV / 2);
+	double angle = game->player.dir - (FOV / 2);
 	double centerX = MINIMAP_WIDTH / 2;
     double centerY = MINIMAP_HEIGHT / 2;
-
-	double ratio = (double)(FOV) / NUM_RAYS;
+	double ratio = FOV / NUM_RAYS;
+	
 	for(int i  = 0; i < NUM_RAYS;i++)
 	{
 		double dist;
 		ray = malloc(sizeof(t_ray));
-		printf(" ------------------- initial angle %f --- - - - - - - - - -\n", angle);
 		init_ray(ray, normalizeAngle((angle)));
 		dda(game, ray);
-		printf("player at %f %f hit wall at %f %f with dist %f\n", game->player.y,game->player.x,ray->wallHit.x, ray->wallHit.y, ray->dist);
-
-		// not working properly		
-		//double x1 = (game->player.y * MINIMAP_SCALE) + centerX;
-		//double y1 = (game->player.x * MINIMAP_SCALE) + centerY;
-		//double x2 = (ray->wallHit.x * MINIMAP_SCALE) + centerX;
-		//double y2 = (ray->wallHit.y * MINIMAP_SCALE) + centerY;
-		//drawLine(game, x1, y1, x2, y2, 0xFF0000);
-		
-		printf("proj plane  dist %f\n", PROJECTION_PLANE_DIST);
-		double px = player.x;
-		double py = player.y;
-		//if (ray->is_facing_up)
-		//	px = ray->wallHit.x;
-		//if (ray->is_facing_left || ray->is_facing_right)
-		//	py = ray->wallHit.y;
-		
-		double ray_dist = distance(px, py, ray->wallHit.x, ray->wallHit.y);
-		printf("ray dist %f\n",ray_dist);
-		double stripHeight = (20 * PROJECTION_PLANE_DIST) / (ray_dist * 20);
-		printf("strip height %f\n", stripHeight);
-		draw_strip(game, i, stripHeight , 0x646464);
-		angle += DEG_TO_RAD(ratio);
-		//free(contact);
-		//printf("angle:%f\n",angle);
+		//printf("strip height %f\n", stripHeight);
+		draw_strip(game, i, ray);
+		angle += ratio;
 	}
+
 }
 

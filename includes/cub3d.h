@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/16 17:16:32 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:57:53 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define RIGHT_BUTTON 124
 # define QUIT_BUTTON 12
 
-# define FOV 90
+# define FOV DEG_TO_RAD(90)
 
 # define WINDOW_WIDTH 1280
 # define WINDOW_HEIGHT 1024
@@ -50,8 +50,10 @@
 # define SCALE 10
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
+# define WALL_SIZE 64
+
+
 // check if this is corrent
-# define PROJECTION_PLANE_DIST  ((WINDOW_WIDTH / 2) / tan(FOV/2))
 
 typedef struct s_point {
   double x;
@@ -64,8 +66,8 @@ typedef struct s_dda
     t_point vp;
     double	hdist;
     double	vdist;
-    double   initial_x;
-    double   initial_y;
+    double  initial_x;
+    double  initial_y;
 }t_dda;
 
 typedef struct s_ray {
@@ -73,7 +75,6 @@ typedef struct s_ray {
   t_point Dir;
   double angle;
   double dist;
-  int hit;
   t_point wallHit;
   int wallContent;
   double wallStripHeight;
@@ -81,6 +82,7 @@ typedef struct s_ray {
   bool is_facing_up;
   bool is_facing_right;
   bool is_facing_left;
+  bool	vertical_hit;
 } t_ray;
 
 typedef struct s_data {
@@ -163,6 +165,9 @@ void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void    draw_rays(t_game *game);
 void	init_ray(t_ray *ray, double angle);
+int handlePress(int keycode, void *param);
+int handleRelease(int keycode, void *param);
+int quite(t_game *game);
 
 // added
 void 	drawAngleInMap(t_game *game);
