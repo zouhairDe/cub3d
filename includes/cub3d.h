@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 19:00:13 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:21:37 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 # define WINDOW_HEIGHT 1024
 # define MINIMAP_WIDTH 250
 # define MINIMAP_HEIGHT 250
-# define MINIMAP_SCALE 20
+# define MINIMAP_SCALE 32
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
 # define WALL_SIZE 64

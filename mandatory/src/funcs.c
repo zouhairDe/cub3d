@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/22 18:54:10 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/23 20:45:46 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ void drawFovInMap(t_game *game)
 int	is_wall(t_game *game, double playerX, double playerY)
 {
 	//printf("X %f y %f \n", floor(playerX), floor(playerY));
-	if (playerX<=0 || playerX>game->map.maxCols || playerY<=0 || playerY>=game->map.rows)
+	if (playerX<=0 || playerX>=game->map.maxCols || playerY<=0 || playerY>=game->map.rows)
 	{
 		// printf("out of bounds wall check.\n");
 		return true;
 	}
-	return ((game->map.map[(int)(playerY-0.000000000001)][(int)(playerX-0.000000000001)] == '1') || (game->map.map[(int)(playerY+0.000000000001)][(int)(playerX+0.000000000001)] == '1'));
+	return ((game->map.map[(int)(playerY)][(int)(playerX)] == '1'));
 }
 
 void	info_init(t_dda *info)
@@ -139,18 +139,22 @@ void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 
 	//  find the xstep and ystep
 	ystep = 1 + (ray->is_facing_up * -2);
-	xstep = (ystep / angle_tan);
+	
+	xstep = (1 / angle_tan);
+	
 	if ((ray->is_facing_left && xstep > 0) || (ray->is_facing_right && xstep < 0))
 		xstep *= -1;
+		
 	info->hdist += distance(player.x, player.y , xintercept ,yintercept);
+	
 	double	next_horz_touchx = xintercept;
 	double	next_horz_touchy = yintercept;
-	//printf("horz angle %.4f xstep %f ystep %f\n", ray->angle, xstep, ystep);
+
 	while (1)
 	{
 		//printf("nhx %f nhy %f\n", next_horz_touchx, next_horz_touchy);
 		//putCircle(game, next_horz_touchx*MINIMAP_SCALE, next_horz_touchy*MINIMAP_SCALE, player.x*MINIMAP_SCALE, player.y*MINIMAP_SCALE, 0XFF0000);
-		if(is_wall(game, next_horz_touchx, next_horz_touchy))
+		if(is_wall(game, next_horz_touchx, next_horz_touchy - (ray->is_facing_up * 0.00000001)))
 			break;
 		info->hdist += distance(next_horz_touchx, next_horz_touchy, next_horz_touchx+xstep, next_horz_touchy+ystep);
 		next_horz_touchx += xstep;
@@ -173,7 +177,7 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 	yintercept =  player.y + ((xintercept - player.x) *  angle_tan);
 	
 	xstep = 1 + (ray->is_facing_left * -2);
-	ystep = (xstep * angle_tan);
+	ystep = angle_tan;
 
 	if ((ray->is_facing_up && ystep > 0) || (ray->is_facing_down && ystep < 0))
 		ystep *= -1;
@@ -181,12 +185,13 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 	info->vdist += distance(player.x, player.y , xintercept ,yintercept);
 	double	next_vert_touchx = xintercept;
 	double	next_vert_touchy = yintercept;
+
 	//printf("vert angle %.4f xstep %f ystep %f\n", ray->angle, xstep, ystep);
 	while (1)
 	{
 		//printf("nhx %f nhy %f\n", next_vert_touchx, next_vert_touchy);
 		//putCircle(game, next_vert_touchx*MINIMAP_SCALE, next_vert_touchy*MINIMAP_SCALE, player.x*MINIMAP_SCALE, player.y*MINIMAP_SCALE, 0XFFFF00);
-		if(is_wall(game, next_vert_touchx, next_vert_touchy))
+		if(is_wall(game, next_vert_touchx - (ray->is_facing_left * 0.00000001), next_vert_touchy))
 			break;
 		info->vdist += distance(next_vert_touchx, next_vert_touchy, next_vert_touchx+xstep, next_vert_touchy+ystep);
 		next_vert_touchx += xstep;
@@ -197,6 +202,7 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 	info->vp.x = next_vert_touchx;
 	info->vp.y = next_vert_touchy;
 }
+
 void	dda(t_game *game, t_ray *ray)
 {
 	t_dda info;
@@ -206,9 +212,11 @@ void	dda(t_game *game, t_ray *ray)
 	if (is_wall(game,player.x, player.y))
 	{
 		ray->dist = 0;
+		ray->wallHit.x = player.x;
+		ray->wallHit.y = player.y;
 		return;
 	}
-	
+
 	get_horizontal_info(game , ray, &info);
 	get_vertical_info(game , ray, &info);
 	if (info.vdist < info.hdist)
@@ -227,43 +235,41 @@ void	dda(t_game *game, t_ray *ray)
 	}
 }
 
-
-void	draw_strip(t_game *game,int x, t_ray *ray)
+void	draw_stripe(t_game *game,int x, t_ray *ray)
 {
-	int middle = WINDOW_HEIGHT / 2;
-
-	double angle_diff =  ray->angle - game->player.dir;
-	double fixedist = cos(angle_diff) * ray->dist;
+	double angle_diff =  normalizeAngle(ray->angle - game->player.dir);
+	double perp_dist = cos(angle_diff) * ray->dist;
 	double PROJECTION_PLANE_DIST  = ((double)WINDOW_WIDTH / 2) / tan((double)FOV/2);
-	double stripHeight = PROJECTION_PLANE_DIST / fixedist;
+	int stripHeight = (int)((1 / perp_dist) * PROJECTION_PLANE_DIST);
 
-	if (stripHeight > WINDOW_HEIGHT)
-		stripHeight = WINDOW_HEIGHT;
-	int start = middle - (stripHeight/2);
+	int start = (WINDOW_HEIGHT / 2) - (stripHeight / 2);
+	int end = (WINDOW_HEIGHT / 2) + (stripHeight / 2);
 
+	if (stripHeight < 0)
+	{
+		for(int y = 0; y < WINDOW_HEIGHT;y++)
+		{
+			my_mlx_pixel_put(&game->mlx.data, x, y, 0x00000000);
+		}
+		return;
+	}
+	
+	if (start < 0)
+		start = 0;
+	if (end > WINDOW_HEIGHT)
+		end = WINDOW_HEIGHT;
 	int tx = -1;
-	
 	if (ray->vertical_hit)
-	{
-		tx = (int)floor(ray->wallHit.y * WALL_SIZE) % WALL_SIZE;
-	}
+		tx = (int)(ray->wallHit.y * WALL_SIZE) % WALL_SIZE;
 	else
-	{
-		tx = (int)floor(ray->wallHit.x * WALL_SIZE) % WALL_SIZE;
-	}
-	
-	printf("ray dist %f strip Height %f tx  %d pplan  %f\n", ray->dist, stripHeight, tx, PROJECTION_PLANE_DIST);
-	for(int y = start; y < (start + stripHeight);y++)
-	{
-		int ty =floor((double)(y - start) * ((double)WALL_SIZE / stripHeight));
-		//printf("addr %p  height %d width %d tx %d ty %d \n", game->walls.no.addr , game->walls.no.height,game->walls.no.width, tx , ty);
+		tx = (int)(ray->wallHit.x * WALL_SIZE) % WALL_SIZE;
 
+	for(int y = start; y < end;y++)
+	{
+		int dft = y + (stripHeight /2) - (WINDOW_HEIGHT / 2);
+		int ty = dft * ((double)WALL_SIZE / stripHeight);
 		unsigned int c = ((unsigned int *)game->walls.no.addr)[ty * WALL_SIZE + tx];
-
-		c += ((int)(ray->dist * 5) << 24); // alpha
-		
-		if (ray->dist == 0.0) // darken inside walls or outside bounds
-			c = 0x00000000;
+		c += ((int)(ray->dist * 6) << 24); // alpha
 		my_mlx_pixel_put(&game->mlx.data, x, y, c);
 	}
 }
@@ -311,17 +317,14 @@ void	castRays(t_game *game)
 	double centerX = MINIMAP_WIDTH / 2;
     double centerY = MINIMAP_HEIGHT / 2;
 	double ratio = FOV / NUM_RAYS;
-	
 	for(int i  = 0; i < NUM_RAYS;i++)
 	{
 		double dist;
 		ray = malloc(sizeof(t_ray));
 		init_ray(ray, normalizeAngle((angle)));
 		dda(game, ray);
-		//printf("strip height %f\n", stripHeight);
-		draw_strip(game, i, ray);
+		draw_stripe(game, i, ray);
 		angle += ratio;
 	}
-
 }
 
