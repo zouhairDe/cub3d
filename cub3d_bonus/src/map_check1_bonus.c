@@ -187,9 +187,10 @@ int	setTextures(t_game *game)
 		return (printf("Error\nCouldn't load EA texture\n"));
 	game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel, &game->walls.ea.line_length, &game->walls.ea.endian);
 	
-	game->walls.CDoor.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/oxidized_copper_bulb_powered.xpm", &game->walls.CDoor.width, &game->walls.CDoor.height);
+	game->walls.CDoor.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/spruce_door_bottom.xpm", &game->walls.CDoor.width, &game->walls.CDoor.height);
 	if (!game->walls.CDoor.img)
 		return (printf("Error\nCouldn't load CDoor texture\n"));
+	game->walls.CDoor.addr = mlx_get_data_addr(game->walls.CDoor.img, &game->walls.CDoor.bits_per_pixel, &game->walls.CDoor.line_length, &game->walls.CDoor.endian);
 	return (0);
 }
 
@@ -222,7 +223,6 @@ bool	checkWallCollision(t_game *game, int keycode)
 	int newY;
 	double distance;
 
-	//make it stop 0.3 before touching wall
 	if (keycode == W_BUTTON)
 	{
 		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir);
@@ -335,6 +335,7 @@ int setMLX(t_game *game)
 	game->mlx.data.addr = mlx_get_data_addr(game->mlx.data.img, &game->mlx.data.bits_per_pixel, &game->mlx.data.line_length, &game->mlx.data.endian);
 	if (!game->mlx.data.addr)
 		return (printf("Error\nCouldn't create image\n"));
+	mlx_mouse_hide();
 	return (0);
 }
 

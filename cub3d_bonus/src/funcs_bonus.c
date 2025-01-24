@@ -296,14 +296,19 @@ void	draw_stripe(t_game *game,int x, t_ray *ray)
 		int dft = y + (stripHeight /2) - (WINDOW_HEIGHT / 2);
 		int ty = dft * ((double)WALL_SIZE / stripHeight);
 		unsigned int c = 0;
-		if (ray->face == N)
-			c = ((unsigned int *)game->walls.no.addr)[ty * WALL_SIZE + tx];
-		else if (ray->face == E)
-			c = ((unsigned int *)game->walls.ea.addr)[ty * WALL_SIZE + tx];
-		else if (ray->face == S)
-			c = ((unsigned int *)game->walls.so.addr)[ty * WALL_SIZE + tx];
-		else if (ray->face == W)
-			c = ((unsigned int *)game->walls.we.addr)[ty * WALL_SIZE + tx];
+		// else if (ray->wallContent == 0)
+		// {	
+			if (ray->face == N)
+				c = ((unsigned int *)game->walls.no.addr)[ty * WALL_SIZE + tx];
+			else if (ray->face == E)
+				c = ((unsigned int *)game->walls.ea.addr)[ty * WALL_SIZE + tx];
+			else if (ray->face == S)
+				c = ((unsigned int *)game->walls.so.addr)[ty * WALL_SIZE + tx];
+			else if (ray->face == W)
+				c = ((unsigned int *)game->walls.we.addr)[ty * WALL_SIZE + tx];
+			if (ray->wallContent == DOOR_CLOSED)
+				c = ((unsigned int *)game->walls.CDoor.addr)[ty * WALL_SIZE + tx];
+		// }
 		c += ((int)(ray->dist * 6) << 24); // alpha
 		my_mlx_pixel_put(&game->mlx.data, x, y, c);
 	}
