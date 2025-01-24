@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/23 21:20:01 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:52:37 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@
 # define NUM_RAYS WINDOW_WIDTH
 # define WALL_SIZE 64
 
+// USED FOR WALL FACE RENDERING.
+# define N 0
+# define E 1
+# define S 2
+# define W 3
+
 typedef struct s_point {
   double x;
   double y;
@@ -87,6 +93,7 @@ typedef struct s_ray {
   bool is_facing_right;
   bool is_facing_left;
   bool	vertical_hit;
+  int	face; // which face the ray hit NSEW
 } t_ray;
 
 typedef struct s_data {

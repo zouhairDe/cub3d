@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/23 21:21:14 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:07:14 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	notSurrounded(t_map *map)
 
 int	setTextures(t_game *game)
 {
-	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/NorthTexture.xpm", &game->walls.no.width, &game->walls.no.height);
+	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/oxidized_copper_bulb.xpm", &game->walls.no.width, &game->walls.no.height);
 	if (!game->walls.no.img)
 		return (printf("Error\nCouldn't load NO texture\n"));
 	game->walls.no.addr = mlx_get_data_addr(game->walls.no.img, &game->walls.no.bits_per_pixel,
@@ -162,28 +162,23 @@ int	setTextures(t_game *game)
 
 	game->walls.wt.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/WallTop.xpm", &game->walls.wt.width, &game->walls.wt.height);
 	if (!game->walls.wt.img)
-		return (printf("Error\nCouldn't load NO texture\n"));
-	game->walls.wt.addr = mlx_get_data_addr(game->walls.wt.img, &game->walls.wt.bits_per_pixel,
-		&game->walls.wt.line_length, &game->walls.wt.endian);
+		return (printf("Error\nCouldn't load WT texture\n"));
+	game->walls.wt.addr = mlx_get_data_addr(game->walls.wt.img, &game->walls.wt.bits_per_pixel, &game->walls.wt.line_length, &game->walls.wt.endian);
 		
-	//game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.so,
-	//	&game->walls.so.width, &game->walls.so.height);
-	//if (!game->walls.so.img)
-	//	return (printf("Error\nCouldn't load SO texture\n"));
-	//game->walls.we.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.we,
-	//	&game->walls.we.width, &game->walls.we.height);
-	//if (!game->walls.we.img)
-	//	return (printf("Error\nCouldn't load WE texture\n"));
-	//game->walls.ea.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.ea,
-	//	&game->walls.ea.width, &game->walls.ea.height);
-	//if (!game->walls.ea.img)
-	//	return (printf("Error\nCouldn't load EA texture\n"));
-	//game->walls.so.addr = mlx_get_data_addr(game->walls.so.img, &game->walls.so.bits_per_pixel,
-	//	&game->walls.so.line_length, &game->walls.so.endian);
-	//game->walls.we.addr = mlx_get_data_addr(game->walls.we.img, &game->walls.we.bits_per_pixel,
-	//	&game->walls.we.line_length, &game->walls.we.endian);
-	//game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel,
-	//	&game->walls.ea.line_length, &game->walls.ea.endian);
+	game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/oxidized_copper_bulb_powered.xpm", &game->walls.so.width, &game->walls.so.height);
+	if (!game->walls.so.img)
+		return (printf("Error\nCouldn't load SO texture\n"));
+	game->walls.so.addr = mlx_get_data_addr(game->walls.so.img, &game->walls.so.bits_per_pixel, &game->walls.so.line_length, &game->walls.so.endian);
+	
+	game->walls.we.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/exposed_copper_bulb_lit_powered.xpm", &game->walls.we.width, &game->walls.we.height);
+	if (!game->walls.we.img)
+		return (printf("Error\nCouldn't load WE texture\n"));
+	game->walls.we.addr = mlx_get_data_addr(game->walls.we.img, &game->walls.we.bits_per_pixel, &game->walls.we.line_length, &game->walls.we.endian);
+	
+	game->walls.ea.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/exposed_copper_bulb_lit.xpm", &game->walls.ea.width, &game->walls.ea.height);
+	if (!game->walls.ea.img)
+		return (printf("Error\nCouldn't load EA texture\n"));
+	game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel, &game->walls.ea.line_length, &game->walls.ea.endian);
 	return (0);
 }
 
