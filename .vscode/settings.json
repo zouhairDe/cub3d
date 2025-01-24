@@ -11,6 +11,8 @@
 		"locale": "c",
 		"optional": "c",
 		"typeinfo": "c",
-		"vector": "c"
+		"vector": "c",
+		"__cxx_version": "c",
+		"type_traits": "c"
 	}
 }

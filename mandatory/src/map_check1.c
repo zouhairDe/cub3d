@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 19:07:47 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/23 21:21:14 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,13 @@ int	setTextures(t_game *game)
 		return (printf("Error\nCouldn't load NO texture\n"));
 	game->walls.no.addr = mlx_get_data_addr(game->walls.no.img, &game->walls.no.bits_per_pixel,
 		&game->walls.no.line_length, &game->walls.no.endian);
+
+	game->walls.wt.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/WallTop.xpm", &game->walls.wt.width, &game->walls.wt.height);
+	if (!game->walls.wt.img)
+		return (printf("Error\nCouldn't load NO texture\n"));
+	game->walls.wt.addr = mlx_get_data_addr(game->walls.wt.img, &game->walls.wt.bits_per_pixel,
+		&game->walls.wt.line_length, &game->walls.wt.endian);
+		
 	//game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.so,
 	//	&game->walls.so.width, &game->walls.so.height);
 	//if (!game->walls.so.img)

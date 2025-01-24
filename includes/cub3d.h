@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 19:21:37 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/23 21:20:01 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct s_map {
   char *so;
   char *we;
   char *ea;
+  char *wt;
   char *C;
   char *F;
   int rows;
@@ -132,6 +133,7 @@ typedef struct s_texture {
   t_data so;
   t_data we;
   t_data ea;
+  t_data wt;
   unsigned int ceilling;
   unsigned int floor;
 } t_texture;

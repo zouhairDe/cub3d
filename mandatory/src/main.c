@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 19:00:24 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/23 21:17:36 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void init_game(t_game *game) {
   game->map.so = NULL;
   game->map.we = NULL;
   game->map.ea = NULL;
+  game->map.wt = NULL;
   game->map.C = NULL;
   game->map.F = NULL;
   game->map.map = NULL;
@@ -113,6 +114,7 @@ void init_game(t_game *game) {
   game->check_map.so = NULL;
   game->check_map.we = NULL;
   game->check_map.ea = NULL;
+//  game->check_map.wt = NULL; ??? 
   game->check_map.C = NULL;
   game->check_map.F = NULL;
   game->check_map.map = NULL;
@@ -137,6 +139,7 @@ void init_game(t_game *game) {
   game->mouseY = WINDOW_HEIGHT / 2;
   game->crosshair.size = 4;
   game->crosshair.thickness = 2;
+  
 }
 
 
