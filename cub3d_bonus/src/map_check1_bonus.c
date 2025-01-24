@@ -6,13 +6,11 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 19:07:47 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:07:14 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../includes/cub3d.h"
-#include <stdbool.h>
-#include <stdio.h>
+# include "../includes/cub3d_bonus.h"
 
 int	copy_map(t_game *game)
 {
@@ -116,7 +114,7 @@ int	check_chars(t_map *map)
 				map->map[i][j] != 'S' && map->map[i][j] != 'E' &&
 				map->map[i][j] != 'W' && map->map[i][j] != '\n' &&
 				map->map[i][j] != ' ' && map->map[i][j] != 'D')
-				return (printf("Error\nInvalid character in map at line: %s\nat %d --> %c\n", map->map[i], j, map->map[i][j]));
+				return (printf("Error\nInvalid character in map %s\nat %d --> %c\n", map->map[i], j, map->map[i][j]));
 			j++;
 		}
 		i++;
@@ -154,31 +152,44 @@ int	notSurrounded(t_map *map)
 
 int	setTextures(t_game *game)
 {
-	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/cracked_stone_bricks.xpm", &game->walls.no.width, &game->walls.no.height);
+	printf("Loading textures\n");
+	game->map.no[ft_strlen(game->map.no) - 1] = 0;
+	game->map.so[ft_strlen(game->map.so) - 1] = 0;
+	game->map.we[ft_strlen(game->map.we) - 1] = 0;
+	game->map.ea[ft_strlen(game->map.ea) - 1] = 0;
+	printf("North texture: %s\n", game->map.no);
+	printf("West texture: %s\n", game->map.we);
+	printf("South texture: %s\n", game->map.so);
+	printf("East texture: %s\n", game->map.ea);//ila kano khawyin l path khas error 9bl mmatwsl hna
+	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.no, &game->walls.no.width, &game->walls.no.height);
 	if (!game->walls.no.img)
 		return (printf("Error\nCouldn't load NO texture\n"));
 	game->walls.no.addr = mlx_get_data_addr(game->walls.no.img, &game->walls.no.bits_per_pixel,
 		&game->walls.no.line_length, &game->walls.no.endian);
-	game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/spruce_door_bottom.xpm",
-		&game->walls.so.width, &game->walls.so.height);
+
+	game->walls.wt.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/WallTop.xpm", &game->walls.wt.width, &game->walls.wt.height);
+	if (!game->walls.wt.img)
+		return (printf("Error\nCouldn't load WT texture\n"));
+	game->walls.wt.addr = mlx_get_data_addr(game->walls.wt.img, &game->walls.wt.bits_per_pixel, &game->walls.wt.line_length, &game->walls.wt.endian);
+	
+	game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.so, &game->walls.so.width, &game->walls.so.height);
 	if (!game->walls.so.img)
 		return (printf("Error\nCouldn't load SO texture\n"));
 	game->walls.so.addr = mlx_get_data_addr(game->walls.so.img, &game->walls.so.bits_per_pixel, &game->walls.so.line_length, &game->walls.so.endian);
-	// game->walls.we.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/WestTexture.xpm",
-	// 	&game->walls.we.width, &game->walls.we.height);
-	// if (!game->walls.we.img)
-	// 	return (printf("Error\nCouldn't load WE texture\n"));
-	// game->walls.we.addr = mlx_get_data_addr(game->walls.we.img, &game->walls.we.bits_per_pixel, &game->walls.we.line_length, &game->walls.we.endian);
-	//game->walls.ea.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.ea,
-	//	&game->walls.ea.width, &game->walls.ea.height);
-	//if (!game->walls.ea.img)
-	//	return (printf("Error\nCouldn't load EA texture\n"));
-	//game->walls.so.addr = mlx_get_data_addr(game->walls.so.img, &game->walls.so.bits_per_pixel,
-	//	&game->walls.so.line_length, &game->walls.so.endian);
-	//game->walls.we.addr = mlx_get_data_addr(game->walls.we.img, &game->walls.we.bits_per_pixel,
-	//	&game->walls.we.line_length, &game->walls.we.endian);
-	//game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel,
-	//	&game->walls.ea.line_length, &game->walls.ea.endian);
+	
+	game->walls.we.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.we, &game->walls.we.width, &game->walls.we.height);
+	if (!game->walls.we.img)
+		return (printf("Error\nCouldn't load WE texture\n"));
+	game->walls.we.addr = mlx_get_data_addr(game->walls.we.img, &game->walls.we.bits_per_pixel, &game->walls.we.line_length, &game->walls.we.endian);
+	
+	game->walls.ea.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.ea, &game->walls.ea.width, &game->walls.ea.height);
+	if (!game->walls.ea.img)
+		return (printf("Error\nCouldn't load EA texture\n"));
+	game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel, &game->walls.ea.line_length, &game->walls.ea.endian);
+	
+	game->walls.CDoor.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/oxidized_copper_bulb_powered.xpm", &game->walls.CDoor.width, &game->walls.CDoor.height);
+	if (!game->walls.CDoor.img)
+		return (printf("Error\nCouldn't load CDoor texture\n"));
 	return (0);
 }
 
@@ -319,12 +330,11 @@ int setMLX(t_game *game)
 	if (!game->mlx.win)
 		return (printf("Error\nCouldn't create window\n"));
 	game->mlx.data.img = mlx_new_image(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	if (!game->mlx.data.img)
+	if (!game->mlx.data.img)//shit is so fkng t9il
 		return (printf("Error\nCouldn't create image\n"));
 	game->mlx.data.addr = mlx_get_data_addr(game->mlx.data.img, &game->mlx.data.bits_per_pixel, &game->mlx.data.line_length, &game->mlx.data.endian);
 	if (!game->mlx.data.addr)
 		return (printf("Error\nCouldn't create image\n"));
-	mlx_mouse_hide();
 	return (0);
 }
 

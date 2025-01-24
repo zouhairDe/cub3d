@@ -6,11 +6,11 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/24 13:57:08 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/23 20:45:46 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 void drawLine(t_game *game, int x1, int y1, int x2, int y2, int color)
 {
@@ -108,6 +108,21 @@ int	is_wall(t_game *game, double playerX, double playerY)
 	return ((game->map.map[(int)(playerY)][(int)(playerX)] == '1'));
 }
 
+int isDoor(t_game *game, double playerX, double playerY, t_ray *ray)
+{
+	if (playerX <= 0 || playerX>=game->map.maxCols || playerY <= 0 || playerY>=game->map.rows)
+	{
+		// printf("out of bounds wall check.\n");
+		return false;
+	}
+	if (game->map.map[(int)(playerY)][(int)(playerX)] == 'D')
+	{
+		ray->wallContent = DOOR_CLOSED;//door is closed
+		return true;
+	}
+	return (false);
+}
+
 void	info_init(t_dda *info)
 {
 	info->hp.x = 0;
@@ -156,6 +171,8 @@ void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 		//putCircle(game, next_horz_touchx*MINIMAP_SCALE, next_horz_touchy*MINIMAP_SCALE, player.x*MINIMAP_SCALE, player.y*MINIMAP_SCALE, 0XFF0000);
 		if(is_wall(game, next_horz_touchx, next_horz_touchy - (ray->is_facing_up * 0.00000001)))
 			break;
+		if (isDoor(game, next_horz_touchx, next_horz_touchy - (ray->is_facing_up * 0.00000001), ray) && info->hdist > 0)
+			break;
 		info->hdist += distance(next_horz_touchx, next_horz_touchy, next_horz_touchx+xstep, next_horz_touchy+ystep);
 		next_horz_touchx += xstep;
 		next_horz_touchy += ystep;
@@ -193,6 +210,8 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 		//putCircle(game, next_vert_touchx*MINIMAP_SCALE, next_vert_touchy*MINIMAP_SCALE, player.x*MINIMAP_SCALE, player.y*MINIMAP_SCALE, 0XFFFF00);
 		if(is_wall(game, next_vert_touchx - (ray->is_facing_left * 0.00000001), next_vert_touchy))
 			break;
+		if (isDoor(game, next_vert_touchx - (ray->is_facing_left * 0.00000001), next_vert_touchy, ray) && info->vdist > 0)
+			break;
 		info->vdist += distance(next_vert_touchx, next_vert_touchy, next_vert_touchx+xstep, next_vert_touchy+ystep);
 		next_vert_touchx += xstep;
 		next_vert_touchy += ystep;
@@ -225,10 +244,6 @@ void	dda(t_game *game, t_ray *ray)
 		ray->wallHit.x = info.vp.x;
 		ray->wallHit.y = info.vp.y;
 		ray->vertical_hit = true;
-		if (player.x < ray->wallHit.x)
-			ray->face = W;
-		else
-			ray->face = E;
 	}
 	else
 	{
@@ -236,10 +251,6 @@ void	dda(t_game *game, t_ray *ray)
 		ray->wallHit.x = info.hp.x;
 		ray->wallHit.y = info.hp.y;
 		ray->vertical_hit = false;
-		if (player.y < ray->wallHit.y)
-			ray->face = N;
-		else
-			ray->face = S;
 	}
 }
 
@@ -262,6 +273,7 @@ void	draw_stripe(t_game *game,int x, t_ray *ray)
 		return;
 	}
 	
+	
 	if (start < 0)
 		start = 0;
 	if (end > WINDOW_HEIGHT)
@@ -276,15 +288,12 @@ void	draw_stripe(t_game *game,int x, t_ray *ray)
 	{
 		int dft = y + (stripHeight /2) - (WINDOW_HEIGHT / 2);
 		int ty = dft * ((double)WALL_SIZE / stripHeight);
-		unsigned int c = 0;
-		if (ray->face == N)
-			c = ((unsigned int *)game->walls.no.addr)[ty * WALL_SIZE + tx];
-		else if (ray->face == E)
-			c = ((unsigned int *)game->walls.ea.addr)[ty * WALL_SIZE + tx];
-		else if (ray->face == S)
+		unsigned int c;
+		if (ray->wallContent == 2)//door, need to chek wheter its opened or not 
 			c = ((unsigned int *)game->walls.so.addr)[ty * WALL_SIZE + tx];
-		else if (ray->face == W)
-			c = ((unsigned int *)game->walls.we.addr)[ty * WALL_SIZE + tx];
+		else if (ray->wallContent == 0)
+			c = ((unsigned int *)game->walls.no.addr)[ty * WALL_SIZE + tx];
+
 		c += ((int)(ray->dist * 6) << 24); // alpha
 		my_mlx_pixel_put(&game->mlx.data, x, y, c);
 	}
@@ -301,6 +310,7 @@ void	init_ray(t_ray *ray, double angle)
 	ray->dist = 0;
 	ray->wallHit.x = 0;
 	ray->wallHit.y = 0;
+	ray->wallContent = 0;
 }
 
 void logs(double angle, double ray_dist, double stripHeight, t_game *game, t_ray *ray)
@@ -330,8 +340,8 @@ void	castRays(t_game *game)
 	t_ray *ray;
 	t_point player = {game->player.y, game->player.x};
 	double angle = game->player.dir - (FOV / 2);
-	double centerX = MINIMAP_WIDTH / 2;
-    double centerY = MINIMAP_HEIGHT / 2;
+	double centerX = MINIMAP_WIDTH * 1.0 / 2;
+    double centerY = MINIMAP_HEIGHT * 1.0 / 2;
 	double ratio = FOV / NUM_RAYS;
 	for(int i  = 0; i < NUM_RAYS;i++)
 	{

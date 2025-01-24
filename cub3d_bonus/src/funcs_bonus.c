@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/23 20:45:46 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:57:08 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,10 @@ void	dda(t_game *game, t_ray *ray)
 		ray->wallHit.x = info.vp.x;
 		ray->wallHit.y = info.vp.y;
 		ray->vertical_hit = true;
+		if (player.x < ray->wallHit.x)
+			ray->face = W;
+		else
+			ray->face = E;
 	}
 	else
 	{
@@ -251,6 +255,10 @@ void	dda(t_game *game, t_ray *ray)
 		ray->wallHit.x = info.hp.x;
 		ray->wallHit.y = info.hp.y;
 		ray->vertical_hit = false;
+		if (player.y < ray->wallHit.y)
+			ray->face = N;
+		else
+			ray->face = S;
 	}
 }
 
@@ -273,7 +281,6 @@ void	draw_stripe(t_game *game,int x, t_ray *ray)
 		return;
 	}
 	
-	
 	if (start < 0)
 		start = 0;
 	if (end > WINDOW_HEIGHT)
@@ -288,12 +295,15 @@ void	draw_stripe(t_game *game,int x, t_ray *ray)
 	{
 		int dft = y + (stripHeight /2) - (WINDOW_HEIGHT / 2);
 		int ty = dft * ((double)WALL_SIZE / stripHeight);
-		unsigned int c;
-		if (ray->wallContent == 2)//door, need to chek wheter its opened or not 
-			c = ((unsigned int *)game->walls.so.addr)[ty * WALL_SIZE + tx];
-		else if (ray->wallContent == 0)
+		unsigned int c = 0;
+		if (ray->face == N)
 			c = ((unsigned int *)game->walls.no.addr)[ty * WALL_SIZE + tx];
-
+		else if (ray->face == E)
+			c = ((unsigned int *)game->walls.ea.addr)[ty * WALL_SIZE + tx];
+		else if (ray->face == S)
+			c = ((unsigned int *)game->walls.so.addr)[ty * WALL_SIZE + tx];
+		else if (ray->face == W)
+			c = ((unsigned int *)game->walls.we.addr)[ty * WALL_SIZE + tx];
 		c += ((int)(ray->dist * 6) << 24); // alpha
 		my_mlx_pixel_put(&game->mlx.data, x, y, c);
 	}
@@ -310,7 +320,6 @@ void	init_ray(t_ray *ray, double angle)
 	ray->dist = 0;
 	ray->wallHit.x = 0;
 	ray->wallHit.y = 0;
-	ray->wallContent = 0;
 }
 
 void logs(double angle, double ray_dist, double stripHeight, t_game *game, t_ray *ray)

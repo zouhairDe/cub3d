@@ -1,8 +1,8 @@
 
- 	 	 	  NO textures/NorthTexture.xpm
-  SO   	 	 	  textures/SouthTexture.xpm
-					   WE textures/WestTexture.xpm
-	 	   EA textures/EasthTexture.xpm
+ 	 	 	  NO ./texture_stock/xpm/oxidized_copper_bulb.xpm
+ 	 	 	  SO	  ./texture_stock/xpm/oxidized_copper_bulb_powered.xpm
+					   WE ./texture_stock/xpm/exposed_copper_bulb_lit_powered.xpm
+	 	   EA ./texture_stock/xpm/exposed_copper_bulb_lit.xpm
 
 F 61,32,1
 C 0,185,222

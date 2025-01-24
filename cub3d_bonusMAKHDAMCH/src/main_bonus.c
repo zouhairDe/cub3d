@@ -6,11 +6,11 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/23 21:17:36 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:00:24 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 #include <sys/stat.h>
 
 int start_map_allocation(t_game *game, char **line) {
@@ -103,7 +103,6 @@ void init_game(t_game *game) {
   game->map.so = NULL;
   game->map.we = NULL;
   game->map.ea = NULL;
-  game->map.wt = NULL;
   game->map.C = NULL;
   game->map.F = NULL;
   game->map.map = NULL;
@@ -114,7 +113,6 @@ void init_game(t_game *game) {
   game->check_map.so = NULL;
   game->check_map.we = NULL;
   game->check_map.ea = NULL;
-//  game->check_map.wt = NULL; ??? 
   game->check_map.C = NULL;
   game->check_map.F = NULL;
   game->check_map.map = NULL;
@@ -139,7 +137,6 @@ void init_game(t_game *game) {
   game->mouseY = WINDOW_HEIGHT / 2;
   game->crosshair.size = 4;
   game->crosshair.thickness = 2;
-  
 }
 
 
@@ -210,6 +207,64 @@ void free_game(t_game *game) {
   close(game->map.fd);
 }
 
+int handle_mouse_click(int button, int x, int y, void *param)
+{
+    t_game *game = (t_game *)param;
+    if (button == 1) // left click
+    {
+        printf("LEFT Mouse click at %d %d\n", x, y);
+		printf("player pos %f %f\n", game->player.x, game->player.y);
+        
+        // Cast a ray from player position in their facing direction
+        double step = 0.1; // Step size for checking
+        double max_dist = 1.0; // Maximum distance to check
+        double curr_dist = 0.0;
+        
+        while (curr_dist <= max_dist)
+        {
+            // Calculate check position
+            double check_x = game->player.x + (sin(game->player.dir) * curr_dist);
+            double check_y = game->player.y + (cos(game->player.dir) * curr_dist);
+            
+            // Convert to map coordinates
+            int mapX = (int)check_y;
+            int mapY = (int)check_x;
+			
+			printf("check pos %f %f\n", check_x, check_y);
+			printf("map pos %d %d\n", mapX, mapY);
+            
+            // Check bounds
+            if (mapX < 0 || mapY < 0 || mapX >= game->map.maxCols || mapY >= game->map.rows)
+            {
+				printf("out of bounds\n");
+				break;
+			}
+            
+            // Check for door and toggle it
+            if (game->map.map[mapY][mapX] == 'D')
+            {
+                game->map.map[mapY][mapX] = 'd';
+                printf("door opened at %d,%d\n", mapX, mapY);
+                return (0);
+            }
+            else if (game->map.map[mapY][mapX] == 'd')
+            {
+                game->map.map[mapY][mapX] = 'D';
+                printf("door closed at %d,%d\n", mapX, mapY);
+                return (0);
+            }
+            else if (game->map.map[mapY][mapX] == '1') // Hit a wall
+            {
+				printf("hit a wall at %d %d\n", mapX, mapY);
+				break;
+			}
+            
+            curr_dist += step;
+        }
+    }
+    return (0);
+}
+
 int main(int ac, char **av) {
   //   atexit(fff);
   t_game game;
@@ -225,7 +280,7 @@ int main(int ac, char **av) {
 	mlx_hook(game.mlx.win, 17, 0, quite, &game);
 	mlx_loop_hook(game.mlx.mlx, simulate, &game);
 	mlx_hook(game.mlx.win, ON_MOUSEMOVE, 0, handle_mouse, &game);
-	// mlx_mouse_hook(game->mlx.win, handle_mouse, (void *)game);//hadi mni n9ado doors ndiroha t7l b left click
+	mlx_mouse_hook(game.mlx.win, handle_mouse_click, &game);//hadi mni n9ado doors ndiroha t7l b left click
 	mlx_loop(game.mlx.mlx);
 
   free_game(&game);

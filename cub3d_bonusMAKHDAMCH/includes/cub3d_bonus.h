@@ -6,16 +6,16 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/24 13:52:37 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:21:37 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 #define CUB3D_H
 
-#include "../gnl/get_next_line_bonus.h"
+#include "../../gnl/get_next_line_bonus.h"
 # include "mlx.h"
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -53,12 +53,8 @@
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
 # define WALL_SIZE 64
-
-// USED FOR WALL FACE RENDERING.
-# define N 0
-# define E 1
-# define S 2
-# define W 3
+# define DOOR_CLOSED 2
+# define DOOR_OPEN 3
 
 typedef struct s_point {
   double x;
@@ -93,7 +89,6 @@ typedef struct s_ray {
   bool is_facing_right;
   bool is_facing_left;
   bool	vertical_hit;
-  int	face; // which face the ray hit NSEW
 } t_ray;
 
 typedef struct s_data {
@@ -119,7 +114,6 @@ typedef struct s_map {
   char *so;
   char *we;
   char *ea;
-  char *wt;
   char *C;
   char *F;
   int rows;
@@ -140,7 +134,6 @@ typedef struct s_texture {
   t_data so;
   t_data we;
   t_data ea;
-  t_data wt;
   unsigned int ceilling;
   unsigned int floor;
 } t_texture;

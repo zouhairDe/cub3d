@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 20:28:17 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:26:32 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void collorCeilling(t_game *game)
 			//if (i < MINIMAP_HEIGHT && j < MINIMAP_HEIGHT)
 			//	continue ;
 			//else
-			my_mlx_pixel_put(&game->mlx.data, i, j, 0x00F3FF);//game->walls.ceilling);
+			my_mlx_pixel_put(&game->mlx.data, i, j, game->walls.ceilling);//game->walls.ceilling);
 		}
 	}
 }
@@ -51,7 +51,7 @@ void collorFloor(t_game *game)
 		j = WINDOW_HEIGHT / 2;
 		while (j < WINDOW_HEIGHT)
 		{
-			my_mlx_pixel_put(&game->mlx.data, i, j, 0X5b3207 );// game->walls.floor);
+			my_mlx_pixel_put(&game->mlx.data, i, j, game->walls.floor);// game->walls.floor);
 			j++;
 		}
 		i++;
@@ -77,7 +77,7 @@ void drawMiniMapBorders(t_game *game)
 			}
 			else
 			{
-				my_mlx_pixel_put(&game->mlx.data, i, j, 0X00000000); // background
+				my_mlx_pixel_put(&game->mlx.data, i, j, game->walls.floor); // background
 			}
 			j++;
 		}
@@ -101,34 +101,44 @@ void drawRotatedMap(t_game *game)
 
     for (int i = 0; i < game->map.rows; i++)
     {
-        for (int j = 0; j < ft_strlen(game->map.map[i]); j++)
+		int col = ft_strlen(game->map.map[i]);
+        for (int j = 0; j < col; j++)
         {
             double mapX = (j - P.x) * MINIMAP_SCALE;
             double mapY = (i - P.y) * MINIMAP_SCALE;
             int screenX = centerX + (int)mapX;
             int screenY = centerY + (int)mapY;
 
-            if (screenX < 0 || screenY < 0 || screenX >= MINIMAP_WIDTH || screenY >= MINIMAP_HEIGHT)
-                continue;
+            //if (screenX < 0 || screenY < 0 || screenX >= MINIMAP_WIDTH || screenY >= MINIMAP_HEIGHT)
+            //    continue;
 
 			for (int a =0 ;a < MINIMAP_SCALE;a++) // remove later Grid.
 			{
+				if (screenX >  8 * MINIMAP_SCALE || screenY > 8 * MINIMAP_SCALE)
+					continue;
 				my_mlx_pixel_put(&game->mlx.data, screenX+a, screenY, 0Xe5e5e5);
 				my_mlx_pixel_put(&game->mlx.data, screenX, screenY+a, 0Xe5e5e5);
 			}
+			
             if (game->map.map[i][j] == '1')
             {
-                for (int x = 0; x < MINIMAP_SCALE; x++)
-                {
-                    for (int y = 0; y < MINIMAP_SCALE; y++)
-                    {
-                        int pixelX = screenX + x;
-                        int pixelY = screenY + y;
-                        if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
-                            my_mlx_pixel_put(&game->mlx.data, pixelX, pixelY, 0X0000FFFF);
-                    }
-                }
-            }
+				for (int x = 0; x < MINIMAP_SCALE; x++)
+				{
+					for (int y = 0; y < MINIMAP_SCALE; y++)
+					{
+						int pixelX = screenX + x;
+						int pixelY = screenY + y;
+						if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
+						{
+							int tx = (pixelX-screenX) % (WALL_SIZE/2);
+							int ty = (pixelY-screenY) % (WALL_SIZE/2);
+							unsigned int color = ((unsigned int *)game->walls.wt.addr)[ty * (WALL_SIZE/2) + tx];
+							my_mlx_pixel_put(&game->mlx.data, pixelX, pixelY, color);
+						}
+					}
+				}
+			}
+            
         }
     }
 }
