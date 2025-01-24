@@ -13,9 +13,9 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-#include "../gnl/get_next_line_bonus.h"
+#include "../../gnl/get_next_line_bonus.h"
 # include "mlx.h"
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -53,6 +53,8 @@
 # define RAY_STEP 0.1
 # define NUM_RAYS WINDOW_WIDTH
 # define WALL_SIZE 64
+# define DOOR_CLOSED 2
+# define DOOR_OPEN 3
 
 typedef struct s_point {
   double x;

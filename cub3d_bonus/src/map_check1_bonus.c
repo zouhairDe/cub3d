@@ -115,8 +115,8 @@ int	check_chars(t_map *map)
 				map->map[i][j] != '2' && map->map[i][j] != 'N' &&
 				map->map[i][j] != 'S' && map->map[i][j] != 'E' &&
 				map->map[i][j] != 'W' && map->map[i][j] != '\n' &&
-				map->map[i][j] != ' ')
-				return (printf("Error\nInvalid character in map %s\nat %d --> %cy\n", map->map[i], j, map->map[i][j]));
+				map->map[i][j] != ' ' && map->map[i][j] != 'D')
+				return (printf("Error\nInvalid character in map at line: %s\nat %d --> %c\n", map->map[i], j, map->map[i][j]));
 			j++;
 		}
 		i++;
@@ -154,19 +154,21 @@ int	notSurrounded(t_map *map)
 
 int	setTextures(t_game *game)
 {
-	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/NorthTexture.xpm", &game->walls.no.width, &game->walls.no.height);
+	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/cracked_stone_bricks.xpm", &game->walls.no.width, &game->walls.no.height);
 	if (!game->walls.no.img)
 		return (printf("Error\nCouldn't load NO texture\n"));
 	game->walls.no.addr = mlx_get_data_addr(game->walls.no.img, &game->walls.no.bits_per_pixel,
 		&game->walls.no.line_length, &game->walls.no.endian);
-	//game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.so,
-	//	&game->walls.so.width, &game->walls.so.height);
-	//if (!game->walls.so.img)
-	//	return (printf("Error\nCouldn't load SO texture\n"));
-	//game->walls.we.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.we,
-	//	&game->walls.we.width, &game->walls.we.height);
-	//if (!game->walls.we.img)
-	//	return (printf("Error\nCouldn't load WE texture\n"));
+	game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/spruce_door_bottom.xpm",
+		&game->walls.so.width, &game->walls.so.height);
+	if (!game->walls.so.img)
+		return (printf("Error\nCouldn't load SO texture\n"));
+	game->walls.so.addr = mlx_get_data_addr(game->walls.so.img, &game->walls.so.bits_per_pixel, &game->walls.so.line_length, &game->walls.so.endian);
+	// game->walls.we.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/WestTexture.xpm",
+	// 	&game->walls.we.width, &game->walls.we.height);
+	// if (!game->walls.we.img)
+	// 	return (printf("Error\nCouldn't load WE texture\n"));
+	// game->walls.we.addr = mlx_get_data_addr(game->walls.we.img, &game->walls.we.bits_per_pixel, &game->walls.we.line_length, &game->walls.we.endian);
 	//game->walls.ea.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.ea,
 	//	&game->walls.ea.width, &game->walls.ea.height);
 	//if (!game->walls.ea.img)
@@ -207,11 +209,14 @@ bool	checkWallCollision(t_game *game, int keycode)
 {
 	int newX;
 	int newY;
+	double distance;
 
+	//make it stop 0.3 before touching wall
 	if (keycode == W_BUTTON)
 	{
 		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir);
 		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir);
+		// distance = distance(game->player.x, game->player.y, newX, newY);
 	}
 	else if (keycode == S_BUTTON)
 	{
@@ -229,11 +234,11 @@ bool	checkWallCollision(t_game *game, int keycode)
 		newY = game->player.y - game->player.moveSpeed * sin(game->player.dir);
 	}
 	
-	if (newX < 0 || newY < 0 || newX >= game->check_map.rows
-		|| newY >= ft_strlen(game->check_map.map[(int)newX]))
+	if (newX < 0 || newY < 0 || newX >= game->map.rows
+		|| newY >= ft_strlen(game->map.map[(int)newX]))
 		return (false);
 	
-	if (game->check_map.map[(int)newX][(int)newY] == '1')
+	if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 		return (false);
 	return (true);
 }
@@ -314,11 +319,12 @@ int setMLX(t_game *game)
 	if (!game->mlx.win)
 		return (printf("Error\nCouldn't create window\n"));
 	game->mlx.data.img = mlx_new_image(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	if (!game->mlx.data.img)//shit is so fkng t9il
+	if (!game->mlx.data.img)
 		return (printf("Error\nCouldn't create image\n"));
 	game->mlx.data.addr = mlx_get_data_addr(game->mlx.data.img, &game->mlx.data.bits_per_pixel, &game->mlx.data.line_length, &game->mlx.data.endian);
 	if (!game->mlx.data.addr)
 		return (printf("Error\nCouldn't create image\n"));
+	mlx_mouse_hide();
 	return (0);
 }
 

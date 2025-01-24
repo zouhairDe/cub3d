@@ -1,5 +1,5 @@
 CC = cc
-FLAGS =  -g -fsanitize=address#-Wall -Wextra -Werror
+FLAGS = -g -fsanitize=address#-Wall -Wextra -Werror
 LIBS = -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -11,10 +11,19 @@ NAME = cub3D
 CUB3D_HEADER = $(HEADER_DIR)cub3d.h
 HEADER_DIR = includes/
 
+BONUS_NAME = $(BONUS_DIR)cub3D_bonus
+BONUS_DIR = cub3d_bonus/
+BONUS_HEADER_DIR = $(BONUS_DIR)includes/
+BONUS_HEADER = $(BONUS_HEADER_DIR)cub3d_bonus.h
+BONUS_SRC_DIR = $(BONUS_DIR)src/
+BONUS_OBJ_DIR = $(BONUS_DIR)obj/
+BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c math_bonus.c funcs_bonus.c
+
 SRC_DIR = mandatory/src/
 OBJ_DIR = mandatory/obj/
 FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c
 
+BOBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_FILES:.c=.o))
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))
 
@@ -42,6 +51,9 @@ all: $(LIBFT) $(OBJ_DIR) $(NAME) thanks
 
 thanks:
 	@echo "$(BLACK)$(WHITE_BG)$(BOLD)Compilation complete.$(RESET)"
+		
+bonus: $(LIBFT) $(BONUS_OBJ_DIR) $(BONUS_NAME) thanks 
+	@rm -rf *.dSYM $(BONUS_DIR)*.dSYM
 
 $(LIBFT): $(LIBFT_DIR)
 	@echo "$(GREEN)$(BOLD)Compiling libft$(DEFAULT)"
@@ -50,26 +62,37 @@ $(LIBFT): $(LIBFT_DIR)
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
+$(BONUS_OBJ_DIR):
+	@mkdir -p $(BONUS_OBJ_DIR)
+
 $(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(LIBS) ./lib/libmlx.a $(FLAGS) $(OBJ) $(LIBFT) $(GNL) -o $(NAME)
+
+$(BONUS_NAME): $(BOBJ) $(LIBFT)
+	@$(CC) $(LIBS) ./lib/libmlx.a $(FLAGS) $(BOBJ) $(LIBFT) $(GNL) -o $(BONUS_NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(CUB3D_HEADER) $(GNL_HEADER)
 	@$(CC) $(FLAGS) -I $(HEADER_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) -c $< -o $@
 	$(update_progress)
 
+$(BONUS_OBJ_DIR)%.o: $(BONUS_SRC_DIR)%.c $(BONUS_HEADER) $(GNL_HEADER)
+	@$(CC) $(FLAGS) -I $(BONUS_HEADER_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) -c $< -o $@
+	$(update_progress)
+
 clean:
 	@rm -rf $(OBJ_DIR)
+	@rm -rf $(BONUS_OBJ_DIR)
 	@make -sC $(LIBFT_DIR) clean
-	@echo "$(RED)$(BOLD)Cleaning libft Object files...$(DEFAULT)"
-	@echo "$(RED)$(BOLD)[$(NAME)] object Removed$(RESET)"
+	@echo "$(RED)$(BOLD)Cleaning object files...$(DEFAULT)"
+	@echo "$(RED)$(BOLD)[$(NAME)] objects Removed$(RESET)"
 
 fclean: clean
 	@rm -f $(NAME)
+	@rm -f $(BONUS_NAME)
 	@make -sC $(LIBFT_DIR) fclean
-	@echo "$(RED)$(BOLD)Cleaning libft$(DEFAULT)"
-	@echo "$(RED)$(BOLD)[$(NAME)] executable Removed$(RESET)"
+	@echo "$(RED)$(BOLD)Cleaning executables$(DEFAULT)"
+	@echo "$(RED)$(BOLD)[$(NAME)] executables Removed$(RESET)"
 
 re: fclean all
 
-.PHONY: all clean fclean re thanks
-
+.PHONY: all clean fclean re bonus thanks
