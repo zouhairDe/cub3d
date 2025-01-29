@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_check1.c                                       :+:      :+:    :+:   */
+/*   map_check1_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/24 14:07:14 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/26 17:30:22 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,7 +289,6 @@ int handlePress(int keycode, void *param)
 		game->player.y -= game->player.moveSpeed * sin(game->player.dir);
 	}
 	game->player.dir = normalizeAngle(game->player.dir);
-	simulate(game);
 	return 0;
 }
 

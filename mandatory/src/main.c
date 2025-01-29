@@ -6,12 +6,11 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/23 21:17:36 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:41:40 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
-#include <sys/stat.h>
+#include "../includes/cub3d.h"
 
 int start_map_allocation(t_game *game, char **line) {
 	char **tmp;
@@ -20,7 +19,7 @@ int start_map_allocation(t_game *game, char **line) {
 	if (game->map.map == NULL) {
 	  game->map.map = malloc(sizeof(char *));
 	  if (!game->map.map)
-	    return (1);
+		return (1);
 	  game->map.map[0] = ft_strdup(*line);
 	  game->map.rows++;
 	  game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
@@ -57,19 +56,19 @@ int manage_line_logic(char *line, t_game *game) {
   tmp = line;
   dump_spaces(&line);
   if (!ft_strncmp(line, "NO ", 3) || !ft_strncmp(line, "NO\t", 3))
-    return (ft_line_value(line, &game->map.no));
+	return (ft_line_value(line, &game->map.no));
   else if (!ft_strncmp(line, "SO ", 3) || !ft_strncmp(line, "SO\t", 3))
-    return (ft_line_value(line, &game->map.so));
+	return (ft_line_value(line, &game->map.so));
   else if (!ft_strncmp(line, "WE ", 3) || !ft_strncmp(line, "WE\t", 3))
-    return (ft_line_value(line, &game->map.we));
+	return (ft_line_value(line, &game->map.we));
   else if (!ft_strncmp(line, "EA ", 3) || !ft_strncmp(line, "EA\t", 3))
-    return (ft_line_value(line, &game->map.ea));
+	return (ft_line_value(line, &game->map.ea));
   else if (!ft_strncmp(line, "C ", 2) || !ft_strncmp(line, "C\t", 2))
-    return (ft_line_value(line, &game->map.C));
+	return (ft_line_value(line, &game->map.C));
   else if (!ft_strncmp(line, "F ", 2) || !ft_strncmp(line, "F\t", 2))
-    return (ft_line_value(line, &game->map.F));
+	return (ft_line_value(line, &game->map.F));
   else if (ft_strchr(line, '1') || ft_strchr(line, '0'))
-    return (start_map_allocation(game, &tmp));
+	return (start_map_allocation(game, &tmp));
   return (0);
 }
 
@@ -78,9 +77,9 @@ int ft_parse_map(t_game *game) {
   char *tmp;
 (void)tmp;
   while ((line = get_next_line(game->map.fd)) != NULL) {
-    if (manage_line_logic(line, game))
-      return (free(line), 1);
-    free(line);
+	if (manage_line_logic(line, game))
+	  return (free(line), 1);
+	free(line);
   }
   return (0);
 }
@@ -90,10 +89,10 @@ int ft_path(char *path, t_game *game) {
 
   dot = path - ft_strrchr(path, '.');
   if (dot == 0 || !ft_strncmp(&path[dot], ".cub", 4))
-    return (printf("Error\nInvalid file extension\n"));
+	return (printf("Error\nInvalid file extension\n"));
   game->map.fd = open(path, O_RDONLY);
   if (game->map.fd == -1)
-    return (printf("Error\nFile not found\n"));
+	return (printf("Error\nFile not found\n"));
   return (0);
 }
 
@@ -138,8 +137,8 @@ void init_game(t_game *game) {
   game->mouseX = WINDOW_WIDTH / 2;
   game->mouseY = WINDOW_HEIGHT / 2;
   game->crosshair.size = 4;
-  game->crosshair.thickness = 2;
-  
+  game->crosshair.thickness = 2;  
+  game->frame = 0;
 }
 
 
@@ -184,13 +183,13 @@ int init(char *path, t_game *game) {
   printf("in init \n");
   init_game(game);
   if (ft_path(path, game))
-    return (1);
+	return (1);
 	printf("1\n");
   if (ft_parse_map(game))
-    return (1);
+	return (1);
   printf("2 \n");
   if (check_map(game))
-    return (1);
+	return (1);
   printf("done initing\n");
   return (0);
 }
@@ -205,7 +204,7 @@ void free_game(t_game *game) {
   free(game->map.C);
   free(game->map.F);
   for (int i = 0; i < game->map.rows; i++)
-    free(game->map.map[i]);
+	free(game->map.map[i]);
   free(game->map.map);
   close(game->map.fd);
 }
@@ -216,9 +215,9 @@ int main(int ac, char **av) {
 
   printf("\n"); // remove later.
   if (ac != 2)
-    return (printf("Error\nInvalid number of arguments\n"));
+	return (printf("Error\nInvalid number of arguments\n"));
   if (init(av[1], &game))
-    return (printf("Error\nParsing error\n"));
+	return (printf("Error\nParsing error\n"));
 
 	mlx_hook(game.mlx.win, 2, 0L, handlePress, &game);
 	mlx_hook(game.mlx.win, 3, 0L, handleRelease, &game);

@@ -6,13 +6,11 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/24 14:07:14 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:47:53 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../includes/cub3d.h"
-#include <stdbool.h>
-#include <stdio.h>
+# include "../includes/cub3d.h"
 
 int	copy_map(t_game *game)
 {
@@ -154,6 +152,11 @@ int	notSurrounded(t_map *map)
 
 int	setTextures(t_game *game)
 {
+	game->minimap.img = mlx_new_image(game->mlx.mlx, 32 * 8, 32 * 8);
+	if (!game->minimap.img)
+		return (printf("Error\nCouldn't create MINIMAP image\n"));
+	game->minimap.addr =  mlx_get_data_addr(game->minimap.img, &game->minimap.bits_per_pixel, &game->minimap.line_length, &game->minimap.endian);
+	
 	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/oxidized_copper_bulb.xpm", &game->walls.no.width, &game->walls.no.height);
 	if (!game->walls.no.img)
 		return (printf("Error\nCouldn't load NO texture\n"));
@@ -243,10 +246,10 @@ bool	checkWallCollision(t_game *game, int keycode)
 int handlePress(int keycode, void *param)
 {
 	// printf("keycode: %d\n", keycode);
-    t_game *game = (t_game *)param;
+	t_game *game = (t_game *)param;
 
-    if (keycode == 53)
-        return (quite(param));
+	if (keycode == 53)
+		return (quite(param));
 	if (keycode == H_BUTTON)
 	{
 		if (game->mouse)
@@ -275,7 +278,6 @@ int handlePress(int keycode, void *param)
 		game->player.y -= game->player.moveSpeed * sin(game->player.dir);
 	}
 	game->player.dir = normalizeAngle(game->player.dir);
-	simulate(game);
 	return 0;
 }
 
@@ -285,26 +287,25 @@ int handleRelease(int keycode, void *param)
 	return 0;
 }
 
-
 int handle_mouse(int x, int y, void *param)
 {
-    t_game	*game;
-    int		diff_x;
-    static int last_x;
+	t_game	*game;
+	int		diff_x;
+	static int last_x;
 
 	game = (t_game *)param;
 	last_x = WINDOW_WIDTH / 2;
 	diff_x = x - last_x;
 	if (game->mouse)
 		return (0);
-    if (diff_x != 0)
-    {
-        game->player.dir += (diff_x * 0.001);
-        game->player.dir = normalizeAngle(game->player.dir);
-        last_x = x;
-    }
-    mlx_mouse_move(game->mlx.win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-    return (0);
+	if (diff_x != 0)
+	{
+		game->player.dir += (diff_x * 0.001);
+		game->player.dir = normalizeAngle(game->player.dir);
+		last_x = x;
+	}
+	mlx_mouse_move(game->mlx.win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	return (0);
 }
 
 int setMLX(t_game *game)
@@ -335,7 +336,7 @@ int	convertToHex(t_game *game)
 	ceilling = ft_split(game->map.C, ',');
 	if (!ceilling)
 		return (1);//free floor...
-	if (twoDArrSize(floor) != 3 || twoDArrSize(ceilling) != 3)
+	if (two_d_arr_size(floor) != 3 || two_d_arr_size(ceilling) != 3)
 		return (printf("Error\nInvalid color format\n"));
 	game->walls.floor = rgb_to_hex(ft_atoi(floor[0]), ft_atoi(floor[1]), ft_atoi(floor[2]));
 	game->walls.ceilling = rgb_to_hex(ft_atoi(ceilling[0]), ft_atoi(ceilling[1]), ft_atoi(ceilling[2]));
@@ -344,60 +345,60 @@ int	convertToHex(t_game *game)
 
 char *equalize_map_row(const char *row, int max_length)
 {
-    char *new_row = calloc(max_length + 1, sizeof(char));
-    if (!new_row)
-        return NULL;
-    
-    int i = 0;
-    while (row[i] && i < max_length)
-    {
-        if (row[i] != ' ' && row[i] != '\t')
-            new_row[i] = row[i];
-        else
-            new_row[i] = '0';
-        i++;
-    }
-    while (i < max_length)
-    {
-        new_row[i] = '0';
-        i++;
-    }
-    new_row[i] = '\0';
-    
-    return new_row;
+	char *new_row = calloc(max_length + 1, sizeof(char));
+	if (!new_row)
+		return NULL;
+	
+	int i = 0;
+	while (row[i] && i < max_length)
+	{
+		if (row[i] != ' ' && row[i] != '\t')
+			new_row[i] = row[i];
+		else
+			new_row[i] = '0';
+		i++;
+	}
+	while (i < max_length)
+	{
+		new_row[i] = '0';
+		i++;
+	}
+	new_row[i] = '\0';
+	
+	return new_row;
 }
 
 char **equalize_map(char **map, int row_count)
 {
 	char **new_map;
-    if (!map || row_count <= 0)
-        return NULL;
-    
-    int max_length = 0;
-    for (int i = 0; i < row_count; i++)
-    {
-        int len = strlen(map[i]);
-        if (len > max_length)
-            max_length = len;
-    }
-    new_map = malloc((row_count + 1) * sizeof(char *));
-    if (!new_map)
-        return NULL;
-    
-    for (int i = 0; i < row_count; i++)
-    {
-        new_map[i] = equalize_map_row(map[i], max_length);
-        if (!new_map[i])
-        {
-            for (int j = 0; j < i; j++)
-                free(new_map[j]);
-            free(new_map);
-            return NULL;
-        }
-    }
-    new_map[row_count] = NULL;
-    
-    return new_map;
+	if (!map || row_count <= 0)
+		return NULL;
+	
+	int max_length = 0;
+	for (int i = 0; i < row_count; i++)
+	{
+		int len = strlen(map[i]);
+		if (len > max_length)
+			max_length = len;
+	}
+	new_map = malloc((row_count + 1) * sizeof(char *));
+	if (!new_map)
+		return NULL;
+	
+	for (int i = 0; i < row_count; i++)
+	{
+		new_map[i] = equalize_map_row(map[i], max_length);
+		if (!new_map[i])
+		{
+			for (int j = 0; j < i; j++)
+				free(new_map[j]);
+			free(new_map);
+			return NULL;
+		}
+	}
+	new_map[row_count] = NULL;
+	
+	return new_map;
 }
 
 int check_map(t_game *game)//gotta check for leaks when exiting with errors...

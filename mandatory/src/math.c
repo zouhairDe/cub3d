@@ -6,11 +6,11 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:21:56 by mait-lah          #+#    #+#             */
-/*   Updated: 2024/11/25 20:20:21 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:41:50 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
 double distance(double x1, double y1, double x2, double y2) {
 	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));

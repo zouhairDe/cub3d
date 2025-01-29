@@ -6,97 +6,86 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/24 13:57:08 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:41:31 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
-void drawLine(t_game *game, int x1, int y1, int x2, int y2, int color)
-{
-    int dx = abs(x2 - x1);
-    int dy = abs(y2 - y1);
-    int sx = (x1 < x2) ? 1 : -1;
-    int sy = (y1 < y2) ? 1 : -1;
-    int err = dx - dy;
+//remove only used in map funcs
+//void drawLine(t_game *game, int x1, int y1, int x2, int y2, int color)
+//{
+//    int dx = abs(x2 - x1);
+//    int dy = abs(y2 - y1);
+//    int sx = (x1 < x2) ? 1 : -1;
+//    int sy = (y1 < y2) ? 1 : -1;
+//    int err = dx - dy;
 
-    while (1) {
-        my_mlx_pixel_put(&game->mlx.data, x1, y1, color);
-        if (x1 == x2 && y1 == y2)
-            break;
-        int e2 = 2 * err;
-        if (e2 > -dy) {
-            err -= dy;
-            x1 += sx;
-        }
-        if (e2 < dx) {
-            err += dx;
-            y1 += sy;
-        }
-    }
-}
+//    while (1) {
+//        my_mlx_pixel_put(&game->minimap, x1, y1, color);
+//        if (x1 == x2 && y1 == y2)
+//            break;
+//        int e2 = 2 * err;
+//        if (e2 > -dy) {
+//            err -= dy;
+//            x1 += sx;
+//        }
+//        if (e2 < dx) {
+//            err += dx;
+//            y1 += sy;
+//        }
+//    }
+//}
 
-void putCircle(t_game *game,int X,int Y, int px, int py, int color)
-{
-    int radius = 3;
-	
-	int centerX = MINIMAP_WIDTH / 2;
-    int centerY = MINIMAP_HEIGHT / 2;
-
-	
-	printf("trying to circle  at %d , %d \n" , centerX + X, centerY +Y);
-    for (int y = -radius; y <= radius; y++)
-    {
-        for (int x = -radius; x <= radius; x++)
-        {
-            if (x*x + y*y <= radius*radius)
-            {
-                int pixelX = X + x;
-                int pixelY = Y + y;
+//void putCircle(t_game *game,int X,int Y, int px, int py, int color)
+//{
+//    int radius = 3;
+//	printf("trying to circle  at %d , %d \n" , center_x + X, center_y +Y);
+//    for (int y = -radius; y <= radius; y++)
+//    {
+//        for (int x = -radius; x <= radius; x++)
+//        {
+//            if (x*x + y*y <= radius*radius)
+//            {
+//                int pixelX = X + x;
+//                int pixelY = Y + y;
 				
-                if (pixelX >= 0 && pixelX < WINDOW_WIDTH && 
-                    pixelY >= 0 && pixelY < WINDOW_HEIGHT)
-                {
-                    my_mlx_pixel_put(&game->mlx.data, centerX +  pixelX- px, centerY + pixelY- py, color);
-                }
-            }
-        }
-    }
-}
+//                if (pixelX >= 0 && pixelX < WINDOW_WIDTH && 
+//                    pixelY >= 0 && pixelY < WINDOW_HEIGHT)
+//                {
+//                    my_mlx_pixel_put(&game->mlx.data, center_x +  pixelX- px, center_y + pixelY- py, color);
+//                }
+//            }
+//        }
+//    }
+//}
 
-void drawAngleInMap(t_game *game)
-{
-	int centerX = MINIMAP_WIDTH / 2;
-    int centerY = MINIMAP_HEIGHT / 2;
+//void drawAngleInMap(t_game *game)
+//{
 
-    int lineLength = 40;
+//    int lineLength = 40;
 
 
-    int endX = centerX + lineLength * cos(game->player.dir);
-    int endY = centerY + lineLength * sin(game->player.dir);
+//    int endX = center_x + lineLength * cos(game->player.dir);
+//    int endY = center_y + lineLength * sin(game->player.dir);
 
-    drawLine(game, centerX, centerY, endX, endY, 0X0000FF);
+//    drawLine(game, center_x, center_y, endX, endY, 0X0000FF);
 	
-}
+//}
 
-void drawFovInMap(t_game *game)
-{
-	int centerX = MINIMAP_WIDTH / 2;
-    int centerY = MINIMAP_HEIGHT / 2;
+//void drawFovInMap(t_game *game)
+//{
+//    int lineLength = 60;
+//    int endX = center_x + lineLength * (cos(game->player.dir - FOV / 2));
+//    int endY = center_y + lineLength * (sin(game->player.dir - FOV / 2));
 
-    int lineLength = 60;
-
-
-    int endX = centerX + lineLength * (cos(game->player.dir - FOV / 2));
-    int endY = centerY + lineLength * (sin(game->player.dir - FOV / 2));
-
-    drawLine(game, centerX, centerY, endX, endY, 0X00FF00);
+//    drawLine(game, center_x, center_y, endX, endY, 0X00FF00);
 	
-	endX = centerX + lineLength * (cos(game->player.dir + FOV / 2) );
-    endY = centerY + lineLength * (sin(game->player.dir + FOV / 2) );
+//	endX = center_x + lineLength * (cos(game->player.dir + FOV / 2) );
+//    endY = center_y + lineLength * (sin(game->player.dir + FOV / 2) );
 
-    drawLine(game, centerX, centerY, endX, endY, 0X00FF00);
-}
+//    drawLine(game, center_x, center_y, endX, endY, 0X00FF00);
+//}
 int	is_wall(t_game *game, double playerX, double playerY)
 {
 	//printf("X %f y %f \n", floor(playerX), floor(playerY));
@@ -112,12 +101,12 @@ void	info_init(t_dda *info)
 {
 	info->hp.x = 0;
 	info->hp.y = 0;
-    info->vp.x = 0;
+	info->vp.x = 0;
 	info->vp.y = 0;
-    info->hdist = 0;
-    info->vdist = 0;
-    info->initial_x = 0;
-    info->initial_y = 0;
+	info->hdist = 0;
+	info->vdist = 0;
+	info->initial_x = 0;
+	info->initial_y = 0;
 }
 
 void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
@@ -303,36 +292,37 @@ void	init_ray(t_ray *ray, double angle)
 	ray->wallHit.y = 0;
 }
 
-void logs(double angle, double ray_dist, double stripHeight, t_game *game, t_ray *ray)
-{
-    struct stat st = {0};
-    if (stat("logs", &st) == -1) {
-        mkdir("logs", 0700);
-    }
+//void logs(double angle, double ray_dist, double stripHeight, t_game *game, t_ray *ray)
+//{
+//    struct stat st = {0};
+//    if (stat("logs", &st) == -1) {
+//        mkdir("logs", 0700);
+//    }
 
-    FILE *f = fopen("logs/logs.log", "a");
-    if (!f) {
-        perror("Error opening log file");
-        return;
-    }
+//    FILE *f = fopen("logs/logs.log", "a");
+//    if (!f) {
+//        perror("Error opening log file");
+//        return;
+//    }
 
-    fprintf(f, " ------------------- initial angle %f --- - - - - - - - - -\n", angle);
-    fprintf(f, "player at %f %f hit wall at %f %f with dist %f\n", game->player.y, game->player.x, ray->wallHit.x, ray->wallHit.y, ray->dist);
-    //fprintf(f, "proj plane  dist %f\n", PROJECTION_PLANE_DIST);
-    fprintf(f, "ray dist %f\n", ray_dist);
-    fprintf(f, "strip height %f\n", stripHeight);
+//    fprintf(f, " ------------------- initial angle %f --- - - - - - - - - -\n", angle);
+//    fprintf(f, "player at %f %f hit wall at %f %f with dist %f\n", game->player.y, game->player.x, ray->wallHit.x, ray->wallHit.y, ray->dist);
+//    //fprintf(f, "proj plane  dist %f\n", PROJECTION_PLANE_DIST);
+//    fprintf(f, "ray dist %f\n", ray_dist);
+//    fprintf(f, "strip height %f\n", stripHeight);
 
-    fclose(f);
-}
+//    fclose(f);
+//}
 
 void	castRays(t_game *game)
 {
 	t_ray *ray;
 	t_point player = {game->player.y, game->player.x};
-	double angle = game->player.dir - (FOV / 2);
-	double centerX = MINIMAP_WIDTH / 2;
-    double centerY = MINIMAP_HEIGHT / 2;
-	double ratio = FOV / NUM_RAYS;
+	double angle;
+	double ratio;
+
+	angle = game->player.dir - (FOV / 2);
+	ratio = FOV / NUM_RAYS;
 	for(int i  = 0; i < NUM_RAYS;i++)
 	{
 		double dist;

@@ -6,16 +6,16 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:45:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/22 20:44:36 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:51:09 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
   if (x<0 || x>=WINDOW_WIDTH || y<0 || y>=WINDOW_HEIGHT)
-    return ;
+	return ;
 	char	*dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
@@ -24,10 +24,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 unsigned int rgb_to_hex(int r, int g, int b)
 {
-    return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 
-int twoDArrSize(char **arr)
+int two_d_arr_size(char **arr)
 {
 	int i;
 
@@ -76,64 +76,63 @@ int count_char(char *str, char c)
 
 char *ft_replace(char *str, char c, char *news)
 {
-    int	i;
-    int	c_count;
-    char *res;
-    char *original_str;
+	int		i;
+	int		c_count;
+	char	*res;
+	char	*original_str;
 
-    if (!str)
-        return (NULL);
-    c_count = count_char(str, c);
-    if (c_count == 0)
-        return (str);
-    i = 0;
-    res = malloc(ft_strlen(str) + (ft_strlen(news) * c_count) + 1);
-    if (!res)
-        return (NULL);
-    original_str = str;
-    while (*str)
-    {
-        if (*str == c)
-        {
-            ft_strlcpy(&res[i], news, ft_strlen(news) + 1);
-            i += ft_strlen(news);
-        }
-        else
-            res[i++] = *str;
-        str++;
-    }
-    res[i] = '\0';
-    free(original_str);
-    return (res);
+	if (!str)
+		return (NULL);
+	c_count = count_char(str, c);
+	if (c_count == 0)
+		return (str);
+	i = 0;
+	res = malloc(ft_strlen(str) + (ft_strlen(news) * c_count) + 1);
+	if (!res)
+		return (NULL);
+	original_str = str;
+	while (*str)
+	{
+		if (*str == c)
+		{
+			ft_strlcpy(&res[i], news, ft_strlen(news) + 1);
+			i += ft_strlen(news);
+		}
+		else
+			res[i++] = *str;
+		str++;
+	}
+	res[i] = '\0';
+	free(original_str);
+	return (res);
 }
 
-int dump_spaces(char **line)
+int	dump_spaces(char **line)
 {
-  while (**line == ' ' || **line == '\t')
-    (*line)++;
-  if (**line == '\0')
-    return (1);
-  return (0);
+	while (**line == ' ' || **line == '\t')
+		(*line)++;
+	if (**line == '\0')
+		return (1);
+	return (0);
 }
 
-int ft_line_value(char *line, char **value)
+int	ft_line_value(char *line, char **value)
 {
-  char *tmp;
+	char	*tmp;
 
-  tmp = *value;
-  if (!*line)
-    return (1);
-  while (*line <= 'Z' && *line >= 'A')
-    line++;
-  if (*line == '\0')
-    return (1);
-  dump_spaces(&line);
-  if (*line == '\0')
-    return (1);
-  *value = ft_strdup(line);
-  if (!*value)
-    return (1);
-  free(tmp);
-  return (0);
+	tmp = *value;
+	if (!*line)
+		return (1);
+	while (*line <= 'Z' && *line >= 'A')
+		line++;
+	if (*line == '\0')
+		return (1);
+	dump_spaces(&line);
+	if (*line == '\0')
+		return (1);
+	*value = ft_strdup(line);
+	if (!*value)
+		return (1);
+	free(tmp);
+	return (0);
 }
-

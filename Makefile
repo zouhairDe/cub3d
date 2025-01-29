@@ -1,5 +1,5 @@
 CC = cc
-FLAGS = -g -fsanitize=address#-Wall -Wextra -Werror
+FLAGS = #-Wall -Wextra -Werror #-g -fsanitize=address#
 LIBS = -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -9,7 +9,7 @@ GNL_HEADER = $(GNL_DIR)get_next_line_bonus.h
 
 NAME = cub3D
 CUB3D_HEADER = $(HEADER_DIR)cub3d.h
-HEADER_DIR = includes/
+HEADER_DIR = mandatory/includes/
 
 BONUS_NAME = $(BONUS_DIR)cub3D_bonus
 BONUS_DIR = cub3d_bonus/
