@@ -199,6 +199,7 @@ void	init_ray(t_ray *ray, double angle);
 int handlePress(int keycode, void *param);
 int handleRelease(int keycode, void *param);
 int handle_mouse(int x, int y, void *param);
+int check_map_border(t_map *map);
 int quite(t_game *game);
 
 // added

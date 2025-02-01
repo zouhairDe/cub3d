@@ -208,7 +208,7 @@ void free_game(t_game *game) {
 
 int main(int ac, char **av) {
   //   atexit(fff);
-  t_game game;
+	t_game game;
 
 	printf("\n"); // remove later.
 	if (ac != 2)
@@ -223,6 +223,6 @@ int main(int ac, char **av) {
 	mlx_hook(game.mlx.win, ON_MOUSEMOVE, 0, handle_mouse, &game);
 	mlx_loop(game.mlx.mlx);
 
-  free_game(&game);
-  return (0);
+	free_game(&game);
+	return (0);
 }

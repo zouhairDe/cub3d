@@ -116,23 +116,48 @@ int	dump_spaces(char **line)
 	return (0);
 }
 
-int	ft_line_value(char *line, char **value)
+int check_map_border(t_map *map)
 {
-	char	*tmp;
+    int i;
+    int j;
+    int len;
 
-	tmp = *value;
-	if (!*line)
-		return (1);
-	while (*line <= 'Z' && *line >= 'A')
-		line++;
-	if (*line == '\0')
-		return (1);
-	dump_spaces(&line);
-	if (*line == '\0')
-		return (1);
-	*value = ft_strdup(line);
-	if (!*value)
-		return (1);
-	free(tmp);
-	return (0);
+	i = -1;
+    while (++i < map->rows)
+    {
+        j = -1;
+        len = ft_strlen(map->map[i]);
+        while (++j < len)
+        {
+            if (map->map[i][j] == '0' || 
+                map->map[i][j] == 'N' || 
+                map->map[i][j] == 'S' || 
+                map->map[i][j] == 'E' || 
+                map->map[i][j] == 'W')
+            {
+                if (i == 0 || i == map->rows - 1 || j == 0 || j == len - 1)
+                    return (printf("Error\nMap not properly enclosed\n"));
+                if (i > 0 && (j >= ft_strlen(map->map[i - 1]) || map->map[i - 1][j] == ' '))
+                    return (printf("Error\nMap has invalid gap above\n"));
+                if (i < map->rows - 1 && (j >= ft_strlen(map->map[i + 1]) || map->map[i + 1][j] == ' '))
+                    return (printf("Error\nMap has invalid gap below\n"));
+                if (j > 0 && map->map[i][j - 1] == ' ')
+                    return (printf("Error\nMap has invalid gap to the left\n"));
+                if (j < len - 1 && map->map[i][j + 1] == ' ')
+                    return (printf("Error\nMap has invalid gap to the right\n"));
+            }
+        }
+    }
+    return (0);
+}
+
+int ft_line_value(char *line, char **value)
+{
+    while (*line && (*line == ' ' || *line == '\t'))
+        line++;
+    line += 2;
+    while (*line && (*line == ' ' || *line == '\t'))
+        line++;
+    *value = ft_strdup(line);
+    return (*value == NULL);
 }

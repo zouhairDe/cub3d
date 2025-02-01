@@ -278,7 +278,7 @@ void	sprites(t_game *game, bool onRelease)
 		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f5, &game->mlx.data.width, &game->mlx.data.height);
 	
 	if (onRelease)
-		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f1, &game->mlx.data.width, &game->mlx.data.height);
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f1, &game->mlx.data.width, &game->mlx.data.height), game->spritesIndex = 0;
 	game->spritesIndex++;
 	
 	if (game->spritesIndex == 9)
@@ -286,8 +286,6 @@ void	sprites(t_game *game, bool onRelease)
 	
 	if (!game->sprites_image)
 		printf("Error\nCouldn't load sprite\n");
-	
-	// printf("Sprite ptr = %p\n", game->sprites_image);
 }
 
 int handlePress(int keycode, void *param)
@@ -384,18 +382,29 @@ int setMLX(t_game *game)
 int	convertToHex(t_game *game)
 {
 	char	**floor;
-	char	**ceilling;
+    char	**ceiling;
+    int		r;
+	int		g;
+	int		b;
 
-	floor = ft_split(game->map.F, ',');
-	if (!floor)
-		return (1);
-	ceilling = ft_split(game->map.C, ',');
-	if (!ceilling)
-		return (1);//free floor...
-	if (twoDArrSize(floor) != 3 || twoDArrSize(ceilling) != 3)
+    floor = ft_split(game->map.F, ',');
+    ceiling = ft_split(game->map.C, ',');
+	if (!floor || two_d_arr_size(floor) != 3)
 		return (printf("Error\nInvalid color format\n"));
+	if (!ceiling || two_d_arr_size(ceiling) != 3)
+		return (printf("Error\nInvalid color format\n"));//free
+    r = ft_atoi(floor[0]);
+    g = ft_atoi(floor[1]);
+    b = ft_atoi(floor[2]);
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+        return (printf("Error\nRGB values must be between 0 and 255\n"));
+	r = ft_atoi(ceiling[0]);
+	g = ft_atoi(ceiling[1]);
+	b = ft_atoi(ceiling[2]);
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+		return (printf("Error\nRGB values must be between 0 and 255\n"));
 	game->walls.floor = rgb_to_hex(ft_atoi(floor[0]), ft_atoi(floor[1]), ft_atoi(floor[2]));
-	game->walls.ceilling = rgb_to_hex(ft_atoi(ceilling[0]), ft_atoi(ceilling[1]), ft_atoi(ceilling[2]));
+	game->walls.ceilling = rgb_to_hex(ft_atoi(ceiling[0]), ft_atoi(ceiling[1]), ft_atoi(ceiling[2]));
 	return (0);
 }
 
@@ -457,6 +466,14 @@ char **equalize_map(char **map, int row_count)
     return new_map;
 }
 
+int validate_elements(t_game *game)
+{
+    if (!game->map.no || !game->map.so || !game->map.we || 
+        !game->map.ea || !game->map.F || !game->map.C)
+        return (printf("Error\nMissing required elements\n"));
+    return (0);
+}
+
 int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 {
 	if (copy_map(game))
@@ -466,6 +483,8 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 		return (1);
 	if (check_chars(&game->check_map))
 		return (1);
+	if (check_map_border(&game->check_map))
+		return (1);
 	if (setPlayer(game))
 		return (1);
 	printf("mid from check map\n");
@@ -474,10 +493,12 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 		return (1);
 	if (convertToHex(game))
 		return (1);
+	if (validate_elements(game))
+		return (1);
 	if (setMLX(game))
 		return (1);
-	//if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL || game->map.ea == NULL)
-	//	return (printf("Error\nMissing texture path\n"));
+	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL || game->map.ea == NULL)
+		return (printf("Error\nMissing texture path\n"));
 	printf("pre set texture\n");
 	if (setTextures(game))
 		return (1);

@@ -102,7 +102,7 @@ typedef struct s_ray {
   bool is_facing_right;
   bool is_facing_left;
   bool	vertical_hit;
-  int	face; // which face the ray hit NSEW
+  int	face;
 } t_ray;
 
 typedef struct s_data {
@@ -196,7 +196,7 @@ void ft_cut_char(char *str, char c);
 int	simulate(t_game *game);
 void printGame(t_game game);
 unsigned int rgb_to_hex(int r, int g, int b);
-int twoDArrSize(char **arr);
+int two_d_arr_size(char **arr);
 double normalizeAngle(double angle);
 void	drawWalls(t_game *game, t_ray *ray);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
@@ -212,5 +212,6 @@ void 	drawAngleInMap(t_game *game);
 void	drawFovInMap(t_game *game);
 void	castRays(t_game *game);
 double distance(double x1, double y1, double x2, double y2);
+int check_map_border(t_map *map);
 
 #endif
