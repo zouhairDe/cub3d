@@ -227,7 +227,6 @@ bool	checkWallCollision(t_game *game, int keycode)
 	{
 		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir);
 		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir);
-		// distance = distance(game->player.x, game->player.y, newX, newY);
 	}
 	else if (keycode == S_BUTTON)
 	{
@@ -252,6 +251,43 @@ bool	checkWallCollision(t_game *game, int keycode)
 	if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 		return (false);
 	return (true);
+}
+
+void	sprites(t_game *game, bool onRelease)
+{
+	char *f1;
+	char *f2;
+	char *f3;
+	char *f4;
+	char *f5;
+	
+	f1 = "textures/hand/hand1.xpm";
+	f2 = "textures/hand/hand2.xpm";
+	f3 = "textures/hand/hand3.xpm";
+	f4 = "textures/hand/hand4.xpm";
+	f5 = "textures/hand/hand5.xpm";
+	if (game->spritesIndex == 0 || game->spritesIndex == 8)
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f1, &game->mlx.data.width, &game->mlx.data.height);
+	else if (game->spritesIndex == 1 || game->spritesIndex == 7)
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f2, &game->mlx.data.width, &game->mlx.data.height);
+	else if (game->spritesIndex == 2 || game->spritesIndex == 6)
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f3, &game->mlx.data.width, &game->mlx.data.height);
+	else if (game->spritesIndex == 3 || game->spritesIndex == 5)
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f4, &game->mlx.data.width, &game->mlx.data.height);
+	else if (game->spritesIndex == 4)
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f5, &game->mlx.data.width, &game->mlx.data.height);
+	
+	if (onRelease)
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f1, &game->mlx.data.width, &game->mlx.data.height);
+	game->spritesIndex++;
+	
+	if (game->spritesIndex == 9)
+		game->spritesIndex = 1;
+	
+	if (!game->sprites_image)
+		printf("Error\nCouldn't load sprite\n");
+	
+	// printf("Sprite ptr = %p\n", game->sprites_image);
 }
 
 int handlePress(int keycode, void *param)
@@ -288,13 +324,17 @@ int handlePress(int keycode, void *param)
 		game->player.x += game->player.moveSpeed * cos(game->player.dir);
 		game->player.y -= game->player.moveSpeed * sin(game->player.dir);
 	}
+	else
+		return 0;
 	game->player.dir = normalizeAngle(game->player.dir);
+	sprites(game, false);
 	return 0;
 }
 
 int handleRelease(int keycode, void *param)
 {
 	t_game *game = (t_game *)param;
+	sprites(game, true);
 	return 0;
 }
 
@@ -441,7 +481,7 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 	printf("pre set texture\n");
 	if (setTextures(game))
 		return (1);
-	
+	sprites(game, false);
 	printf("done with check map\n");
 		
 	return (0);

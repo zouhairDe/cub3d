@@ -229,5 +229,9 @@ int simulate(t_game *game)
 	drawMap(game);
 	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0);
 	mlx_put_image_to_window(game->minimap.img, game->mlx.win, game->minimap.img, 0, 0);
+	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->sprites_image, 0, 0);
+	// printf("Sprite ptr = %p\n", game->sprites_image);
+	
+	mlx_do_sync(game->mlx.mlx);
 	return 0;
 }
