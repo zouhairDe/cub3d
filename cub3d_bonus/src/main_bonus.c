@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
+#include <stdbool.h>
+#include <stdio.h>
 
 int start_map_allocation(t_game *game, char **line) {
 	char **tmp;
@@ -137,7 +139,8 @@ void init_game(t_game *game) {
   game->mouseY = WINDOW_HEIGHT / 2;
   game->crosshair.size = 4;
   game->crosshair.thickness = 2;
-  
+  game->spritesIndex = 0;
+  game->sprites_image = NULL;
 }
 
 
@@ -207,10 +210,17 @@ void free_game(t_game *game) {
   close(game->map.fd);
 }
 
+bool	player_isnt_in_door(t_game *game)
+{
+	int mapX = (int)game->player.y;
+	int mapY = (int)game->player.x;
+	return (game->map.map[mapY][mapX] != 'D' && game->map.map[mapY][mapX] != 'd');
+}
+
 int handle_mouse_click(int button, int x, int y, void *param)
 {
     t_game *game = (t_game *)param;
-    if (button == 1) // left click
+    if (button == 1 && player_isnt_in_door(game)) // left click
     {
         printf("LEFT Mouse click at %d %d\n", x, y);
 		printf("player pos %f %f\n", game->player.x, game->player.y);

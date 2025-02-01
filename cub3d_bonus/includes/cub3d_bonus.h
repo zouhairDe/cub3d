@@ -182,7 +182,8 @@ typedef struct s_game {
   bool			mouse;
   int			mouseX;
   int			mouseY;
-  int			frame;
+  int			spritesIndex;
+  void			*sprites_image;
 } t_game;
 
 
