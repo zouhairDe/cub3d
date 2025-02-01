@@ -15,7 +15,7 @@
 
 #include "../../gnl/get_next_line_bonus.h"
 # include "mlx.h"
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>

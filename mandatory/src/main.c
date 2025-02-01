@@ -180,18 +180,15 @@ void printGame(t_game game) {
 }
 
 int init(char *path, t_game *game) {
-  printf("in init \n");
-  init_game(game);
-  if (ft_path(path, game))
-	return (1);
-	printf("1\n");
-  if (ft_parse_map(game))
-	return (1);
-  printf("2 \n");
-  if (check_map(game))
-	return (1);
-  printf("done initing\n");
-  return (0);
+	init_game(game);
+	if (ft_path(path, game))
+		return (1);
+	if (ft_parse_map(game))
+		return (1);
+	if (check_map(game))
+		return (1);
+	printf("done initing\n");
+	return (0);
 }
 
 void fff() { system("leaks cub3d"); }
@@ -213,18 +210,17 @@ int main(int ac, char **av) {
   //   atexit(fff);
   t_game game;
 
-  printf("\n"); // remove later.
-  if (ac != 2)
-	return (printf("Error\nInvalid number of arguments\n"));
-  if (init(av[1], &game))
-	return (printf("Error\nParsing error\n"));
+	printf("\n"); // remove later.
+	if (ac != 2)
+		return (printf("Error\nInvalid number of arguments\n"));
+	if (init(av[1], &game))
+		return (printf("Error\nParsing error\n"));
 
 	mlx_hook(game.mlx.win, 2, 0L, handlePress, &game);
 	mlx_hook(game.mlx.win, 3, 0L, handleRelease, &game);
 	mlx_hook(game.mlx.win, 17, 0, quite, &game);
 	mlx_loop_hook(game.mlx.mlx, simulate, &game);
 	mlx_hook(game.mlx.win, ON_MOUSEMOVE, 0, handle_mouse, &game);
-	// mlx_mouse_hook(game->mlx.win, handle_mouse, (void *)game);//hadi mni n9ado doors ndiroha t7l b left click
 	mlx_loop(game.mlx.mlx);
 
   free_game(&game);

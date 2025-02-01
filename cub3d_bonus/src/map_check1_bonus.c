@@ -157,17 +157,17 @@ int	setTextures(t_game *game)
 	game->map.so[ft_strlen(game->map.so) - 1] = 0;
 	game->map.we[ft_strlen(game->map.we) - 1] = 0;
 	game->map.ea[ft_strlen(game->map.ea) - 1] = 0;
-	printf("North texture: %s\n", game->map.no);
-	printf("West texture: %s\n", game->map.we);
-	printf("South texture: %s\n", game->map.so);
-	printf("East texture: %s\n", game->map.ea);//ila kano khawyin l path khas error 9bl mmatwsl hna
+	game->minimap.img = mlx_new_image(game->mlx.mlx, 32 * 8, 32 * 8);
+	if (!game->minimap.img)
+		return (printf("Error\nCouldn't create MINIMAP image\n"));
+	game->minimap.addr =  mlx_get_data_addr(game->minimap.img, &game->minimap.bits_per_pixel, &game->minimap.line_length, &game->minimap.endian);
 	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.no, &game->walls.no.width, &game->walls.no.height);
 	if (!game->walls.no.img)
 		return (printf("Error\nCouldn't load NO texture\n"));
 	game->walls.no.addr = mlx_get_data_addr(game->walls.no.img, &game->walls.no.bits_per_pixel,
 		&game->walls.no.line_length, &game->walls.no.endian);
 
-	game->walls.wt.img = mlx_xpm_file_to_image(game->mlx.mlx, "./textures/WallTop.xpm", &game->walls.wt.width, &game->walls.wt.height);
+	game->walls.wt.img = mlx_xpm_file_to_image(game->mlx.mlx, "textures/WallTop.xpm", &game->walls.wt.width, &game->walls.wt.height);
 	if (!game->walls.wt.img)
 		return (printf("Error\nCouldn't load WT texture\n"));
 	game->walls.wt.addr = mlx_get_data_addr(game->walls.wt.img, &game->walls.wt.bits_per_pixel, &game->walls.wt.line_length, &game->walls.wt.endian);
@@ -187,7 +187,7 @@ int	setTextures(t_game *game)
 		return (printf("Error\nCouldn't load EA texture\n"));
 	game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel, &game->walls.ea.line_length, &game->walls.ea.endian);
 	
-	game->walls.CDoor.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/spruce_door_bottom.xpm", &game->walls.CDoor.width, &game->walls.CDoor.height);
+	game->walls.CDoor.img = mlx_xpm_file_to_image(game->mlx.mlx, "textures/spruce_door_bottom.xpm", &game->walls.CDoor.width, &game->walls.CDoor.height);
 	if (!game->walls.CDoor.img)
 		return (printf("Error\nCouldn't load CDoor texture\n"));
 	game->walls.CDoor.addr = mlx_get_data_addr(game->walls.CDoor.img, &game->walls.CDoor.bits_per_pixel, &game->walls.CDoor.line_length, &game->walls.CDoor.endian);
@@ -329,7 +329,10 @@ int setMLX(t_game *game)
 	if (!game->mlx.win)
 		return (printf("Error\nCouldn't create window\n"));
 	game->mlx.data.img = mlx_new_image(game->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	if (!game->mlx.data.img)//shit is so fkng t9il
+	if (!game->mlx.data.img)
+		return (printf("Error\nCouldn't create image\n"));
+	game->minimap.img = mlx_new_image(game->mlx.mlx, MINIMAP_WIDTH, MINIMAP_HEIGHT);
+	if (!game->minimap.img)
 		return (printf("Error\nCouldn't create image\n"));
 	game->mlx.data.addr = mlx_get_data_addr(game->mlx.data.img, &game->mlx.data.bits_per_pixel, &game->mlx.data.line_length, &game->mlx.data.endian);
 	if (!game->mlx.data.addr)

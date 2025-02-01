@@ -122,7 +122,7 @@ void init_game(t_game *game) {
   game->player.y = 0.0;
   game->player.dir = 0;
   game->player.fov = 0;
-  game->player.moveSpeed = 0.1;
+  game->player.moveSpeed = 0.15;
   game->player.rotSpeed = 0.1;
   game->mlx.mlx = NULL;
   game->mlx.win = NULL;

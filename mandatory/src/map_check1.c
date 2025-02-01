@@ -152,10 +152,7 @@ int	notSurrounded(t_map *map)
 
 int	setTextures(t_game *game)
 {
-	game->minimap.img = mlx_new_image(game->mlx.mlx, 32 * 8, 32 * 8);
-	if (!game->minimap.img)
-		return (printf("Error\nCouldn't create MINIMAP image\n"));
-	game->minimap.addr =  mlx_get_data_addr(game->minimap.img, &game->minimap.bits_per_pixel, &game->minimap.line_length, &game->minimap.endian);
+
 	
 	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, "./texture_stock/xpm/oxidized_copper_bulb.xpm", &game->walls.no.width, &game->walls.no.height);
 	if (!game->walls.no.img)

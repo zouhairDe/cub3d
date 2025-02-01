@@ -56,6 +56,10 @@
 
 # define DOOR_CLOSED 2
 # define DOOR_OPEN 3
+# define center_x (MINIMAP_WIDTH / 2)
+# define center_y (MINIMAP_HEIGHT / 2)
+# define win_center_x (WINDOW_WIDTH / 2)
+# define win_center_y (WINDOW_HEIGHT / 2)
 
 // USED FOR WALL FACE RENDERING.
 # define N 0
@@ -172,6 +176,7 @@ typedef struct s_game {
   t_setting		setting;
   t_point		dir_end;
   t_crosshair	crosshair;
+  t_data		minimap;
   bool			mouse;
   int			mouseX;
   int			mouseY;
