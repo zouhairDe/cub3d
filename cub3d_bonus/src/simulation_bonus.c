@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/29 19:36:36 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/01 07:00:13 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,41 @@ void drawRotatedMap(t_game *game)
 					}
 				}
 			}
-			
+			else if (game->map.map[i][j] == 'D')
+			{
+				for (int y = 0; y < MINIMAP_SCALE; y++)
+				{
+					for (int x = 0; x < MINIMAP_SCALE; x++)
+					{
+						int pixelX = screenX + x;
+						int pixelY = screenY + y;
+						if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
+						{
+							int tx = (pixelX-screenX) % (WALL_SIZE/2);
+							int ty = (pixelY-screenY) % (WALL_SIZE/2);
+							my_mlx_pixel_put(&game->minimap, pixelX, pixelY, 0x000000);
+						}
+					}
+				}
+			}
+			else if (game->map.map[i][j] == 'd')
+			{
+				for (int y = 0; y < MINIMAP_SCALE; y++)
+				{
+					for (int x = 0; x < MINIMAP_SCALE; x++)
+					{
+						int pixelX = screenX + x;
+						int pixelY = screenY + y;
+						if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
+						{
+							int tx = (pixelX-screenX) % (WALL_SIZE/2);
+							int ty = (pixelY-screenY) % (WALL_SIZE/2);
+							//unsigned int color = ((unsigned int *)game->walls.wt.addr)[ty * (WALL_SIZE/2) + tx];
+							my_mlx_pixel_put(&game->minimap, pixelX, pixelY, 0x9298a1);
+						}
+					}
+				}
+			}
        }
    }
 }

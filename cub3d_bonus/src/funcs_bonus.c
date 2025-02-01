@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   funcs.c                                            :+:      :+:    :+:   */
+/*   funcs_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/24 13:57:08 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/01 06:59:18 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void drawLine(t_game *game, int x1, int y1, int x2, int y2, int color)
     int err = dx - dy;
 
     while (1) {
-        my_mlx_pixel_put(&game->mlx.data, x1, y1, color);
+        my_mlx_pixel_put(&game->minimap, x1, y1, color);
         if (x1 == x2 && y1 == y2)
             break;
         int e2 = 2 * err;
@@ -36,33 +36,33 @@ void drawLine(t_game *game, int x1, int y1, int x2, int y2, int color)
     }
 }
 
-void putCircle(t_game *game,int X,int Y, int px, int py, int color)
-{
-    int radius = 3;
+//void putCircle(t_game *game,int X,int Y, int px, int py, int color)
+//{
+//    int radius = 3;
 	
-	int centerX = MINIMAP_WIDTH / 2;
-    int centerY = MINIMAP_HEIGHT / 2;
+//	int centerX = MINIMAP_WIDTH / 2;
+//    int centerY = MINIMAP_HEIGHT / 2;
 
 	
-	printf("trying to circle  at %d , %d \n" , centerX + X, centerY +Y);
-    for (int y = -radius; y <= radius; y++)
-    {
-        for (int x = -radius; x <= radius; x++)
-        {
-            if (x*x + y*y <= radius*radius)
-            {
-                int pixelX = X + x;
-                int pixelY = Y + y;
+//	printf("trying to circle  at %d , %d \n" , centerX + X, centerY +Y);
+//    for (int y = -radius; y <= radius; y++)
+//    {
+//        for (int x = -radius; x <= radius; x++)
+//        {
+//            if (x*x + y*y <= radius*radius)
+//            {
+//                int pixelX = X + x;
+//                int pixelY = Y + y;
 				
-                if (pixelX >= 0 && pixelX < WINDOW_WIDTH && 
-                    pixelY >= 0 && pixelY < WINDOW_HEIGHT)
-                {
-                    my_mlx_pixel_put(&game->mlx.data, centerX +  pixelX- px, centerY + pixelY- py, color);
-                }
-            }
-        }
-    }
-}
+//                if (pixelX >= 0 && pixelX < WINDOW_WIDTH && 
+//                    pixelY >= 0 && pixelY < WINDOW_HEIGHT)
+//                {
+//                    my_mlx_pixel_put(&game->mlx.data, centerX +  pixelX- px, centerY + pixelY- py, color);
+//                }
+//            }
+//        }
+//    }
+//}
 
 void drawAngleInMap(t_game *game)
 {
@@ -105,7 +105,7 @@ int	is_wall(t_game *game, double playerX, double playerY)
 		// printf("out of bounds wall check.\n");
 		return true;
 	}
-	return ((game->map.map[(int)(playerY)][(int)(playerX)] == '1'));
+	return ((game->map.map[(int)(playerY)][(int)(playerX)] == '1') );
 }
 
 int isDoor(t_game *game, double playerX, double playerY, t_ray *ray)
@@ -117,7 +117,6 @@ int isDoor(t_game *game, double playerX, double playerY, t_ray *ray)
 	}
 	if (game->map.map[(int)(playerY)][(int)(playerX)] == 'D')
 	{
-		ray->wallContent = DOOR_CLOSED;//door is closed
 		return true;
 	}
 	return (false);
@@ -133,6 +132,8 @@ void	info_init(t_dda *info)
     info->vdist = 0;
     info->initial_x = 0;
     info->initial_y = 0;
+	info->vwall = false;
+	info->hwall = false;
 }
 
 void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
@@ -172,7 +173,10 @@ void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 		if(is_wall(game, next_horz_touchx, next_horz_touchy - (ray->is_facing_up * 0.00000001)))
 			break;
 		if (isDoor(game, next_horz_touchx, next_horz_touchy - (ray->is_facing_up * 0.00000001), ray) && info->hdist > 0)
+		{
+			info->hwall = true;
 			break;
+		}
 		info->hdist += distance(next_horz_touchx, next_horz_touchy, next_horz_touchx+xstep, next_horz_touchy+ystep);
 		next_horz_touchx += xstep;
 		next_horz_touchy += ystep;
@@ -211,7 +215,10 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 		if(is_wall(game, next_vert_touchx - (ray->is_facing_left * 0.00000001), next_vert_touchy))
 			break;
 		if (isDoor(game, next_vert_touchx - (ray->is_facing_left * 0.00000001), next_vert_touchy, ray) && info->vdist > 0)
+		{
+			info->vwall = true;
 			break;
+		}
 		info->vdist += distance(next_vert_touchx, next_vert_touchy, next_vert_touchx+xstep, next_vert_touchy+ystep);
 		next_vert_touchx += xstep;
 		next_vert_touchy += ystep;
@@ -248,6 +255,10 @@ void	dda(t_game *game, t_ray *ray)
 			ray->face = W;
 		else
 			ray->face = E;
+		if (info.vwall)
+			ray->wallContent = DOOR_CLOSED;
+		else
+			ray->wallContent = DOOR_OPEN;
 	}
 	else
 	{
@@ -259,6 +270,10 @@ void	dda(t_game *game, t_ray *ray)
 			ray->face = N;
 		else
 			ray->face = S;
+		if (info.hwall)
+			ray->wallContent = DOOR_CLOSED;
+		else
+			ray->wallContent = DOOR_OPEN;
 	}
 }
 
@@ -325,6 +340,7 @@ void	init_ray(t_ray *ray, double angle)
 	ray->dist = 0;
 	ray->wallHit.x = 0;
 	ray->wallHit.y = 0;
+	ray->wallContent = DOOR_OPEN;
 }
 
 void logs(double angle, double ray_dist, double stripHeight, t_game *game, t_ray *ray)

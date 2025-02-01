@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/26 17:31:50 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/01 06:30:44 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ typedef struct s_dda
     double	vdist;
     double  initial_x;
     double  initial_y;
+	bool	vwall;
+	bool	hwall;
 }t_dda;
 
 typedef struct s_ray {
