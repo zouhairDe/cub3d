@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   funcs.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/02 02:48:52 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/02 06:58:18 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,6 +331,7 @@ void	castRays(t_game *game)
 		dda(game, ray);
 		draw_stripe(game, i, ray);
 		angle += ratio;
+		free_ptr(game, ray);
 	}
 }
 

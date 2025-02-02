@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 02:31:45 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 04:25:34 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/02 07:10:04 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	*init_cg(t_game *game, size_t size)
 
 void *g_malloc(t_game *game, size_t size)
 {
+	//int i = 0;
     t_gc *new_node;
 
     if (!game->gc)
@@ -120,6 +121,15 @@ void *g_malloc(t_game *game, size_t size)
 
     new_node->next = game->gc;
     game->gc = new_node;
-
+	
+	//t_gc *tmp;
+	//tmp = game->gc;
+    //i = 0;
+    //while (tmp)
+	//{
+	//	i++;
+	//	tmp = tmp->next;
+	//}
+	//fprintf(stderr, "I == %d\n", i);
     return (new_node->ptr);
 }

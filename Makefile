@@ -1,5 +1,5 @@
 CC = cc
-FLAGS = #-g -fsanitize=address #-Wall -Wextra -Werror
+FLAGS =# -g -fsanitize=address #-Wall -Wextra -Werror
 LIBS = -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -34,7 +34,6 @@ $(MLX):
 	@echo "$(GREEN)$(BOLD)Compiling mlx$(DEFAULT)"
 	@make -sC $(MLX_DIR)
 
-
 RED = \033[0;31m
 GREEN = \033[0;32m
 CYAN = \033[0;36m
@@ -59,7 +58,7 @@ all: $(OBJ_DIR) $(NAME) thanks
 
 thanks:
 	@echo "$(BLACK)$(WHITE_BG)$(BOLD)Compilation complete.$(RESET)"
-	@rm -rf *.dSYM $(BONUS_DIR)*.dSYM
+	@rm -rf *.dSYM $(BONUS_DIR)*.dSYM *.vscode 
 		
 bonus: $(mlx) $(LIBFT) $(BONUS_OBJ_DIR) $(BONUS_NAME) thanks 
 

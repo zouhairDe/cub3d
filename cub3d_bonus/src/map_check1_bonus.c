@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 06:02:43 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/02 07:24:36 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,6 @@ int	setTextures(t_game *game)
 
 int quite(t_game *game)
 {
-	free_all(game->gc);
 	if (game->minimap.img)
 		mlx_destroy_image(game->mlx.mlx, game->minimap.img);
 	if (game->walls.no.img)
@@ -204,6 +203,7 @@ int quite(t_game *game)
         mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
 	if (game->walls.CDoor.img)
 		mlx_destroy_image(game->mlx.mlx, game->walls.CDoor.img);
+	free_all(game->gc);
 	
 	// if (game->map.no)
 	// 	free(game->map.no);

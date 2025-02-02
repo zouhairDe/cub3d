@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 06:04:59 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/02 07:24:41 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,49 +101,61 @@ int ft_path(char *path, t_game *game) {
 }
 
 void init_game(t_game *game) {
-  game->map.fd = 0;
-  game->map.no = NULL;
-  game->map.so = NULL;
-  game->map.we = NULL;
-  game->map.ea = NULL;
-  game->map.wt = NULL;
-  game->map.C = NULL;
-  game->map.F = NULL;
-  game->map.map = NULL;
-  game->map.rows = 0;
-  game->map.maxCols = 0;
-  game->check_map.fd = 0;
-  game->check_map.no = NULL;
-  game->check_map.so = NULL;
-  game->check_map.we = NULL;
-  game->check_map.ea = NULL;
-  game->check_map.C = NULL;
-  game->check_map.F = NULL;
-  game->check_map.map = NULL;
-  game->check_map.rows = 0;
-  game->check_map.maxCols = 0;
-  game->player.x = 0.0;
-  game->player.y = 0.0;
-  game->player.dir = 0;
-  game->player.fov = 0;
-  game->player.moveSpeed = 0.15;
-  game->player.rotSpeed = 0.1;
-  game->mlx.mlx = NULL;
-  game->mlx.win = NULL;
-  game->setting.width = 0;
-  game->setting.height = 0;
-  game->setting.title = NULL;
-  game->setting.player_speed = 1;
-  game->setting.mlx.mlx = NULL;
-  game->setting.mlx.win = NULL;
-  game->mouse = false;
-  game->mouseX = WINDOW_WIDTH / 2;
-  game->mouseY = WINDOW_HEIGHT / 2;
-  game->crosshair.size = 4;
-  game->crosshair.thickness = 2;
-  game->spritesIndex = 0;
-  game->sprites_image = NULL;
-  game->gc  = NULL;
+	game->map.fd = 0;
+	game->map.no = NULL;
+	game->map.so = NULL;
+	game->map.we = NULL;
+	game->map.ea = NULL;
+	game->map.wt = NULL;
+	game->map.C = NULL;
+	game->map.F = NULL;
+	game->map.map = NULL;
+	game->map.rows = 0;
+	game->map.maxCols = 0;
+	game->check_map.fd = 0;
+	game->check_map.no = NULL;
+	game->check_map.so = NULL;
+	game->check_map.we = NULL;
+	game->check_map.ea = NULL;
+	game->check_map.C = NULL;
+	game->check_map.F = NULL;
+	game->check_map.map = NULL;
+	game->check_map.rows = 0;
+	game->check_map.maxCols = 0;
+	game->player.x = 0.0;
+	game->player.y = 0.0;
+	game->player.dir = 0;
+	game->player.fov = 0;
+	game->player.moveSpeed = 0.15;
+	game->player.rotSpeed = 0.1;
+	game->mlx.mlx = NULL;
+	game->mlx.win = NULL;
+	game->setting.width = 0;
+	game->setting.height = 0;
+	game->setting.title = NULL;
+	game->setting.player_speed = 1;
+	game->setting.mlx.mlx = NULL;
+	game->setting.mlx.win = NULL;
+	game->mouse = false;
+	game->mouseX = WINDOW_WIDTH / 2;
+	game->mouseY = WINDOW_HEIGHT / 2;
+	game->crosshair.size = 4;
+	game->crosshair.thickness = 2;
+	game->spritesIndex = 0;
+	game->sprites_image = NULL;
+	game->gc  = NULL;
+	game->walls.no.img = NULL;
+	game->walls.no.addr = NULL;
+	game->walls.so.img = NULL;
+	game->walls.so.addr = NULL;
+	game->walls.we.img = NULL;
+	game->walls.we.addr = NULL;
+	game->walls.ea.img = NULL;
+	game->walls.ea.addr = NULL;
+	game->walls.wt.img = NULL;
+	game->walls.wt.addr = NULL;
+	game->walls.ceilling = 0;
+	game->walls.floor = 0;
 }
 
 
@@ -199,17 +211,33 @@ int init(char *path, t_game *game) {
 
 void fff() { system("leaks cub3D_bonus > bonus_leaks.leaks"); }
 
-void free_game(t_game *game) {
-  free_ptr(game, game->map.no);
-  free_ptr(game, game->map.so);
-  free_ptr(game, game->map.we);
-  free_ptr(game, game->map.ea);
-  free_ptr(game, game->map.C);
-  free_ptr(game, game->map.F);
-  for (int i = 0; i < game->map.rows; i++)
-    free_ptr(game, game->map.map[i]);
-  free_ptr(game, game->map.map);
-  close(game->map.fd);
+void free_game(t_game *game)
+{
+	if (game->walls.no.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.no.img);
+    if (game->walls.so.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.so.img);
+    if (game->walls.we.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.we.img);
+    if (game->walls.ea.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
+    if (game->mlx.win)
+        mlx_destroy_window(game->mlx.mlx, game->mlx.win);
+    //free_ptr(game, game->map.no);
+    //free_ptr(game, game->map.so);
+    //free_ptr(game, game->map.we);
+    //free_ptr(game, game->map.ea);
+    //free_ptr(game, game->map.C);
+    //free_ptr(game, game->map.F);
+    //while (i < game->map.rows)
+    //    free_ptr(game, game->map.map[i++]);
+    //free_ptr(game, game->map.map);
+	//i = 0;
+    //while (i < game->check_map.rows)
+    //    free_ptr(game, game->check_map.map[i++]);
+    //free_ptr(game, game->check_map.map);
+    free_all(game->gc);
+    close(game->map.fd);
 }
 
 bool	player_isnt_in_door(t_game *game)
@@ -266,7 +294,7 @@ int handle_mouse_click(int button, int x, int y, void *param)
 
 int main(int ac, char **av)
 {
-    atexit(fff);
+    //atexit(fff);
 	t_game game;
 
 	if (ac != 2)

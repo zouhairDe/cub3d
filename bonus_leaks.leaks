@@ -1,0 +1,23 @@
+Process:         cub3D_bonus [28894]
+Path:            /Volumes/VOLUME/*/cub3D_bonus
+Load Address:    0x1094e9000
+Identifier:      cub3D_bonus
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [21440]
+
+Date/Time:       2025-02-02 07:24:21.888 +0100
+Launch Time:     2025-02-02 07:24:19.250 +0100
+OS Version:      Mac OS X 10.15.7 (19H2026)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 12.4 (12D4e)
+
+Physical footprint:         51.6M
+Physical footprint (peak):  53.1M
+----
+
+leaks Report Version: 4.0
+Process 28894: 21058 nodes malloced for 25537 KB
+Process 28894: 0 leaks for 0 total leaked bytes.
+
