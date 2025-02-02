@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/26 17:30:22 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 02:43:43 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,26 +222,73 @@ bool	checkWallCollision(t_game *game, int keycode)
 	int newX;
 	int newY;
 	double distance;
-
+	
 	if (keycode == W_BUTTON)
 	{
 		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir);
 		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir);
+		
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+			return (false);
+		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir - 45);
+		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir - 45);
+		
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+		{
+			newX = game->player.x + game->player.moveSpeed * sin(game->player.dir + 45);
+			newY = game->player.y + game->player.moveSpeed * cos(game->player.dir + 45);
+			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+				return (false);
+		}
+		
 	}
 	else if (keycode == S_BUTTON)
 	{
 		newX = game->player.x - game->player.moveSpeed * sin(game->player.dir);
 		newY = game->player.y - game->player.moveSpeed * cos(game->player.dir);
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+			return (false);
+		newX = game->player.x - game->player.moveSpeed * sin(game->player.dir - 45);
+		newY = game->player.y - game->player.moveSpeed * cos(game->player.dir - 45);
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+		{
+			newX = game->player.x - game->player.moveSpeed * sin(game->player.dir + 45);
+			newY = game->player.y - game->player.moveSpeed * cos(game->player.dir + 45);
+			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+				return (false);
+		}
 	}
 	else if (keycode == A_BUTTON)
 	{
 		newX = game->player.x - game->player.moveSpeed * cos(game->player.dir);
 		newY = game->player.y + game->player.moveSpeed * sin(game->player.dir);
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+			return (false);
+		newX = game->player.x - game->player.moveSpeed * sin(game->player.dir - 45);
+		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir - 45);
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+		{
+			newX = game->player.x - game->player.moveSpeed * sin(game->player.dir + 45);
+			newY = game->player.y + game->player.moveSpeed * cos(game->player.dir + 45);
+			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+				return (false);
+		}
 	}
 	else if (keycode == D_BUTTON)
 	{
 		newX = game->player.x + game->player.moveSpeed * cos(game->player.dir);
 		newY = game->player.y - game->player.moveSpeed * sin(game->player.dir);
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+			return (false);
+		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir - 45);
+		newY = game->player.y - game->player.moveSpeed * cos(game->player.dir - 45);
+		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+		{
+			newX = game->player.x + game->player.moveSpeed * sin(game->player.dir + 45);
+			newY = game->player.y - game->player.moveSpeed * cos(game->player.dir + 45);
+			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
+				return (false);
+		}
 	}
 	
 	if (newX < 0 || newY < 0 || newX >= game->map.rows

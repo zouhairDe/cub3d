@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/01 07:00:13 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 02:47:41 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,9 @@ void drawRotatedMap(t_game *game)
 				{
 					for (int x = 0; x < MINIMAP_SCALE; x++)
 					{
+						if (x % MINIMAP_SCALE > 2 && x % MINIMAP_SCALE < MINIMAP_SCALE-2 && y % MINIMAP_SCALE > 2 && y % MINIMAP_SCALE < MINIMAP_SCALE-2)
+							continue;
+							
 						int pixelX = screenX + x;
 						int pixelY = screenY + y;
 						if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
@@ -120,7 +123,8 @@ void drawRotatedMap(t_game *game)
 							int tx = (pixelX-screenX) % (WALL_SIZE/2);
 							int ty = (pixelY-screenY) % (WALL_SIZE/2);
 							//unsigned int color = ((unsigned int *)game->walls.wt.addr)[ty * (WALL_SIZE/2) + tx];
-							my_mlx_pixel_put(&game->minimap, pixelX, pixelY, 0x9298a1);
+							
+							my_mlx_pixel_put(&game->minimap, pixelX, pixelY, 0x000000);
 						}
 					}
 				}
