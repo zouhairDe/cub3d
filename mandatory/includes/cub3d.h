@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 03:56:32 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/02 06:19:39 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #define CUB3D_H
 
 #include "../../gnl/get_next_line_bonus.h"
-# include "mlx.h"
+// # include "mlx.h"
+# include "../../mlx/mlx.h"
 # include "../../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>

@@ -1,5 +1,5 @@
 CC = cc
-FLAGS = #-g -fsanitize=address #-Wall -Wextra -Werror #
+FLAGS = #-g -fsanitize=address #-Wall -Wextra -Werror
 LIBS = -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -27,6 +27,14 @@ BOBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_FILES:.c=.o))
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))
 
+MLX = ./mlx/libmlx.a
+MLX_DIR = mlx/
+
+$(MLX):
+	@echo "$(GREEN)$(BOLD)Compiling mlx$(DEFAULT)"
+	@make -sC $(MLX_DIR)
+
+
 RED = \033[0;31m
 GREEN = \033[0;32m
 CYAN = \033[0;36m
@@ -47,13 +55,13 @@ define update_progress
 	@bash -c 'echo -e "$(UP)\r$(GREEN)$(BOLD)[$(PERCENT)%] Compiling Cub3d...$(RESET)"'
 endef
 
-all: $(LIBFT) $(OBJ_DIR) $(NAME) thanks
+all: $(OBJ_DIR) $(NAME) thanks
 
 thanks:
 	@echo "$(BLACK)$(WHITE_BG)$(BOLD)Compilation complete.$(RESET)"
-		
-bonus: $(LIBFT) $(BONUS_OBJ_DIR) $(BONUS_NAME) thanks 
 	@rm -rf *.dSYM $(BONUS_DIR)*.dSYM
+		
+bonus: $(mlx) $(LIBFT) $(BONUS_OBJ_DIR) $(BONUS_NAME) thanks 
 
 $(LIBFT): $(LIBFT_DIR)
 	@echo "$(GREEN)$(BOLD)Compiling libft$(DEFAULT)"
@@ -65,11 +73,12 @@ $(OBJ_DIR):
 $(BONUS_OBJ_DIR):
 	@mkdir -p $(BONUS_OBJ_DIR)
 
-$(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(LIBS) ./lib/libmlx.a $(FLAGS) $(OBJ) $(LIBFT) $(GNL) -o $(NAME)
+$(NAME): $(MLX) $(OBJ) $(LIBFT)
+	@$(CC) $(LIBS) $(MLX) $(FLAGS) $(OBJ) $(LIBFT) $(GNL) -o $(NAME)
 
-$(BONUS_NAME): $(BOBJ) $(LIBFT)
-	@$(CC) $(LIBS) ./lib/libmlx.a $(FLAGS) $(BOBJ) $(LIBFT) $(GNL) -o $(BONUS_NAME)
+$(BONUS_NAME): $(MLX) $(BOBJ) $(LIBFT)
+	@$(CC) $(LIBS) $(MLX) $(FLAGS) $(BOBJ) $(LIBFT) $(GNL) -o $(BONUS_NAME)
+
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(CUB3D_HEADER) $(GNL_HEADER)
 	@$(CC) $(FLAGS) -I $(HEADER_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) -c $< -o $@
@@ -90,6 +99,7 @@ fclean: clean
 	@rm -f $(NAME)
 	@rm -f $(BONUS_NAME)
 	@make -sC $(LIBFT_DIR) fclean
+	@make -sC $(MLX_DIR) clean
 	@echo "$(RED)$(BOLD)Cleaning executables$(DEFAULT)"
 	@echo "$(RED)$(BOLD)[$(NAME)] executables Removed$(RESET)"
 
