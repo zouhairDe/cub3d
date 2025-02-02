@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 05:57:56 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/02 06:04:59 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,7 @@ int handle_mouse_click(int button, int x, int y, void *param)
 
 int main(int ac, char **av)
 {
-    // atexit(fff);
+    atexit(fff);
 	t_game game;
 
 	if (ac != 2)
