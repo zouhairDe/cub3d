@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/01 06:30:44 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 04:31:23 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,11 @@ typedef struct s_crosshair
 	int	thickness;
 }	t_crosshair;
 
+typedef struct s_gc {
+	void *ptr;
+	struct s_gc *next;
+}	t_gc;
+
 typedef struct s_game {
   t_mlx			mlx;
   t_texture		walls;
@@ -184,6 +189,7 @@ typedef struct s_game {
   int			mouseY;
   int			spritesIndex;
   void			*sprites_image;
+  t_gc			*gc;
 } t_game;
 
 
@@ -206,6 +212,9 @@ int handlePress(int keycode, void *param);
 int handleRelease(int keycode, void *param);
 int handle_mouse(int x, int y, void *param);
 int quite(t_game *game);
+void	*g_malloc(t_game *game, size_t size);
+void	free_all(t_gc *gc);
+void	free_ptr(t_game *game, void *ptr);
 
 // added
 void 	drawAngleInMap(t_game *game);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   funcs.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/01/29 19:41:31 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 02:48:52 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,7 @@ void	castRays(t_game *game)
 	for(int i  = 0; i < NUM_RAYS;i++)
 	{
 		double dist;
-		ray = malloc(sizeof(t_ray));
+		ray = g_malloc(game, sizeof(t_ray));
 		init_ray(ray, normalizeAngle((angle)));
 		dda(game, ray);
 		draw_stripe(game, i, ray);

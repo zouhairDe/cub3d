@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/29 19:47:53 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 05:12:40 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/cub3d.h"
+#include <stdlib.h>
 
 int	copy_map(t_game *game)
 {
@@ -18,7 +19,7 @@ int	copy_map(t_game *game)
 	int j;
 
 	i = 0;
-	game->check_map.map = malloc(sizeof(char *) * game->map.rows);
+	game->check_map.map = g_malloc(game, sizeof(char *) * game->map.rows);
 	if (!game->check_map.map)
 		return (1);
 	while (i < game->map.rows)
@@ -191,23 +192,22 @@ int	setTextures(t_game *game)
 
 int quite(t_game *game)
 {
-	int i;
-	
-	i = 0;
+	free_all(game->gc);
+	if (game->minimap.img)
+		mlx_destroy_image(game->mlx.mlx, game->minimap.img);
+	if (game->walls.no.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.no.img);
+    if (game->walls.so.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.so.img);
+    if (game->walls.we.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.we.img);
+    if (game->walls.ea.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
+	if (game->walls.wt.img)
+		mlx_destroy_image(game->mlx.mlx, game->walls.wt.img);
+
 	printf("Exiting\n");
-	// printGame(*game);
-	mlx_destroy_window(game->mlx.mlx, game->mlx.win);
-	while (i < game->check_map.rows)
-	{
-		free(game->check_map.map[i]);
-		i++;
-	}
-	free(game->check_map.map);
-	free(game->map.no);
-	free(game->map.so);
-	free(game->map.we);
-	free(game->map.ea);
-	free(game->mlx.mlx);//more to free
+	close(game->map.fd);
 	exit(0);
 	return (0);
 }
@@ -329,6 +329,16 @@ int setMLX(t_game *game)
 	return (0);
 }
 
+void	free_2d_arr(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
+}
+
 int	convertToHex(t_game *game)
 {
 	char	**floor;
@@ -342,7 +352,7 @@ int	convertToHex(t_game *game)
 	if (!floor || two_d_arr_size(floor) != 3)
 		return (printf("Error\nInvalid color format\n"));
 	if (!ceiling || two_d_arr_size(ceiling) != 3)
-		return (printf("Error\nInvalid color format\n"));//free
+		return (free_2d_arr(floor), printf("Error\nInvalid color format\n"));//free
     r = ft_atoi(floor[0]);
     g = ft_atoi(floor[1]);
     b = ft_atoi(floor[2]);
@@ -355,6 +365,8 @@ int	convertToHex(t_game *game)
 		return (printf("Error\nRGB values must be between 0 and 255\n"));
 	game->walls.floor = rgb_to_hex(ft_atoi(floor[0]), ft_atoi(floor[1]), ft_atoi(floor[2]));
 	game->walls.ceilling = rgb_to_hex(ft_atoi(ceiling[0]), ft_atoi(ceiling[1]), ft_atoi(ceiling[2]));
+	free_2d_arr(floor);
+	free_2d_arr(ceiling);
 	return (0);
 }
 
@@ -366,7 +378,7 @@ int validate_elements(t_game *game)
     return (0);
 }
 
-char *equalize_map_row(const char *row, int max_length)
+char *equalize_map_row(char *row, int max_length)
 {
 	char *new_row = calloc(max_length + 1, sizeof(char));
 	if (!new_row)
@@ -387,7 +399,7 @@ char *equalize_map_row(const char *row, int max_length)
 		i++;
 	}
 	new_row[i] = '\0';
-	
+	// free(row);//huh?
 	return new_row;
 }
 
@@ -420,8 +432,9 @@ char **equalize_map(char **map, int row_count)
 		}
 	}
 	new_map[row_count] = NULL;
-	
-	return new_map;
+	for (int i = 0; i < row_count; i++)
+		free(map[i]);
+	return (new_map);
 }
 
 int check_map(t_game *game)//gotta check for leaks when exiting with errors...
@@ -437,7 +450,6 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 		return (1);
 	if (setPlayer(game))
 		return (1);
-	printf("mid from check map\n");
 	floodfill(&game->check_map, 5, 13);
 	if (notSurrounded(&game->check_map))
 		return (1);
@@ -445,15 +457,14 @@ int check_map(t_game *game)//gotta check for leaks when exiting with errors...
 		return (1);
 	if (validate_elements(game))
 		return (1);
+	for (int i = 0; i < game->check_map.rows; i++)
+		free(game->check_map.map[i]);
+	// free(game->check_map.map);// hna makanfreewch 2dp hit t freea fl garbge collector but l ppointers l dakhl t allocaw b malloc 3adia hit f strdup..., ila 9ritih ms7o
 	if (setMLX(game))
 		return (1);
 	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL || game->map.ea == NULL)
 		return (printf("Error\nMissing texture path\n"));
-	printf("pre set texture\n");
 	if (setTextures(game))
 		return (1);
-	
-	printf("done with check map\n");
-		
 	return (0);
 }

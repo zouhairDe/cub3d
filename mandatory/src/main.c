@@ -3,50 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/29 19:41:40 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 05:09:36 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
 int start_map_allocation(t_game *game, char **line) {
-	char **tmp;
-	int i;
-	
-	if (game->map.map == NULL) {
-	  game->map.map = malloc(sizeof(char *));
-	  if (!game->map.map)
-		return (1);
-	  game->map.map[0] = ft_strdup(*line);
-	  game->map.rows++;
-	  game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
-		if (!game->map.map[0])
-			return (1);
-		ft_cut_char(game->map.map[0], '\n');
-	  return (0);
-	}
-	i = 0;
-	tmp = game->map.map;
-	game->map.map = malloc(sizeof(char *) * (game->map.rows + 1));
-	if (!game->map.map)
-	  return (1);
-	while (i < game->map.rows) {
-	  game->map.map[i] = tmp[i];
-	  i++;
-	}
-	game->map.map[i] = ft_strdup(*line);
-	game->map.rows++;
-	if (game->map.maxCols < (int)ft_strlen(*line))
-	  game->map.maxCols = ft_strlen(*line) - 1;
-	game->map.map[i] = ft_replace(game->map.map[i], '\t', "    ");
-	if (!game->map.map[i])
-	  return (1);
-	ft_cut_char(game->map.map[i], '\n');
-	free(tmp);
-	return (0);
+    char **tmp;
+    int i;
+    
+    if (game->map.map == NULL) {
+        game->map.map = g_malloc(game, sizeof(char *));
+        if (!game->map.map)
+            return (1);
+        game->map.map[0] = ft_strdup(*line);
+        game->map.rows++;
+        game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
+        if (!game->map.map[0])
+            return (1);
+        ft_cut_char(game->map.map[0], '\n');
+      return (0);
+    }
+    i = 0;
+    tmp = game->map.map;
+    game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));
+    if (!game->map.map)
+        return (1);
+    while (i < game->map.rows)
+    {
+        game->map.map[i] = tmp[i];
+        i++;
+    }
+    game->map.map[i] = ft_strdup(*line);
+    game->map.rows++;
+    if (game->map.maxCols < (int)ft_strlen(*line))
+      game->map.maxCols = ft_strlen(*line) - 1;
+    game->map.map[i] = ft_replace(game->map.map[i], '\t', "    ");
+    if (!game->map.map[i])
+      return (1);
+    ft_cut_char(game->map.map[i], '\n');
+    free_ptr(game, tmp);
+    tmp = NULL;
+    return (0);
 }
 
 
@@ -72,15 +74,17 @@ int manage_line_logic(char *line, t_game *game) {
   return (0);
 }
 
+
 int ft_parse_map(t_game *game) {
-  char *line;
-  char *tmp;
-(void)tmp;
-  while ((line = get_next_line(game->map.fd)) != NULL) {
-	if (manage_line_logic(line, game))
-	  return (free(line), 1);
-	free(line);
-  }
+	char *line;
+	char *tmp;
+	(void)tmp;
+
+	while ((line = get_next_line(game->map.fd)) != NULL) {
+		if (manage_line_logic(line, game))
+			return (free(line), 1);
+		free(line);
+	}
   return (0);
 }
 
@@ -139,6 +143,7 @@ void init_game(t_game *game) {
   game->crosshair.size = 4;
   game->crosshair.thickness = 2;  
   game->frame = 0;
+  game->gc = NULL;
 }
 
 
@@ -191,30 +196,50 @@ int init(char *path, t_game *game) {
 	return (0);
 }
 
-void fff() { system("leaks cub3d"); }
+void fff() { system("leaks cub3D > leaks.leaks"); }
 
-void free_game(t_game *game) {
-  free(game->map.no);
-  free(game->map.so);
-  free(game->map.we);
-  free(game->map.ea);
-  free(game->map.C);
-  free(game->map.F);
-  for (int i = 0; i < game->map.rows; i++)
-	free(game->map.map[i]);
-  free(game->map.map);
-  close(game->map.fd);
+void free_game(t_game *game)
+{
+	int	i;
+	
+	i = 0;
+    if (game->walls.no.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.no.img);
+    if (game->walls.so.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.so.img);
+    if (game->walls.we.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.we.img);
+    if (game->walls.ea.img)
+        mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
+    if (game->mlx.win)
+        mlx_destroy_window(game->mlx.mlx, game->mlx.win);
+    free_ptr(game, game->map.no);
+    free_ptr(game, game->map.so);
+    free_ptr(game, game->map.we);
+    free_ptr(game, game->map.ea);
+    free_ptr(game, game->map.C);
+    free_ptr(game, game->map.F);
+    while (i < game->map.rows)
+        free_ptr(game, game->map.map[i++]);
+    free_ptr(game, game->map.map);
+	i = 0;
+    while (i < game->check_map.rows)
+        free_ptr(game, game->check_map.map[i++]);
+    free_ptr(game, game->check_map.map);
+    close(game->map.fd);
 }
 
 int main(int ac, char **av) {
-  //   atexit(fff);
+    atexit(fff);
 	t_game game;
 
-	printf("\n"); // remove later.
 	if (ac != 2)
 		return (printf("Error\nInvalid number of arguments\n"));
 	if (init(av[1], &game))
-		return (printf("Error\nParsing error\n"));
+	{
+        free_game(&game);
+        return (printf("Error\nParsing error\n"));
+    }
 
 	mlx_hook(game.mlx.win, 2, 0L, handlePress, &game);
 	mlx_hook(game.mlx.win, 3, 0L, handleRelease, &game);
@@ -222,7 +247,5 @@ int main(int ac, char **av) {
 	mlx_loop_hook(game.mlx.mlx, simulate, &game);
 	mlx_hook(game.mlx.win, ON_MOUSEMOVE, 0, handle_mouse, &game);
 	mlx_loop(game.mlx.mlx);
-
-	free_game(&game);
 	return (0);
 }

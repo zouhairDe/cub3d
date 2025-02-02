@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/23 21:17:36 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 05:57:56 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int start_map_allocation(t_game *game, char **line) {
 	int i;
 	
 	if (game->map.map == NULL) {
-	  game->map.map = malloc(sizeof(char *));
+	  game->map.map = g_malloc(game, sizeof(char *));
 	  if (!game->map.map)
 	    return (1);
 	  game->map.map[0] = ft_strdup(*line);
@@ -32,7 +32,7 @@ int start_map_allocation(t_game *game, char **line) {
 	}
 	i = 0;
 	tmp = game->map.map;
-	game->map.map = malloc(sizeof(char *) * (game->map.rows + 1));
+	game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));
 	if (!game->map.map)
 	  return (1);
 	while (i < game->map.rows) {
@@ -47,7 +47,8 @@ int start_map_allocation(t_game *game, char **line) {
 	if (!game->map.map[i])
 	  return (1);
 	ft_cut_char(game->map.map[i], '\n');
-	free(tmp);
+	free_ptr(game, tmp);
+	tmp = NULL;
 	return (0);
 }
 
@@ -75,14 +76,15 @@ int manage_line_logic(char *line, t_game *game) {
 }
 
 int ft_parse_map(t_game *game) {
-  char *line;
-  char *tmp;
-(void)tmp;
-  while ((line = get_next_line(game->map.fd)) != NULL) {
-    if (manage_line_logic(line, game))
-      return (free(line), 1);
-    free(line);
-  }
+	char *line;
+	char *tmp;
+	(void)tmp;
+
+	while ((line = get_next_line(game->map.fd)) != NULL) {
+		if (manage_line_logic(line, game))
+			return (free(line), 1);
+		free(line);
+	}
   return (0);
 }
 
@@ -141,6 +143,7 @@ void init_game(t_game *game) {
   game->crosshair.thickness = 2;
   game->spritesIndex = 0;
   game->sprites_image = NULL;
+  game->gc  = NULL;
 }
 
 
@@ -182,7 +185,6 @@ void printGame(t_game game) {
 }
 
 int init(char *path, t_game *game) {
-  printf("in init \n");
   init_game(game);
   if (ft_path(path, game))
     return (1);
@@ -195,18 +197,18 @@ int init(char *path, t_game *game) {
   return (0);
 }
 
-void fff() { system("leaks cub3d"); }
+void fff() { system("leaks cub3D_bonus > bonus_leaks.leaks"); }
 
 void free_game(t_game *game) {
-  free(game->map.no);
-  free(game->map.so);
-  free(game->map.we);
-  free(game->map.ea);
-  free(game->map.C);
-  free(game->map.F);
+  free_ptr(game, game->map.no);
+  free_ptr(game, game->map.so);
+  free_ptr(game, game->map.we);
+  free_ptr(game, game->map.ea);
+  free_ptr(game, game->map.C);
+  free_ptr(game, game->map.F);
   for (int i = 0; i < game->map.rows; i++)
-    free(game->map.map[i]);
-  free(game->map.map);
+    free_ptr(game, game->map.map[i]);
+  free_ptr(game, game->map.map);
   close(game->map.fd);
 }
 
@@ -220,33 +222,23 @@ bool	player_isnt_in_door(t_game *game)
 int handle_mouse_click(int button, int x, int y, void *param)
 {
     t_game *game = (t_game *)param;
-    if (button == 1 && player_isnt_in_door(game)) // left click
+    if (button == 1 && player_isnt_in_door(game))
     {
-        printf("LEFT Mouse click at %d %d\n", x, y);
-		printf("player pos %f %f\n", game->player.x, game->player.y);
-        
-        // Cast a ray from player position in their facing direction
-        double step = 0.1; // Step size for checking
-        double max_dist = 1.0; // Maximum distance to check
+        double step = 0.1;
+        double max_dist = 1.0;
         double curr_dist = 0.0;
         
         while (curr_dist <= max_dist)
         {
-            // Calculate check position
             double check_x = game->player.x + (sin(game->player.dir) * curr_dist);
             double check_y = game->player.y + (cos(game->player.dir) * curr_dist);
             
-            // Convert to map coordinates
             int mapX = (int)check_y;
             int mapY = (int)check_x;
-			
-			printf("check pos %f %f\n", check_x, check_y);
-			printf("map pos %d %d\n", mapX, mapY);
             
-            // Check bounds
             if (mapX < 0 || mapY < 0 || mapX >= game->map.maxCols || mapY >= game->map.rows)
             {
-				printf("out of bounds\n");
+				printf("out of bounds\n");//remove later
 				break;
 			}
             
@@ -264,10 +256,7 @@ int handle_mouse_click(int button, int x, int y, void *param)
                 return (0);
             }
             else if (game->map.map[mapY][mapX] == '1') // Hit a wall
-            {
-				printf("hit a wall at %d %d\n", mapX, mapY);
-				break;
-			}
+				break ;
             
             curr_dist += step;
         }
@@ -275,24 +264,21 @@ int handle_mouse_click(int button, int x, int y, void *param)
     return (0);
 }
 
-int main(int ac, char **av) {
-  //   atexit(fff);
-  t_game game;
+int main(int ac, char **av)
+{
+    // atexit(fff);
+	t_game game;
 
-  printf("\n"); // remove later.
-  if (ac != 2)
-    return (printf("Error\nInvalid number of arguments\n"));
-  if (init(av[1], &game))
-    return (printf("Error\nParsing error\n"));
-
+	if (ac != 2)
+	 	return (printf("Error\nInvalid number of arguments\n"));
+	if (init(av[1], &game))
+		return (printf("Error\nParsing error\n"));
 	mlx_hook(game.mlx.win, 2, 0L, handlePress, &game);
 	mlx_hook(game.mlx.win, 3, 0L, handleRelease, &game);
 	mlx_hook(game.mlx.win, 17, 0, quite, &game);
 	mlx_loop_hook(game.mlx.mlx, simulate, &game);
 	mlx_hook(game.mlx.win, ON_MOUSEMOVE, 0, handle_mouse, &game);
-	mlx_mouse_hook(game.mlx.win, handle_mouse_click, &game);//hadi mni n9ado doors ndiroha t7l b left click
+	mlx_mouse_hook(game.mlx.win, handle_mouse_click, &game);
 	mlx_loop(game.mlx.mlx);
-
-  free_game(&game);
-  return (0);
+	return (0);
 }

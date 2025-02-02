@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/29 19:47:53 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/02 03:56:32 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,21 +164,29 @@ typedef struct s_crosshair
 	int	thickness;
 }	t_crosshair;
 
+typedef struct s_gc
+{
+	void	*ptr;
+	struct s_gc	*next;
+}	t_gc;
+
 typedef struct s_game {
-  t_mlx			mlx;
-  t_texture		walls;
-  t_player		player;
-  t_map			map;
-  t_map			check_map;
-  t_setting		setting;
-  t_point		dir_end;
-  t_crosshair	crosshair;
-  t_data		minimap; //rem
-  bool			mouse;
-  int			mouseX;
-  int			mouseY;
-  int			frame;
+	t_mlx			mlx;
+	t_texture		walls;
+	t_player		player;
+	t_map			map;
+	t_map			check_map;
+	t_setting		setting;
+	t_point			dir_end;
+	t_crosshair		crosshair;
+	t_data			minimap; //rem
+	bool			mouse;
+	int				mouseX;
+	int				mouseY;
+	int				frame;
+	t_gc			*gc;
 } t_game;
+
 
 
 int count_char(char *str, char c);
@@ -201,6 +209,9 @@ int handleRelease(int keycode, void *param);
 int handle_mouse(int x, int y, void *param);
 int check_map_border(t_map *map);
 int quite(t_game *game);
+void	*g_malloc(t_game *game, size_t size);
+void	free_all(t_gc *gc);
+void	free_ptr(t_game *game, void *ptr);
 
 // added
 void 	drawAngleInMap(t_game *game);
