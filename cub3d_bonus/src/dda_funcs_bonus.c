@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dda_funcs.c                                        :+:      :+:    :+:   */
+/*   dda_funcs_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 12:15:34 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/06 16:05:41 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:51:02 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 void	info_init(t_dda *info)
 {
@@ -22,59 +22,66 @@ void	info_init(t_dda *info)
 	info->vdist = 0;
 	info->initial_x = 0;
 	info->initial_y = 0;
+	info->vwall = false;
+	info->hwall = false;
 }
 
 void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 {
-	double	xinter;
-	double	yinter;
+	double	xi;
+	double	yi;
 	double	xstep;
 	double	ystep;
 
-	yinter = floor(game->player.x) + (double)(ray->facing_down);
-	xinter = game->player.y + ((yinter - game->player.x) / tan(ray->angle));
+	yi = floor(game->player.x) + (double)(ray->facing_down);
+	xi = game->player.y + ((yi - game->player.x) / tan(ray->angle));
 	ystep = 1 + (ray->facing_up * -2);
 	xstep = (1 / tan(ray->angle));
 	if ((ray->facing_left && xstep > 0) || (ray->facing_right && xstep < 0))
 		xstep *= -1;
-	info->hdist += distance(game->player.y, game->player.x, xinter, yinter);
-	yinter = yinter;
+	info->hdist += distance(game->player.y, game->player.x, xi, yi);
 	while (1)
 	{
-		if (is_wall(game, xinter, yinter - (ray->facing_up * 0.00000001)))
+		if (is_wall(game, xi, yi - (ray->facing_up * 0.00000001)))
 			break ;
-		info->hdist += distance(xinter, yinter, xinter + xstep, yinter + ystep);
-		xinter += xstep;
-		yinter += ystep;
+		info->hwall = door(game, xi, yi - (ray->facing_up * 0.00000001), ray);
+		if (info->hwall)
+			break ;
+		info->hdist += distance(xi, yi, xi + xstep, yi + ystep);
+		xi += xstep;
+		yi += ystep;
 	}
-	info->hp.x = xinter;
-	info->hp.y = yinter;
+	info->hp.x = xi;
+	info->hp.y = yi;
 }
 
 void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 {
-	double	xinter;
-	double	yinter;
+	double	xi;
+	double	yi;
 	double	xstep;
 	double	ystep;
 
-	xinter = floor(game->player.y) + (double)(ray->facing_right);
-	yinter = game->player.x + ((xinter - game->player.y) * tan(ray->angle));
+	xi = floor(game->player.y) + (double)(ray->facing_right);
+	yi = game->player.x + ((xi - game->player.y) * tan(ray->angle));
 	xstep = 1 + (ray->facing_left * -2);
 	ystep = tan(ray->angle);
 	if ((ray->facing_up && ystep > 0) || (ray->facing_down && ystep < 0))
 		ystep *= -1;
-	info->vdist += distance(game->player.y, game->player.x, xinter, yinter);
+	info->vdist += distance(game->player.y, game->player.x, xi, yi);
 	while (1)
 	{
-		if (is_wall(game, xinter - (ray->facing_left * 0.00000001), yinter))
+		if (is_wall(game, xi - (ray->facing_left * 0.00000001), yi))
 			break ;
-		info->vdist += distance(xinter, yinter, xinter + xstep, yinter + ystep);
-		xinter += xstep;
-		yinter += ystep;
+		info->vwall = door(game, xi - (ray->facing_left * 0.00000001), yi, ray);
+		if (info->vwall)
+			break ;
+		info->vdist += distance(xi, yi, xi + xstep, yi + ystep);
+		xi += xstep;
+		yi += ystep;
 	}
-	info->vp.x = xinter;
-	info->vp.y = yinter;
+	info->vp.x = xi;
+	info->vp.y = yi;
 }
 
 void	set_ray_data(t_dda *info, t_ray *ray, double px, double py)
@@ -89,6 +96,7 @@ void	set_ray_data(t_dda *info, t_ray *ray, double px, double py)
 			ray->face = W;
 		else
 			ray->face = E;
+		ray->wallContent = DOOR_CLOSED + (!info->vwall);
 	}
 	else
 	{
@@ -100,6 +108,7 @@ void	set_ray_data(t_dda *info, t_ray *ray, double px, double py)
 			ray->face = N;
 		else
 			ray->face = S;
+		ray->wallContent = DOOR_CLOSED + (!info->hwall);
 	}
 }
 

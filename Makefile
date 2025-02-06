@@ -17,11 +17,11 @@ BONUS_HEADER_DIR = $(BONUS_DIR)includes/
 BONUS_HEADER = $(BONUS_HEADER_DIR)cub3d_bonus.h
 BONUS_SRC_DIR = $(BONUS_DIR)src/
 BONUS_OBJ_DIR = $(BONUS_DIR)obj/
-BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c math_bonus.c funcs_bonus.c garbage_collector_bonus.c
+BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c math_bonus.c funcs_bonus.c dda_funcs_bonus.c garbage_collector_bonus.c
 
 SRC_DIR = mandatory/src/
 OBJ_DIR = mandatory/obj/
-FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c garbage_collector.c
+FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c dda_funcs.c garbage_collector.c
 
 BOBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_FILES:.c=.o))
 SRC = $(addprefix $(SRC_DIR), $(FILES))

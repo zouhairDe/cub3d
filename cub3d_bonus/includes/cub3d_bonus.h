@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 06:19:29 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/06 19:06:31 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@
 # include <unistd.h>
 # include <sys/stat.h>
 
-#define DEG_TO_RAD(angle) ((double)(angle) * M_PI / 180.0)
-#define RAD_TO_DEG(angle) ((double)(angle) *  180.0 / M_PI)
-
 # define ESCAPE_BUTTON 53
 # define W_BUTTON 13
 # define A_BUTTON 0
@@ -43,7 +40,7 @@
 # define RIGHT_BUTTON 124
 # define QUIT_BUTTON 12
 
-# define FOV DEG_TO_RAD(60)
+# define FOV deg_to_rad(60)
 
 # define WINDOW_WIDTH 1280
 # define WINDOW_HEIGHT 1024
@@ -97,10 +94,10 @@ typedef struct s_ray {
   t_point wallHit;
   int wallContent;
   double wallStripHeight;
-  bool is_facing_down;
-  bool is_facing_up;
-  bool is_facing_right;
-  bool is_facing_left;
+  bool	facing_down;
+  bool	facing_up;
+  bool	facing_right;
+  bool	facing_left;
   bool	vertical_hit;
   int	face;
 } t_ray;
@@ -193,34 +190,41 @@ typedef struct s_game {
 } t_game;
 
 
-int count_char(char *str, char c);
-char *ft_replace(char *str, char c, char *news);
-int dump_spaces(char **line);
-int ft_line_value(char *line, char **value);
-int check_map(t_game *game);
-void ft_cut_char(char *str, char c);
-int	simulate(t_game *game);
-void printGame(t_game game);
-unsigned int rgb_to_hex(int r, int g, int b);
-int two_d_arr_size(char **arr);
-double normalizeAngle(double angle);
-void	drawWalls(t_game *game, t_ray *ray);
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void    draw_rays(t_game *game);
-void	init_ray(t_ray *ray, double angle);
-int handlePress(int keycode, void *param);
-int handleRelease(int keycode, void *param);
-int handle_mouse(int x, int y, void *param);
-int quite(t_game *game);
-void	*g_malloc(t_game *game, size_t size);
-void	free_all(t_gc *gc);
-void	free_ptr(t_game *game, void *ptr);
+int				count_char(char *str, char c);
+char			*ft_replace(char *str, char c, char *news);
+int				dump_spaces(char **line);
+int				ft_line_value(char *line, char **value);
+int				check_map(t_game *game);
+void			ft_cut_char(char *str, char c);
+int				simulate(t_game *game);
+void			printGame(t_game game);
+unsigned int	rgb_to_hex(int r, int g, int b);
+int				two_d_arr_size(char **arr);
+double			normalizeAngle(double angle);
+void			drawWalls(t_game *game, t_ray *ray);
+void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void			draw_rays(t_game *game);
+void			init_ray(t_ray *ray, double angle);
+int				handlePress(int keycode, void *param);
+int				handleRelease(int keycode, void *param);
+int				handle_mouse(int x, int y, void *param);
+int				quite(t_game *game);
+void			*g_malloc(t_game *game, size_t size);
+void			free_all(t_gc *gc);
+void			free_ptr(t_game *game, void *ptr);
 
 // added
-void 	drawAngleInMap(t_game *game);
-void	drawFovInMap(t_game *game);
-void	castRays(t_game *game);
-double distance(double x1, double y1, double x2, double y2);
-int check_map_border(t_map *map);
-
+void 			drawAngleInMap(t_game *game);
+void			drawFovInMap(t_game *game);
+void			castRays(t_game *game);
+double			distance(double x1, double y1, double x2, double y2);
+int				check_map_border(t_map *map);
+double			deg_to_rad(double angle);
+double			rad_to_deg(double angle);
+void			dda(t_game *game, t_ray *ray);
+void			get_vertical_info(t_game *game, t_ray *ray, t_dda *info);
+void			get_horizontal_info(t_game *game, t_ray *ray, t_dda *info);
+int				is_wall(t_game *game, double playerX, double playerY);
+void			info_init(t_dda *info);
+int				door(t_game *game, double playerX, double playerY, t_ray *ray);
 #endif
