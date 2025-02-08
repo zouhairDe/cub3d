@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   funcs_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/08 08:01:08 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:27:28 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,11 @@ void drawAngleInMap(t_game *game)
 
     int lineLength = 40;
 
-
     int endX = centerX + lineLength * cos(game->player.dir);
     int endY = centerY + lineLength * sin(game->player.dir);
 
     drawline(game, centerX, centerY, endX, endY);
-	
+
 }
 
 void drawFovInMap(t_game *game)
@@ -61,16 +60,16 @@ void drawFovInMap(t_game *game)
 	int	endY;
 	int	lineLength = 80;
 
-	endX = center_x + lineLength * (cos(game->player.dir - FOV / 2));
-	endY = center_y + lineLength * (sin(game->player.dir - FOV / 2));
-	drawline(game, center_x, center_y, endX, endY);
-	endX = center_x + lineLength * (cos(game->player.dir + FOV / 2) );
-	endY = center_y + lineLength * (sin(game->player.dir + FOV / 2) );
-	drawline(game, center_x, center_y, endX, endY);
+	endX = CENTER_X + lineLength * (cos(game->player.dir - FOV / 2));
+	endY = CENTER_Y + lineLength * (sin(game->player.dir - FOV / 2));
+	drawline(game, CENTER_X, CENTER_Y, endX, endY);
+	endX = CENTER_X + lineLength * (cos(game->player.dir + FOV / 2) );
+	endY = CENTER_Y + lineLength * (sin(game->player.dir + FOV / 2) );
+	drawline(game, CENTER_X, CENTER_Y, endX, endY);
 }
 int	is_wall(t_game *game, double pX, double pY)
 {
-	if (pX<=0 || pX>=game->map.maxCols || pY<=0 || pY>=game->map.rows)
+	if (pX<=0 || pX>=game->map.max_cols || pY<=0 || pY>=game->map.rows)
 	{
 		return true;
 	}
@@ -79,7 +78,7 @@ int	is_wall(t_game *game, double pX, double pY)
 
 int door(t_game *game, double pX, double pY, t_ray *ray)
 {
-	if (pX <= 0 || pX>=game->map.maxCols || pY <= 0 || pY>=game->map.rows)
+	if (pX <= 0 || pX>=game->map.max_cols || pY <= 0 || pY>=game->map.rows)
 		return false;
 	return (game->map.map[(int)(pY)][(int)(pX)] == 'D');
 }
@@ -97,8 +96,8 @@ unsigned int	get_color(t_game *game, t_ray *ray, int tx, int ty)
 		c = ((unsigned int *)game->walls.so.addr)[ty * WALL_SIZE + tx];
 	else if (ray->face == W)
 		c = ((unsigned int *)game->walls.we.addr)[ty * WALL_SIZE + tx];
-	if (ray->wallContent == DOOR_CLOSED)
-		c = ((unsigned int *)game->walls.CDoor.addr)[ty * WALL_SIZE + tx];
+	if (ray->wall_content == DOOR_CLOSED)
+		c = ((unsigned int *)game->walls.closed_door.addr)[ty * WALL_SIZE + tx];
 	c += ((int)(ray->dist * 6) << 24);
 	return (c);
 }
@@ -113,15 +112,15 @@ void	draw_stripe(t_game *game, int x, t_ray *ray)
 	int		end = (WINDOW_HEIGHT / 2) + (stripHeight / 2);
 	int		tx = -1;
 	int		y = start;
-	
+
 	if (start < 0)
 		start = 0;
 	if (end > WINDOW_HEIGHT)
 		end = WINDOW_HEIGHT;
 	if (ray->vertical_hit)
-		tx = (int)(ray->wallHit.y * WALL_SIZE) % WALL_SIZE;
+		tx = (int)(ray->wall_hit.y * WALL_SIZE) % WALL_SIZE;
 	else
-		tx = (int)(ray->wallHit.x * WALL_SIZE) % WALL_SIZE;
+		tx = (int)(ray->wall_hit.x * WALL_SIZE) % WALL_SIZE;
 	while (y < end)
 	{
 		int dft = y + ((stripHeight /2 ) - (WINDOW_HEIGHT / 2));
@@ -140,9 +139,9 @@ void	init_ray(t_ray *ray, double angle)
 	ray->facing_left = !ray->facing_right;
 	ray->vertical_hit = false;
 	ray->dist = 0;
-	ray->wallHit.x = 0;
-	ray->wallHit.y = 0;
-	ray->wallContent = DOOR_OPEN;
+	ray->wall_hit.x = 0;
+	ray->wall_hit.y = 0;
+	ray->wall_content = DOOR_OPEN;
 }
 
 void	cast_rays(t_game *game)
@@ -158,7 +157,7 @@ void	cast_rays(t_game *game)
 	while (i < NUM_RAYS)
 	{
 		ray = g_malloc(game, sizeof(t_ray));
-		init_ray(ray, normalizeAngle((angle)));
+		init_ray(ray, normalize_angle((angle)));
 		dda(game, ray);
 		draw_stripe(game, i, ray);
 		free_ptr(game, ray);

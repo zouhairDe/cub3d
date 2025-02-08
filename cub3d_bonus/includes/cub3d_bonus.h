@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 14:01:54 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:27:46 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ typedef struct s_dda
 typedef struct s_ray
 {
 	t_point			origin;
-	t_point			Dir;
 	double			angle;
 	double			dist;
 	t_point			wall_hit;
@@ -155,7 +154,7 @@ typedef struct s_texture
 	t_data			we;
 	t_data			ea;
 	t_data			wt;
-	t_data			CDoor;
+	t_data			closed_door;
 	unsigned int	ceilling;
 	unsigned int	floor;
 }					t_texture;
@@ -195,7 +194,7 @@ typedef struct s_game
 	bool			mouse;
 	int				mouse_x;
 	int				mouse_y;
-	int				spritesIndex;
+	int				sprites_index;
 	void			*sprites_image;
 	t_gc			*gc;
 }					t_game;

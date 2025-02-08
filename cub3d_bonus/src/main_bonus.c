@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 07:24:41 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:27:46 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int start_map_allocation(t_game *game, char **line) {
 	char **tmp;
 	int i;
-	
+
 	if (game->map.map == NULL) {
 	  game->map.map = g_malloc(game, sizeof(char *));
 	  if (!game->map.map)
@@ -41,8 +41,8 @@ int start_map_allocation(t_game *game, char **line) {
 	}
 	game->map.map[i] = ft_strdup(*line);
 	game->map.rows++;
-	if (game->map.maxCols < (int)ft_strlen(*line))
-	  game->map.maxCols = ft_strlen(*line) - 1;
+	if (game->map.max_cols < (int)ft_strlen(*line))
+	  game->map.max_cols = ft_strlen(*line) - 1;
 	game->map.map[i] = ft_replace(game->map.map[i], '\t', "    ");
 	if (!game->map.map[i])
 	  return (1);
@@ -51,7 +51,6 @@ int start_map_allocation(t_game *game, char **line) {
 	tmp = NULL;
 	return (0);
 }
-
 
 int manage_line_logic(char *line, t_game *game) {
   char *tmp;
@@ -67,9 +66,9 @@ int manage_line_logic(char *line, t_game *game) {
   else if (!ft_strncmp(line, "EA ", 3) || !ft_strncmp(line, "EA\t", 3))
     return (ft_line_value(line, &game->map.ea));
   else if (!ft_strncmp(line, "C ", 2) || !ft_strncmp(line, "C\t", 2))
-    return (ft_line_value(line, &game->map.C));
+    return (ft_line_value(line, &game->map.ceiling));
   else if (!ft_strncmp(line, "F ", 2) || !ft_strncmp(line, "F\t", 2))
-    return (ft_line_value(line, &game->map.F));
+    return (ft_line_value(line, &game->map.floor));
   else if (ft_strchr(line, '1') || ft_strchr(line, '0'))
     return (start_map_allocation(game, &tmp));
   return (0);
@@ -107,27 +106,27 @@ void init_game(t_game *game) {
 	game->map.we = NULL;
 	game->map.ea = NULL;
 	game->map.wt = NULL;
-	game->map.C = NULL;
-	game->map.F = NULL;
+	game->map.ceiling = NULL;
+	game->map.floor = NULL;
 	game->map.map = NULL;
 	game->map.rows = 0;
-	game->map.maxCols = 0;
+	game->map.max_cols = 0;
 	game->check_map.fd = 0;
 	game->check_map.no = NULL;
 	game->check_map.so = NULL;
 	game->check_map.we = NULL;
 	game->check_map.ea = NULL;
-	game->check_map.C = NULL;
-	game->check_map.F = NULL;
+	game->check_map.ceiling = NULL;
+	game->check_map.floor = NULL;
 	game->check_map.map = NULL;
 	game->check_map.rows = 0;
-	game->check_map.maxCols = 0;
+	game->check_map.max_cols = 0;
 	game->player.x = 0.0;
 	game->player.y = 0.0;
 	game->player.dir = 0;
 	game->player.fov = 0;
-	game->player.moveSpeed = 0.15;
-	game->player.rotSpeed = 0.1;
+	game->player.moving_speed = 0.15;
+	game->player.rotation_speed = 0.1;
 	game->mlx.mlx = NULL;
 	game->mlx.win = NULL;
 	game->setting.width = 0;
@@ -137,11 +136,11 @@ void init_game(t_game *game) {
 	game->setting.mlx.mlx = NULL;
 	game->setting.mlx.win = NULL;
 	game->mouse = false;
-	game->mouseX = WINDOW_WIDTH / 2;
-	game->mouseY = WINDOW_HEIGHT / 2;
+	game->mouse_x = WINDOW_WIDTH / 2;
+	game->mouse_y = WINDOW_HEIGHT / 2;
 	game->crosshair.size = 4;
 	game->crosshair.thickness = 2;
-	game->spritesIndex = 0;
+	game->sprites_index = 0;
 	game->sprites_image = NULL;
 	game->gc  = NULL;
 	game->walls.no.img = NULL;
@@ -158,51 +157,12 @@ void init_game(t_game *game) {
 	game->walls.floor = 0;
 }
 
-
-void printGame(t_game game) {
-	struct stat st = {0};
-	if (stat("logs", &st) == -1) {
-		mkdir("logs", 0700);
-	}
-	
-	FILE *f = fopen("logs/gameData.log", "a");
-	if (!f) {
-		perror("Error opening log file");
-		return;
-	}
-	fprintf(f, "____________________ Game Data ------------------\n");
-	fprintf(f, "Current Game State\n");
-	fprintf(f, "Map:\n");
-	for (int i = 0; i < game.map.rows; i++)
-		fprintf(f, "%s\n", game.map.map[i]);
-	fprintf(f, "\nMap settings:\n");
-	(game.mouse) ? fprintf(f, "Mouse: true\n") : fprintf(f, "Mouse: false\n");
-	fprintf(f, "Player speed: %ld\n", game.setting.player_speed);
-	fprintf(f, "Player move speed: %f\n", game.player.moveSpeed);
-	fprintf(f, "Player rotation speed: %f\n", game.player.rotSpeed);
-	fprintf(f, "Window width: %d\n", game.setting.width);
-	fprintf(f, "Window height: %d\n", game.setting.height);
-	fprintf(f, "Title: %s\n", game.setting.title);
-	fprintf(f, "Textures:\n");
-	(game.walls.no.addr) ? fprintf(f, "NO: %s", game.map.no) : fprintf(f, "NO: NULL\n");
-	(game.walls.so.addr) ? fprintf(f, "SO: %s", game.map.so) : fprintf(f, "SO: NULL\n");
-	(game.walls.we.addr) ? fprintf(f, "WE: %s", game.map.we) : fprintf(f, "WE: NULL\n");
-	(game.walls.ea.addr) ? fprintf(f, "EA: %s", game.map.ea) : fprintf(f, "EA: NULL\n");
-	fprintf(f, "Colors:\n");
-	(game.walls.ceilling) ? fprintf(f, "Ceilling: %d\n", game.walls.ceilling) : fprintf(f, "Ceilling: NULL\n");
-	(game.walls.floor) ? fprintf(f, "Floor: %d\n", game.walls.floor) : fprintf(f, "Floor: NULL\n");
-	fprintf(f, "Player pos: %f %f\n", game.player.x, game.player.y);
-	fprintf(f, "Player dir: %f\n", game.player.dir);
-	fprintf(f, "Player fov: %f\n", game.player.fov);
-}
-
 int init(char *path, t_game *game) {
   init_game(game);
   if (ft_path(path, game))
     return (1);
   if (ft_parse_map(game))
     return (1);
-	printGame(*game);
   if (check_map(game))
     return (1);
   printf("done initing\n");
@@ -223,19 +183,6 @@ void free_game(t_game *game)
         mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
     if (game->mlx.win)
         mlx_destroy_window(game->mlx.mlx, game->mlx.win);
-    //free_ptr(game, game->map.no);
-    //free_ptr(game, game->map.so);
-    //free_ptr(game, game->map.we);
-    //free_ptr(game, game->map.ea);
-    //free_ptr(game, game->map.C);
-    //free_ptr(game, game->map.F);
-    //while (i < game->map.rows)
-    //    free_ptr(game, game->map.map[i++]);
-    //free_ptr(game, game->map.map);
-	//i = 0;
-    //while (i < game->check_map.rows)
-    //    free_ptr(game, game->check_map.map[i++]);
-    //free_ptr(game, game->check_map.map);
     free_all(game->gc);
     close(game->map.fd);
 }
@@ -255,22 +202,21 @@ int handle_mouse_click(int button, int x, int y, void *param)
         double step = 0.1;
         double max_dist = 1.0;
         double curr_dist = 0.0;
-        
+
         while (curr_dist <= max_dist)
         {
             double check_x = game->player.x + (sin(game->player.dir) * curr_dist);
             double check_y = game->player.y + (cos(game->player.dir) * curr_dist);
-            
+
             int mapX = (int)check_y;
             int mapY = (int)check_x;
-            
-            if (mapX < 0 || mapY < 0 || mapX >= game->map.maxCols || mapY >= game->map.rows)
+
+            if (mapX < 0 || mapY < 0 || mapX >= game->map.max_cols || mapY >= game->map.rows)
             {
-				printf("out of bounds\n");//remove later
+				printf("out of bounds\n");
 				break;
 			}
-            
-            // Check for door and toggle it
+
             if (game->map.map[mapY][mapX] == 'D')
             {
                 game->map.map[mapY][mapX] = 'd';
@@ -283,9 +229,9 @@ int handle_mouse_click(int button, int x, int y, void *param)
                 printf("door closed at %d,%d\n", mapX, mapY);
                 return (0);
             }
-            else if (game->map.map[mapY][mapX] == '1') // Hit a wall
+            else if (game->map.map[mapY][mapX] == '1') 
 				break ;
-            
+
             curr_dist += step;
         }
     }
@@ -294,15 +240,15 @@ int handle_mouse_click(int button, int x, int y, void *param)
 
 int main(int ac, char **av)
 {
-    //atexit(fff);
+
 	t_game game;
 
 	if (ac != 2)
 	 	return (printf("Error\nInvalid number of arguments\n"));
 	if (init(av[1], &game))
 		return (printf("Error\nParsing error\n"));
-	mlx_hook(game.mlx.win, 2, 0L, handlePress, &game);
-	mlx_hook(game.mlx.win, 3, 0L, handleRelease, &game);
+	mlx_hook(game.mlx.win, 2, 0L, handle_press, &game);
+	mlx_hook(game.mlx.win, 3, 0L, handle_release, &game);
 	mlx_hook(game.mlx.win, 17, 0, quite, &game);
 	mlx_loop_hook(game.mlx.mlx, simulate, &game);
 	mlx_hook(game.mlx.win, ON_MOUSEMOVE, 0, handle_mouse, &game);

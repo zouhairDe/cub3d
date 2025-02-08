@@ -14,7 +14,7 @@
 
 void printGC(t_gc *gc)
 {
-	
+
 	if (!gc)
     {
         printf("Garbage collector is empty\n");
@@ -46,7 +46,7 @@ void free_ptr(t_game *game, void *ptr)
     t_gc	*tmp;
     t_gc	*prev;
 	t_gc	*gc;
-	
+
 	gc = game->gc;
     if (!gc)
         return;
@@ -76,7 +76,7 @@ void free_ptr(t_game *game, void *ptr)
 void	free_all(t_gc *gc)
 {
 	t_gc	*tmp;
-	
+
 	printf("Freeing all\n");
 	while (gc)
 	{

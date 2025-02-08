@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 08:54:05 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:27:46 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ int	copy_map(t_game *game)
 		i++;
 	}
 	game->check_map.rows = game->map.rows;
-	game->check_map.maxCols = game->map.maxCols;
+	game->check_map.max_cols = game->map.max_cols;
 	return (0);
 }
 
 int	ft_find(char *str, char c)
 {
 	int i;
-	
+
 	i = 0;
 	while (str[i])
 	{
@@ -51,7 +51,7 @@ int	setPlayer(t_game *game)
 {
 	int i;
 	bool posSet;
-	
+
 	i = 0;
 	posSet = false;
 	while (i < game->check_map.rows)
@@ -100,7 +100,7 @@ int	check_chars(t_map *map)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	while (i < map->rows)
 	{
@@ -123,7 +123,7 @@ int	check_chars(t_map *map)
 int	ft_ignore_space(char *str)
 {
 	int i;
-	
+
 	i = 0;
 	while (str[i] == ' ')
 		i++;
@@ -134,7 +134,7 @@ int	notSurrounded(t_map *map)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	if (ft_strchr(map->map[0], '*') || ft_strchr(map->map[map->rows - 1], '*'))
 		return (printf("Error\nMap not surrounded by walls\n"));
@@ -180,10 +180,10 @@ int	setTextures(t_game *game)
 	if (!game->walls.ea.img)
 		return (printf("Error\nCouldn't load EA texture\n"));
 	game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img, &game->walls.ea.bits_per_pixel, &game->walls.ea.line_length, &game->walls.ea.endian);
-	game->walls.CDoor.img = mlx_xpm_file_to_image(game->mlx.mlx, "textures/spruce_door_bottom.xpm", &game->walls.CDoor.width, &game->walls.CDoor.height);
-	if (!game->walls.CDoor.img)
-		return (printf("Error\nCouldn't load CDoor texture\n"));
-	game->walls.CDoor.addr = mlx_get_data_addr(game->walls.CDoor.img, &game->walls.CDoor.bits_per_pixel, &game->walls.CDoor.line_length, &game->walls.CDoor.endian);
+	game->walls.closed_door.img = mlx_xpm_file_to_image(game->mlx.mlx, "textures/spruce_door_bottom.xpm", &game->walls.closed_door.width, &game->walls.closed_door.height);
+	if (!game->walls.closed_door.img)
+		return (printf("Error\nCouldn't load closed_door texture\n"));
+	game->walls.closed_door.addr = mlx_get_data_addr(game->walls.closed_door.img, &game->walls.closed_door.bits_per_pixel, &game->walls.closed_door.line_length, &game->walls.closed_door.endian);
 	return (0);
 }
 
@@ -199,22 +199,10 @@ int quite(t_game *game)
         mlx_destroy_image(game->mlx.mlx, game->walls.we.img);
     if (game->walls.ea.img)
         mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
-	if (game->walls.CDoor.img)
-		mlx_destroy_image(game->mlx.mlx, game->walls.CDoor.img);
+	if (game->walls.closed_door.img)
+		mlx_destroy_image(game->mlx.mlx, game->walls.closed_door.img);
 	free_all(game->gc);
-	
-	// if (game->map.no)
-	// 	free(game->map.no);
-	// if (game->map.so)
-	// 	free(game->map.so);
-	// if (game->map.we)
-	// 	free(game->map.we);
-	// if (game->map.ea)
-	// 	free(game->map.ea);
-	// if (game->map.C)
-	// 	free(game->map.C);
-	// if (game->map.F)
-	// 	free(game->map.F);
+
 	close(game->map.fd);
 	printf("Exiting\n");
 	exit(0);
@@ -226,79 +214,79 @@ bool	checkWallCollision(t_game *game, int keycode)
 	int newX;
 	int newY;
 	double distance;
-	
+
 	if (keycode == W_BUTTON)
 	{
-		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir);
-		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir);
-		
+		newX = game->player.x + game->player.moving_speed * sin(game->player.dir);
+		newY = game->player.y + game->player.moving_speed * cos(game->player.dir);
+
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 			return (false);
-		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir - 45);
-		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir - 45);
-		
+		newX = game->player.x + game->player.moving_speed * sin(game->player.dir - 45);
+		newY = game->player.y + game->player.moving_speed * cos(game->player.dir - 45);
+
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 		{
-			newX = game->player.x + game->player.moveSpeed * sin(game->player.dir + 45);
-			newY = game->player.y + game->player.moveSpeed * cos(game->player.dir + 45);
+			newX = game->player.x + game->player.moving_speed * sin(game->player.dir + 45);
+			newY = game->player.y + game->player.moving_speed * cos(game->player.dir + 45);
 			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 				return (false);
 		}
-		
+
 	}
 	else if (keycode == S_BUTTON)
 	{
-		newX = game->player.x - game->player.moveSpeed * sin(game->player.dir);
-		newY = game->player.y - game->player.moveSpeed * cos(game->player.dir);
+		newX = game->player.x - game->player.moving_speed * sin(game->player.dir);
+		newY = game->player.y - game->player.moving_speed * cos(game->player.dir);
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 			return (false);
-		newX = game->player.x - game->player.moveSpeed * sin(game->player.dir - 45);
-		newY = game->player.y - game->player.moveSpeed * cos(game->player.dir - 45);
+		newX = game->player.x - game->player.moving_speed * sin(game->player.dir - 45);
+		newY = game->player.y - game->player.moving_speed * cos(game->player.dir - 45);
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 		{
-			newX = game->player.x - game->player.moveSpeed * sin(game->player.dir + 45);
-			newY = game->player.y - game->player.moveSpeed * cos(game->player.dir + 45);
+			newX = game->player.x - game->player.moving_speed * sin(game->player.dir + 45);
+			newY = game->player.y - game->player.moving_speed * cos(game->player.dir + 45);
 			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 				return (false);
 		}
 	}
 	else if (keycode == A_BUTTON)
 	{
-		newX = game->player.x - game->player.moveSpeed * cos(game->player.dir);
-		newY = game->player.y + game->player.moveSpeed * sin(game->player.dir);
+		newX = game->player.x - game->player.moving_speed * cos(game->player.dir);
+		newY = game->player.y + game->player.moving_speed * sin(game->player.dir);
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 			return (false);
-		newX = game->player.x - game->player.moveSpeed * sin(game->player.dir);
-		newY = game->player.y + game->player.moveSpeed * cos(game->player.dir);
+		newX = game->player.x - game->player.moving_speed * sin(game->player.dir);
+		newY = game->player.y + game->player.moving_speed * cos(game->player.dir);
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 		{
-			newX = game->player.x - game->player.moveSpeed * sin(game->player.dir + 90);
-			newY = game->player.y + game->player.moveSpeed * cos(game->player.dir + 90);
+			newX = game->player.x - game->player.moving_speed * sin(game->player.dir + 90);
+			newY = game->player.y + game->player.moving_speed * cos(game->player.dir + 90);
 			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 				return (false);
 		}
 	}
 	else if (keycode == D_BUTTON)
 	{
-		newX = game->player.x + game->player.moveSpeed * cos(game->player.dir);
-		newY = game->player.y - game->player.moveSpeed * sin(game->player.dir);
+		newX = game->player.x + game->player.moving_speed * cos(game->player.dir);
+		newY = game->player.y - game->player.moving_speed * sin(game->player.dir);
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 			return (false);
-		newX = game->player.x + game->player.moveSpeed * sin(game->player.dir - 90);
-		newY = game->player.y - game->player.moveSpeed * cos(game->player.dir - 90);
+		newX = game->player.x + game->player.moving_speed * sin(game->player.dir - 90);
+		newY = game->player.y - game->player.moving_speed * cos(game->player.dir - 90);
 		if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 		{
-			newX = game->player.x + game->player.moveSpeed * sin(game->player.dir);
-			newY = game->player.y - game->player.moveSpeed * cos(game->player.dir);
+			newX = game->player.x + game->player.moving_speed * sin(game->player.dir);
+			newY = game->player.y - game->player.moving_speed * cos(game->player.dir);
 			if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 				return (false);
 		}
 	}
-	
+
 	if (newX < 0 || newY < 0 || newX >= game->map.rows
 		|| newY >= ft_strlen(game->map.map[(int)newX]))
 		return (false);
-	
+
 	if (game->map.map[(int)newX][(int)newY] == '1' || game->map.map[(int)newX][(int)newY] == 'D')
 		return (false);
 	return (true);
@@ -311,35 +299,35 @@ void	sprites(t_game *game, bool onRelease)
 	char *f3;
 	char *f4;
 	char *f5;
-	
+
 	f1 = "textures/hand/hand1.xpm";
 	f2 = "textures/hand/hand2.xpm";
 	f3 = "textures/hand/hand3.xpm";
 	f4 = "textures/hand/hand4.xpm";
 	f5 = "textures/hand/hand5.xpm";
-	if (game->spritesIndex == 0 || game->spritesIndex == 8)
+	if (game->sprites_index == 0 || game->sprites_index == 8)
 		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f1, &game->mlx.data.width, &game->mlx.data.height);
-	else if (game->spritesIndex == 1 || game->spritesIndex == 7)
+	else if (game->sprites_index == 1 || game->sprites_index == 7)
 		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f2, &game->mlx.data.width, &game->mlx.data.height);
-	else if (game->spritesIndex == 2 || game->spritesIndex == 6)
+	else if (game->sprites_index == 2 || game->sprites_index == 6)
 		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f3, &game->mlx.data.width, &game->mlx.data.height);
-	else if (game->spritesIndex == 3 || game->spritesIndex == 5)
+	else if (game->sprites_index == 3 || game->sprites_index == 5)
 		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f4, &game->mlx.data.width, &game->mlx.data.height);
-	else if (game->spritesIndex == 4)
+	else if (game->sprites_index == 4)
 		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f5, &game->mlx.data.width, &game->mlx.data.height);
-	
+
 	if (onRelease)
-		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f1, &game->mlx.data.width, &game->mlx.data.height), game->spritesIndex = 0;
-	game->spritesIndex++;
-	
-	if (game->spritesIndex == 9)
-		game->spritesIndex = 1;
-	
+		game->sprites_image = mlx_xpm_file_to_image(game->mlx.mlx, f1, &game->mlx.data.width, &game->mlx.data.height), game->sprites_index = 0;
+	game->sprites_index++;
+
+	if (game->sprites_index == 9)
+		game->sprites_index = 1;
+
 	if (!game->sprites_image)
 		printf("Error\nCouldn't load sprite\n");
 }
 
-int handlePress(int keycode, void *param)
+int handle_press(int keycode, void *param)
 {
     t_game *game = (t_game *)param;
 
@@ -353,39 +341,38 @@ int handlePress(int keycode, void *param)
 			mlx_mouse_show(), game->mouse = !game->mouse;
 	}
 	else if (keycode == LEFT_BUTTON)
-		game->player.dir -= game->player.rotSpeed;
+		game->player.dir -= game->player.rotation_speed;
 	else if (keycode == RIGHT_BUTTON)
-		game->player.dir += game->player.rotSpeed;
+		game->player.dir += game->player.rotation_speed;
 	else if (keycode == W_BUTTON && checkWallCollision(game, W_BUTTON)){
-		game->player.x += game->player.moveSpeed * sin(game->player.dir);
-		game->player.y += game->player.moveSpeed * cos(game->player.dir);
+		game->player.x += game->player.moving_speed * sin(game->player.dir);
+		game->player.y += game->player.moving_speed * cos(game->player.dir);
 	}
 	else if (keycode == S_BUTTON && checkWallCollision(game, S_BUTTON)){
-		game->player.x -= game->player.moveSpeed * sin(game->player.dir);
-		game->player.y -= game->player.moveSpeed * cos(game->player.dir);
+		game->player.x -= game->player.moving_speed * sin(game->player.dir);
+		game->player.y -= game->player.moving_speed * cos(game->player.dir);
 	}
 	else if (keycode == A_BUTTON && checkWallCollision(game, A_BUTTON)){
-		game->player.x -= game->player.moveSpeed * cos(game->player.dir);
-		game->player.y += game->player.moveSpeed * sin(game->player.dir);
+		game->player.x -= game->player.moving_speed * cos(game->player.dir);
+		game->player.y += game->player.moving_speed * sin(game->player.dir);
 	}
 	else if (keycode == D_BUTTON && checkWallCollision(game, D_BUTTON)){
-		game->player.x += game->player.moveSpeed * cos(game->player.dir);
-		game->player.y -= game->player.moveSpeed * sin(game->player.dir);
+		game->player.x += game->player.moving_speed * cos(game->player.dir);
+		game->player.y -= game->player.moving_speed * sin(game->player.dir);
 	}
 	else
 		return 0;
-	game->player.dir = normalizeAngle(game->player.dir);
+	game->player.dir = normalize_angle(game->player.dir);
 	sprites(game, false);
 	return 0;
 }
 
-int handleRelease(int keycode, void *param)
+int handle_release(int keycode, void *param)
 {
 	t_game *game = (t_game *)param;
 	sprites(game, true);
 	return 0;
 }
-
 
 int handle_mouse(int x, int y, void *param)
 {
@@ -401,7 +388,7 @@ int handle_mouse(int x, int y, void *param)
     if (diff_x != 0)
     {
         game->player.dir += (diff_x * 0.001);
-        game->player.dir = normalizeAngle(game->player.dir);
+        game->player.dir = normalize_angle(game->player.dir);
         last_x = x;
     }
     mlx_mouse_move(game->mlx.win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -447,12 +434,12 @@ int	convertToHex(t_game *game)
 	int		g;
 	int		b;
 
-    floor = ft_split(game->map.F, ',');
-    ceiling = ft_split(game->map.C, ',');
+    floor = ft_split(game->map.floor, ',');
+    ceiling = ft_split(game->map.ceiling, ',');
 	if (!floor || two_d_arr_size(floor) != 3)
 		return (printf("Error\nInvalid color format\n"));
 	if (!ceiling || two_d_arr_size(ceiling) != 3)
-		return (free_2d_arr(floor), printf("Error\nInvalid color format\n"));//free
+		return (free_2d_arr(floor), printf("Error\nInvalid color format\n"));
     r = ft_atoi(floor[0]);
     g = ft_atoi(floor[1]);
     b = ft_atoi(floor[2]);
@@ -475,7 +462,7 @@ char *equalize_map_row(const char *row, int max_length)
     char *new_row = calloc(max_length + 1, sizeof(char));
     if (!new_row)
         return NULL;
-    
+
     int i = 0;
     while (row[i] && i < max_length)
     {
@@ -491,7 +478,7 @@ char *equalize_map_row(const char *row, int max_length)
         i++;
     }
     new_row[i] = '\0';
-    //need to free the old row
+
     return new_row;
 }
 
@@ -500,7 +487,7 @@ char **equalize_map(char **map, int row_count)
 	char **new_map;
     if (!map || row_count <= 0)
         return NULL;
-    
+
     int max_length = 0;
     for (int i = 0; i < row_count; i++)
     {
@@ -511,7 +498,7 @@ char **equalize_map(char **map, int row_count)
     new_map = malloc((row_count + 1) * sizeof(char *));
     if (!new_map)
         return NULL;
-    
+
     for (int i = 0; i < row_count; i++)
     {
         new_map[i] = equalize_map_row(map[i], max_length);
@@ -532,7 +519,7 @@ char **equalize_map(char **map, int row_count)
 int validate_elements(t_game *game)
 {
     if (!game->map.no || !game->map.so || !game->map.we || 
-        !game->map.ea || !game->map.F || !game->map.C)
+        !game->map.ea || !game->map.floor || !game->map.ceiling)
         return (printf("Error\nMissing required elements\n"));
     return (0);
 }

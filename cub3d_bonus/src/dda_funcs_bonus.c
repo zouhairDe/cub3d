@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dda_funcs_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 12:15:34 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/06 18:51:02 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:24:07 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,26 +89,26 @@ void	set_ray_data(t_dda *info, t_ray *ray, double px, double py)
 	if (info->vdist < info->hdist)
 	{
 		ray->dist = info->vdist;
-		ray->wallHit.x = info->vp.x;
-		ray->wallHit.y = info->vp.y;
+		ray->wall_hit.x = info->vp.x;
+		ray->wall_hit.y = info->vp.y;
 		ray->vertical_hit = true;
-		if (px < ray->wallHit.x)
+		if (px < ray->wall_hit.x)
 			ray->face = W;
 		else
 			ray->face = E;
-		ray->wallContent = DOOR_CLOSED + (!info->vwall);
+		ray->wall_content = DOOR_CLOSED + (!info->vwall);
 	}
 	else
 	{
 		ray->dist = info->hdist;
-		ray->wallHit.x = info->hp.x;
-		ray->wallHit.y = info->hp.y;
+		ray->wall_hit.x = info->hp.x;
+		ray->wall_hit.y = info->hp.y;
 		ray->vertical_hit = false;
-		if (py < ray->wallHit.y)
+		if (py < ray->wall_hit.y)
 			ray->face = N;
 		else
 			ray->face = S;
-		ray->wallContent = DOOR_CLOSED + (!info->hwall);
+		ray->wall_content = DOOR_CLOSED + (!info->hwall);
 	}
 }
 
@@ -120,8 +120,8 @@ void	dda(t_game *game, t_ray *ray)
 	if (is_wall(game, game->player.y, game->player.x))
 	{
 		ray->dist = 0;
-		ray->wallHit.x = game->player.y;
-		ray->wallHit.y = game->player.x;
+		ray->wall_hit.x = game->player.y;
+		ray->wall_hit.y = game->player.x;
 		return ;
 	}
 	get_horizontal_info(game, ray, &info);
