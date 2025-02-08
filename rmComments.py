@@ -3,6 +3,7 @@ import sys
 import os
 from pathlib import Path
 
+
 def remove_comments(content, skip_lines=12):
     """
     Remove both single-line and multi-line comments from C code content,
