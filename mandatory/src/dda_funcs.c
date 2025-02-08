@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dda_funcs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 12:15:34 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 06:58:09 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 11:02:19 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ void	set_ray_data(t_dda *info, t_ray *ray, double px, double py)
 	if (info->vdist < info->hdist)
 	{
 		ray->dist = info->vdist;
-		ray->wallHit.x = info->vp.x;
-		ray->wallHit.y = info->vp.y;
+		ray->wall_hit.x = info->vp.x;
+		ray->wall_hit.y = info->vp.y;
 		ray->vertical_hit = true;
-		if (px < ray->wallHit.x)
+		if (px < ray->wall_hit.x)
 			ray->face = W;
 		else
 			ray->face = E;
@@ -92,10 +92,10 @@ void	set_ray_data(t_dda *info, t_ray *ray, double px, double py)
 	else
 	{
 		ray->dist = info->hdist;
-		ray->wallHit.x = info->hp.x;
-		ray->wallHit.y = info->hp.y;
+		ray->wall_hit.x = info->hp.x;
+		ray->wall_hit.y = info->hp.y;
 		ray->vertical_hit = false;
-		if (py < ray->wallHit.y)
+		if (py < ray->wall_hit.y)
 			ray->face = N;
 		else
 			ray->face = S;

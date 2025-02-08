@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   funcs.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/08 07:00:06 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:02:16 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-int	is_wall(t_game *game, double pX, double pY)
-{
-	if (pX <= 0 || pX >= game->map.maxCols || pY <= 0 || pY >= game->map.rows)
-		return (true);
-	return ((game->map.map[(int)(pY)][(int)(pX)] == '1'));
-}
 
 unsigned int	get_color(t_game *game, t_ray *ray, int tx, int ty)
 {
@@ -36,31 +29,40 @@ unsigned int	get_color(t_game *game, t_ray *ray, int tx, int ty)
 	return (c);
 }
 
+void	init_drawing_data(t_drawing_data *data, t_game *game, t_ray *ray, int x)
+{
+	data->angle_diff = ray->angle - game->player.dir;
+	data->perp_dist = cos(data->angle_diff) * ray->dist;
+	data->projection_plan_dist = (WINDOW_WIDTH / 2) / tan(FOV / 2);
+	data->strip_height = data->projection_plan_dist / data->perp_dist;
+	data->start = (WINDOW_HEIGHT / 2) - (data->strip_height / 2);
+	data->end = (WINDOW_HEIGHT / 2) + (data->strip_height / 2);
+	data->tx = -1;
+	data->y = data->start;
+	data->dft = 0;
+	data->ty = 0;
+}
+
 void	draw_stripe(t_game *game, int x, t_ray *ray)
 {
-	double	angle_diff =  ray->angle - game->player.dir;
-	double	perp_dist = cos(angle_diff) * ray->dist;
-	double	PROJECTION_PLANE_DIST  = (WINDOW_WIDTH / 2) / tan(FOV/2);
-	int		stripHeight = PROJECTION_PLANE_DIST / perp_dist;
-	int		start = (WINDOW_HEIGHT / 2) - (stripHeight / 2);
-	int		end = (WINDOW_HEIGHT / 2) + (stripHeight / 2);
-	int		tx = -1;
-	int		y = start;
-	
-	if (start < 0)
-		start = 0;
-	if (end > WINDOW_HEIGHT)
-		end = WINDOW_HEIGHT;
+	t_drawing_data	data;
+
+	init_drawing_data(&data, game, ray, x);
+	if (data.start < 0)
+		data.start = 0;
+	if (data.end > WINDOW_HEIGHT)
+		data.end = WINDOW_HEIGHT;
 	if (ray->vertical_hit)
-		tx = (int)(ray->wallHit.y * WALL_SIZE) % WALL_SIZE;
+		data.tx = (int)(ray->wall_hit.y * WALL_SIZE) % WALL_SIZE;
 	else
-		tx = (int)(ray->wallHit.x * WALL_SIZE) % WALL_SIZE;
-	while (y < end)
+		data.tx = (int)(ray->wall_hit.x * WALL_SIZE) % WALL_SIZE;
+	while (data.y < data.end)
 	{
-		int dft = y + ((stripHeight /2 ) - (WINDOW_HEIGHT / 2));
-		int ty = dft * ((double)WALL_SIZE / stripHeight);
-		my_mlx_pixel_put(&game->mlx.data, x, y, get_color(game, ray, tx, ty));
-		y++;
+		data.dft = data.y + ((data.strip_height / 2) - (WINDOW_HEIGHT / 2));
+		data.ty = data.dft * ((double)WALL_SIZE / data.strip_height);
+		my_mlx_pixel_put(&game->mlx.data, x, data.y,
+			get_color(game, ray, data.tx, data.ty));
+		data.y++;
 	}
 }
 
@@ -73,8 +75,8 @@ void	init_ray(t_ray *ray, double angle)
 	ray->facing_left = !ray->facing_right;
 	ray->vertical_hit = false;
 	ray->dist = 0;
-	ray->wallHit.x = 0;
-	ray->wallHit.y = 0;
+	ray->wall_hit.x = 0;
+	ray->wall_hit.y = 0;
 }
 
 void	cast_rays(t_game *game)
@@ -90,7 +92,7 @@ void	cast_rays(t_game *game)
 	while (i < NUM_RAYS)
 	{
 		ray = g_malloc(game, sizeof(t_ray));
-		init_ray(ray, normalizeAngle((angle)));
+		init_ray(ray, normalize_angle((angle)));
 		dda(game, ray);
 		draw_stripe(game, i, ray);
 		free_ptr(game, ray);
