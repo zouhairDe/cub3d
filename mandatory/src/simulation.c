@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2025/01/29 19:41:54 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 02:51:38 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int simulate(t_game *game)
 	clean_window(&game->mlx.data);
 	collorCeilling(game);
 	collorFloor(game);
-	castRays(game);
+	cast_rays(game);
 	draw_crosshair(game);
 	//drawMap(game);
 	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0); //

@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/02 07:13:15 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 04:03:59 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,18 @@ int	setPlayer(t_game *game)
 				return (printf("Error\nMultiple player starting positions\n"));
 			game->player.x = i + 0.5;
 			if (ft_find(game->check_map.map[i], 'S') != -1)
-				(game->player.dir = 270, game->player.y = ft_find(game->check_map.map[i], 'S') + 0.5);
-			else if (ft_find(game->check_map.map[i], 'E') != -1)
-				(game->player.dir = 180, game->player.y = ft_find(game->check_map.map[i], 'E') + 0.5);
+				(game->player.dir = deg_to_rad(270), game->player.y = ft_find(game->check_map.map[i], 'S') + 0.5);
 			else if (ft_find(game->check_map.map[i], 'W') != -1)
-				(game->player.dir = 90, game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
+				(game->player.dir = deg_to_rad(180), game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
+			else if (ft_find(game->check_map.map[i], 'N') != -1)
+				(game->player.dir = deg_to_rad(90), game->player.y = ft_find(game->check_map.map[i], 'N') + 0.5);
 			else
-				(game->player.dir = 0, game->player.y = ft_find(game->check_map.map[i], 'N') + 0.5);
+				(game->player.dir = deg_to_rad(0), game->player.y = ft_find(game->check_map.map[i], 'E') + 0.5);
 			posSet = true;
 		}
 		i++;
 	}
-	game->player.dir = normalizeAngle(game->player.dir); // added this so that the angle is normalized even if no key is pressed
+	
 	// printf("Player position: %f, %f\n", game->player.x, game->player.y);
 	if (!posSet)
 		return (printf("Error\nNo player starting position\n"));

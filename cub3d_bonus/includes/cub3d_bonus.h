@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/06 19:06:31 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 02:51:38 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ void			free_ptr(t_game *game, void *ptr);
 // added
 void 			drawAngleInMap(t_game *game);
 void			drawFovInMap(t_game *game);
-void			castRays(t_game *game);
+void			cast_rays(t_game *game);
 double			distance(double x1, double y1, double x2, double y2);
 int				check_map_border(t_map *map);
 double			deg_to_rad(double angle);

@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 12:15:34 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/06 16:05:41 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/08 06:58:09 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 	if ((ray->facing_left && xstep > 0) || (ray->facing_right && xstep < 0))
 		xstep *= -1;
 	info->hdist += distance(game->player.y, game->player.x, xinter, yinter);
-	yinter = yinter;
 	while (1)
 	{
 		if (is_wall(game, xinter, yinter - (ray->facing_up * 0.00000001)))
@@ -108,13 +107,6 @@ void	dda(t_game *game, t_ray *ray)
 	t_dda	info;
 
 	info_init(&info);
-	if (is_wall(game, game->player.y, game->player.x))
-	{
-		ray->dist = 0;
-		ray->wallHit.x = game->player.y;
-		ray->wallHit.y = game->player.x;
-		return ;
-	}
 	get_horizontal_info(game, ray, &info);
 	get_vertical_info(game, ray, &info);
 	set_ray_data(&info, ray, game->player.y, game->player.x);
