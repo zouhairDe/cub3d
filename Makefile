@@ -21,7 +21,7 @@ BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c 
 
 SRC_DIR = mandatory/src/
 OBJ_DIR = mandatory/obj/
-FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c dda_funcs.c garbage_collector.c
+FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c dda_funcs.c garbage_collector.c utils2.c map_check2.c utils3.c map_check3.c key_handler.c map_check4.c map_check5.c utils4.c utils5.c
 
 BOBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_FILES:.c=.o))
 SRC = $(addprefix $(SRC_DIR), $(FILES))
