@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:10:06 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 19:23:56 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 23:02:29 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 bool	check_up_collision(t_game *game, int *newX, int *newY)
 {
-	*newX = game->player.x + game->player.moving_speed * sin(game->player.dir);
-	*newY = game->player.y + game->player.moving_speed * cos(game->player.dir);
+	*newX = game->player.x + (game->player.moving_speed + 0.4) * sin(game->player.dir);
+	*newY = game->player.y + (game->player.moving_speed + 0.4) * cos(game->player.dir);
 	if (game->map.map[(int)*newX][(int)*newY] == '1'
 		|| game->map.map[(int)*newX][(int)*newY] == 'D')
 		return (false);
@@ -39,8 +39,8 @@ bool	check_up_collision(t_game *game, int *newX, int *newY)
 
 bool	check_left_collision(t_game *game, int *newX, int *newY)
 {
-	*newX = game->player.x - game->player.moving_speed * cos(game->player.dir);
-	*newY = game->player.y + game->player.moving_speed * sin(game->player.dir);
+	*newX = game->player.x - (game->player.moving_speed + 0.4) * cos(game->player.dir);
+	*newY = game->player.y + (game->player.moving_speed + 0.4) * sin(game->player.dir);
 	if (game->map.map[(int)*newX][(int)*newY] == '1'
 		|| game->map.map[(int)*newX][(int)*newY] == 'D')
 		return (false);
@@ -64,8 +64,8 @@ bool	check_left_collision(t_game *game, int *newX, int *newY)
 
 bool	check_down_collision(t_game *game, int *newX, int *newY)
 {
-	*newX = game->player.x - game->player.moving_speed * sin(game->player.dir);
-	*newY = game->player.y - game->player.moving_speed * cos(game->player.dir);
+	*newX = game->player.x - (game->player.moving_speed + 0.4) * sin(game->player.dir);
+	*newY = game->player.y - (game->player.moving_speed + 0.4) * cos(game->player.dir);
 	if (game->map.map[(int)*newX][(int)*newY] == '1'
 		|| game->map.map[(int)*newX][(int)*newY] == 'D')
 		return (false);
@@ -89,8 +89,8 @@ bool	check_down_collision(t_game *game, int *newX, int *newY)
 
 bool	check_right_collision(t_game *game, int *newX, int *newY)
 {
-	*newX = game->player.x + game->player.moving_speed * cos(game->player.dir);
-	*newY = game->player.y - game->player.moving_speed * sin(game->player.dir);
+	*newX = game->player.x + (game->player.moving_speed + 0.4) * cos(game->player.dir);
+	*newY = game->player.y - (game->player.moving_speed + 0.4) * sin(game->player.dir);
 	if (game->map.map[(int)*newX][(int)*newY] == '1'
 		|| game->map.map[(int)*newX][(int)*newY] == 'D')
 		return (false);
