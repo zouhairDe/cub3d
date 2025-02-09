@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 15:22:50 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:48:25 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	handle_release(int keycode, void *param)
 {
 	t_game	*game;
 
+	(void)keycode;
 	game = (t_game *)param;
 	sprites(game, true);
 	return (0);
@@ -51,6 +52,7 @@ int	handle_mouse(int x, int y, void *param)
 	int			diff_x;
 	static int	last_x;
 
+	y = 0;
 	game = (t_game *)param;
 	last_x = WINDOW_WIDTH / 2;
 	diff_x = x - last_x;

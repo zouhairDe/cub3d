@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 02:31:45 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 13:59:10 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:46:20 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	free_ptr(t_game *game, void *ptr)
 	t_gc	*gc;
 
 	gc = game->gc;
+	tmp = NULL;
 	if (init_free(game, gc, ptr, tmp))
 		return ;
 	prev = gc;

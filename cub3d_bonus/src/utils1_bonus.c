@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:45:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 15:37:54 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:43:08 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ int	check_map_boundaries(t_map *map, int i, int j, int len)
 {
 	if (i == 0 || i == map->rows - 1 || j == 0 || j == len - 1)
 		return (printf("Error\nMap not properly enclosed\n"));
-	if (i > 0 && (j >= ft_strlen(map->map[i - 1])
+	if (i > 0 && ((size_t)j >= ft_strlen(map->map[i - 1])
 			|| map->map[i - 1][j] == ' '))
 		return (printf("Error\nMap has invalid gap above\n"));
-	if (i < map->rows - 1 && (j >= ft_strlen(map->map[i + 1])
+	if (i < map->rows - 1 && ((size_t)j >= ft_strlen(map->map[i + 1])
 			|| map->map[i + 1][j] == ' '))
 		return (printf("Error\nMap has invalid gap below\n"));
 	if (j > 0 && map->map[i][j - 1] == ' ')

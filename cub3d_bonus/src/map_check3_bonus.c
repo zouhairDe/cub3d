@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check3_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:05:39 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 15:31:57 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:54:28 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	copy_map(t_game *game)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	game->check_map.map = g_malloc(game, sizeof(char *) * game->map.rows);
@@ -75,7 +74,7 @@ int	set_player(t_game *game)
 
 void	floodfill(t_map *map, int x, int y)
 {
-	if (x < 0 || y < 0 || x >= map->rows || y >= ft_strlen(map->map[x]))
+	if (x < 0 || y < 0 || x >= map->rows || (size_t)y >= ft_strlen(map->map[x]))
 		return ;
 	if (map->map[x] == NULL)
 		return ;

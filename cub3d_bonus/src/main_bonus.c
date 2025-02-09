@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 10:12:19 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:50:19 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	handle_mouse_click(int button, int x, int y, void *param)
 
 	game = (t_game *)param;
 	curr_dist = 0.0;
+	y = x;
 	if (button == 1 && player_isnt_in_door(game))
 	{
 		while (curr_dist <= 1.0)

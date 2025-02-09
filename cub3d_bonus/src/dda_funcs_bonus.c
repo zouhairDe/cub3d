@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dda_funcs_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 12:15:34 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 17:24:07 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:52:31 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	get_horizontal_info(t_game *game, t_ray *ray, t_dda *info)
 	{
 		if (is_wall(game, xi, yi - (ray->facing_up * 0.00000001)))
 			break ;
-		info->hwall = door(game, xi, yi - (ray->facing_up * 0.00000001), ray);
+		info->hwall = door(game, xi, yi - (ray->facing_up * 0.00000001));
 		if (info->hwall)
 			break ;
 		info->hdist += distance(xi, yi, xi + xstep, yi + ystep);
@@ -73,7 +73,7 @@ void	get_vertical_info(t_game *game, t_ray *ray, t_dda *info)
 	{
 		if (is_wall(game, xi - (ray->facing_left * 0.00000001), yi))
 			break ;
-		info->vwall = door(game, xi - (ray->facing_left * 0.00000001), yi, ray);
+		info->vwall = door(game, xi - (ray->facing_left * 0.00000001), yi);
 		if (info->vwall)
 			break ;
 		info->vdist += distance(xi, yi, xi + xstep, yi + ystep);

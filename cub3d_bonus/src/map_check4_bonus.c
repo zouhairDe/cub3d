@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check4_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:09:52 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 15:32:25 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:57:14 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	ft_ignore_space(char *str)
 int	not_surrounded(t_map *map)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	if (ft_strchr(map->map[0], '*') || ft_strchr(map->map[map->rows - 1], '*'))

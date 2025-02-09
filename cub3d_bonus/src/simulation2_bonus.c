@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation2_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 15:24:25 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 15:33:17 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:54:40 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	center_player_in_map(t_game *game)
 {
-	int	radius;
 	int	pixel_x;
 	int	pixel_y;
 	int	y;

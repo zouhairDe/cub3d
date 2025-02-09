@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   funcs1_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 06:19:36 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/09 14:04:40 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:52:57 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ void	draw_angle_in_map(t_game *game)
 {
 	int			line_length;
 	t_intPoint	end;
-	int			end_x;
-	int			end_y;
 
 	line_length = 40;
 	end.x = CENTER_X + line_length * cos(game->player.dir);
@@ -64,8 +62,6 @@ void	draw_angle_in_map(t_game *game)
 void	draw_fov_in_map(t_game *game)
 {
 	int			line_length;
-	int			end_x;
-	int			end_y;
 	t_intPoint	end;
 
 	line_length = 80;
@@ -77,7 +73,7 @@ void	draw_fov_in_map(t_game *game)
 	draw_line(game, CENTER_X, CENTER_Y, end);
 }
 
-int	door(t_game *game, double pX, double pY, t_ray *ray)
+int	door(t_game *game, double pX, double pY)
 {
 	if (pX <= 0 || pX >= game->map.max_cols || pY <= 0 || pY >= game->map.rows)
 		return (false);
