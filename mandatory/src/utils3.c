@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:02:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 12:34:07 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:23:38 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	ft_ignore_space(char *str)
 int	not_surrounded(t_map *map)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	if (ft_strchr(map->map[0], '*') || ft_strchr(map->map[map->rows - 1], '*'))

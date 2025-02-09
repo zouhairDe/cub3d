@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:14:05 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 13:02:16 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:24:49 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	handle_release(int keycode, void *param)
 {
 	t_game	*game;
 
+	keycode = 0;
 	game = (t_game *)param;
 	return (0);
 }
@@ -70,6 +71,7 @@ int	handle_mouse(int x, int y, void *param)
 	int			diff_x;
 	static int	last_x;
 
+	y = 0;
 	game = (t_game *)param;
 	last_x = WINDOW_WIDTH / 2;
 	diff_x = x - last_x;

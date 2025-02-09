@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 12:58:10 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:20:20 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 int	copy_map(t_game *game)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	game->check_map.map = g_malloc(game, sizeof(char *) * game->map.rows);

@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 13:20:52 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 13:57:25 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:25:34 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ int	check_map_boundaries(t_map *map, int i, int j, int len)
 {
 	if (i == 0 || i == map->rows - 1 || j == 0 || j == len - 1)
 		return (printf("Error\nMap not properly enclosed\n"));
-	if (i > 0 && (j >= ft_strlen(map->map[i - 1])
+	if (i > 0 && ((size_t)j >= ft_strlen(map->map[i - 1])
 			|| map->map[i - 1][j] == ' '))
 		return (printf("Error\nMap has invalid gap above\n"));
-	if (i < map->rows - 1 && (j >= ft_strlen(map->map[i + 1])
+	if (i < map->rows - 1 && ((size_t)j >= ft_strlen(map->map[i + 1])
 			|| map->map[i + 1][j] == ' '))
 		return (printf("Error\nMap has invalid gap below\n"));
 	if (j > 0 && map->map[i][j - 1] == ' ')

@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:46:08 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 13:01:38 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:25:12 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	floodfill(t_map *map, int x, int y)
 {
-	if (x < 0 || y < 0 || x >= map->rows || y >= ft_strlen(map->map[x]))
+	if (x < 0 || y < 0 || x >= map->rows || (size_t)y >= ft_strlen(map->map[x]))
 		return ;
 	if (map->map[x] == NULL)
 		return ;

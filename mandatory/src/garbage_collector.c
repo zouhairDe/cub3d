@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 02:31:45 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 13:48:34 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:23:27 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	free_ptr(t_game *game, void *ptr)
 	t_gc	*gc;
 
 	gc = game->gc;
+	tmp = NULL;
 	if (init_free(game, gc, ptr, tmp))
 		return ;
 	prev = gc;

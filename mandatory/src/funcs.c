@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:19:11 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/08 13:02:16 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:22:31 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ unsigned int	get_color(t_game *game, t_ray *ray, int tx, int ty)
 	return (c);
 }
 
-void	init_drawing_data(t_drawing_data *data, t_game *game, t_ray *ray, int x)
+void	init_drawing_data(t_drawing_data *data, t_game *game, t_ray *ray)
 {
 	data->angle_diff = ray->angle - game->player.dir;
 	data->perp_dist = cos(data->angle_diff) * ray->dist;
@@ -47,7 +47,7 @@ void	draw_stripe(t_game *game, int x, t_ray *ray)
 {
 	t_drawing_data	data;
 
-	init_drawing_data(&data, game, ray, x);
+	init_drawing_data(&data, game, ray);
 	if (data.start < 0)
 		data.start = 0;
 	if (data.end > WINDOW_HEIGHT)
