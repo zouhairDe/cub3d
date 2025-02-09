@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 17:27:46 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 10:06:51 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	copy_map(t_game *game)
 
 int	ft_find(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -47,36 +47,29 @@ int	ft_find(char *str, char c)
 	return (-1);
 }
 
-int	setPlayer(t_game *game)
+
+int	set_player(t_game *game)
 {
-	int i;
-	bool posSet;
+	int		i;
+	bool	pos_set;
 
 	i = 0;
-	posSet = false;
+	pos_set = false;
 	while (i < game->check_map.rows)
 	{
-		if (ft_find(game->check_map.map[i], 'N') != -1 ||
-			ft_find(game->check_map.map[i], 'S') != -1 ||
-			ft_find(game->check_map.map[i], 'E') != -1 ||
-			ft_find(game->check_map.map[i], 'W') != -1)
+		if (ft_find(game->check_map.map[i], 'N') != -1
+			|| ft_find(game->check_map.map[i], 'S') != -1
+			|| ft_find(game->check_map.map[i], 'E') != -1
+			|| ft_find(game->check_map.map[i], 'W') != -1)
 		{
-			if (posSet == true)
+			if (pos_set == true)
 				return (printf("Error\nMultiple player starting positions\n"));
-			game->player.x = i + 0.5;
-			if (ft_find(game->check_map.map[i], 'S') != -1)
-				(game->player.dir = deg_to_rad(270), game->player.y = ft_find(game->check_map.map[i], 'S') + 0.5);
-			else if (ft_find(game->check_map.map[i], 'W') != -1)
-				(game->player.dir = deg_to_rad(180), game->player.y = ft_find(game->check_map.map[i], 'W') + 0.5);
-			else if (ft_find(game->check_map.map[i], 'N') != -1)
-				(game->player.dir = deg_to_rad(90), game->player.y = ft_find(game->check_map.map[i], 'N') + 0.5);
-			else
-				(game->player.dir = deg_to_rad(0), game->player.y = ft_find(game->check_map.map[i], 'E') + 0.5);
-			posSet = true;
+			put_player(game, i);
+			pos_set = true;
 		}
 		i++;
 	}
-	if (!posSet)
+	if (!pos_set)
 		return (printf("Error\nNo player starting position\n"));
 	return (0);
 }
@@ -122,7 +115,7 @@ int	check_chars(t_map *map)
 
 int	ft_ignore_space(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] == ' ')
@@ -130,10 +123,10 @@ int	ft_ignore_space(char *str)
 	return (i);
 }
 
-int	notSurrounded(t_map *map)
+int	not_surrounded(t_map *map)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	if (ft_strchr(map->map[0], '*') || ft_strchr(map->map[map->rows - 1], '*'))
@@ -148,17 +141,18 @@ int	notSurrounded(t_map *map)
 	return (0);
 }
 
-int	setTextures(t_game *game)
+int	set_textures(t_game *game)
 {
 	printf("Loading textures\n");
 	game->map.no[ft_strlen(game->map.no) - 1] = 0;
 	game->map.so[ft_strlen(game->map.so) - 1] = 0;
 	game->map.we[ft_strlen(game->map.we) - 1] = 0;
 	game->map.ea[ft_strlen(game->map.ea) - 1] = 0;
-	game->minimap.img = mlx_new_image(game->mlx.mlx, 32 * 8, 32 * 8);
+	game->minimap.img = mlx_new_image(game->mlx.mlx, 32 * 8,32 * 8);
 	if (!game->minimap.img)
 		return (printf("Error\nCouldn't create MINIMAP image\n"));
-	game->minimap.addr =  mlx_get_data_addr(game->minimap.img, &game->minimap.bits_per_pixel, &game->minimap.line_length, &game->minimap.endian);
+	game->minimap.addr =  mlx_get_data_addr(game->minimap.img, &game->minimap.bits_per_pixel,
+			&game->minimap.line_length, &game->minimap.endian);
 	game->walls.no.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.no, &game->walls.no.width, &game->walls.no.height);
 	if (!game->walls.no.img)
 		return (printf("Error\nCouldn't load NO texture\n"));
@@ -516,12 +510,12 @@ char **equalize_map(char **map, int row_count)
     return new_map;
 }
 
-int validate_elements(t_game *game)
+int	validate_elements(t_game *game)
 {
-    if (!game->map.no || !game->map.so || !game->map.we || 
-        !game->map.ea || !game->map.floor || !game->map.ceiling)
-        return (printf("Error\nMissing required elements\n"));
-    return (0);
+	if (!game->map.no || !game->map.so || !game->map.we || 
+		!game->map.ea || !game->map.floor || !game->map.ceiling)
+		return (printf("Error\nMissing required elements\n"));
+	return (0);
 }
 
 int check_map(t_game *game)
@@ -535,10 +529,10 @@ int check_map(t_game *game)
 		return (1);
 	if (check_map_border(&game->check_map))
 		return (1);
-	if (setPlayer(game))
+	if (set_player(game))
 		return (1);
 	floodfill(&game->check_map, 5, 13);
-	if (notSurrounded(&game->check_map))
+	if (not_surrounded(&game->check_map))
 		return (1);
 	if (convertToHex(game))
 		return (1);
@@ -550,7 +544,7 @@ int check_map(t_game *game)
 		free(game->check_map.map[i]);
 	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL || game->map.ea == NULL)
 		return (printf("Error\nMissing texture path\n"));
-	if (setTextures(game))
+	if (set_textures(game))
 		return (1);
 	sprites(game, false);
 	return (0);

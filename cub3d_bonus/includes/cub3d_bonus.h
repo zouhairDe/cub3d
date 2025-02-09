@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 17:27:46 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 10:13:56 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,33 @@ typedef struct s_ray
 	int				face;
 }					t_ray;
 
+typedef struct	s_minimap
+{
+	int				pixel_x;
+	int				pixel_y;
+	int				tx;
+	int				ty;
+	unsigned int	color;
+	int				col;
+	int				screen_x;
+	int				screen_y;
+	double			rotationAngle;
+}				t_minimap;
+
+typedef struct s_drawing_data
+{
+	double	angle_diff;
+	double	perp_dist;
+	double	projection_plan_dist;
+	int		strip_height;
+	int		start;
+	int		end;
+	int		tx;
+	int		y;
+	int		dft;
+	int		ty;
+}			t_drawing_data;
+
 typedef struct s_data
 {
 	int				width;
@@ -199,40 +226,72 @@ typedef struct s_game
 	t_gc			*gc;
 }					t_game;
 
+int					init_map(t_game *game, char **line);
+int					ft_parse_map(t_game *game);
+int					ft_path(char *path, t_game *game);
+int					manage_line_logic(char *line, t_game *game);
+int					start_map_allocation(t_game *game, char **line);
+int					set_textures(t_game *game);
+int					set_textures2(t_game *game);
+int					not_surrounded(t_map *map);
+int					ft_find(char *str, char c);
+int					set_mlx(t_game *game);
+int					convert_to_hex(t_game *game);
+int					validate_elements(t_game *game);
+int					check_chars(t_map *map);
 int					count_char(char *str, char c);
-char				*ft_replace(char *str, char c, char *news);
 int					dump_spaces(char **line);
 int					ft_line_value(char *line, char **value);
 int					check_map(t_game *game);
-void				ft_cut_char(char *str, char c);
 int					simulate(t_game *game);
-void				printGame(t_game game);
-unsigned int		rgb_to_hex(int r, int g, int b);
 int					two_d_arr_size(char **arr);
-double				normalize_angle(double angle);
-void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void				init_ray(t_ray *ray, double angle);
 int					handle_press(int keycode, void *param);
 int					handle_release(int keycode, void *param);
 int					handle_mouse(int x, int y, void *param);
+int					check_map_border(t_map *map);
 int					quite(t_game *game);
+int					is_wall(t_game *game, double pX, double pY);
+
+bool				check_wall_collision(t_game *game, int keycode);
+bool				check_up_collision(t_game *game, int *newX, int *newY);
+bool				check_right_collision(t_game *game, int *newX, int *newY);
+bool				check_left_collision(t_game *game, int *newX, int *newY);
+bool				check_down_collision(t_game *game, int *newX, int *newY);
+bool				check_collor_values(char **side, int *r, int *g, int *b);
+
+unsigned int		rgb_to_hex(int r, int g, int b);
+
+double				normalize_angle(double angle);
+double				distance(double x1, double y1, double x2, double y2);
+double				deg_to_rad(double angle);
+double				rad_to_deg(double angle);
+
+char				*equalize_map_row(const char *row, int max_length);
+char				**equalize_map(char **map, int row_count);
+char				*ft_replace(char *str, char c, char *news);
+
+void				init_game(t_game *game);
+void				put_player(t_game *game, int i);
+void				free_2d_arr(char **arr);
+void				floodfill(t_map *map, int x, int y);
+void				ft_cut_char(char *str, char c);
+void				printGame(t_game game);
+void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void				init_ray(t_ray *ray, double angle);
 void				*g_malloc(t_game *game, size_t size);
 void				free_all(t_gc *gc);
 void				free_ptr(t_game *game, void *ptr);
-
-// added
-void				drawAngleInMap(t_game *game);
-void				drawFovInMap(t_game *game);
+void				draw_angle_in_map(t_game *game);
+void				draw_fov_in_map(t_game *game);
 void				cast_rays(t_game *game);
-double				distance(double x1, double y1, double x2, double y2);
-int					check_map_border(t_map *map);
-double				deg_to_rad(double angle);
-double				rad_to_deg(double angle);
 void				dda(t_game *game, t_ray *ray);
 void				get_vertical_info(t_game *game, t_ray *ray, t_dda *info);
 void				get_horizontal_info(t_game *game, t_ray *ray, t_dda *info);
-int					is_wall(t_game *game, double playerX, double playerY);
 void				info_init(t_dda *info);
-int					door(t_game *game, double playerX, double playerY,
-						t_ray *ray);
+void				collor_floor(t_game *game);
+void				collor_ceilling(t_game *game);
+int					door(t_game *game, double pX, double pY, t_ray *ray);
+void				draw_line(t_game *game, int x1, int y1, int x2, int y2);
+int					handle_mouse_checks(t_game *game, int map_x, int map_y);
+
 #endif

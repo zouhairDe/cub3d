@@ -3,159 +3,118 @@
 /*                                                        :::      ::::::::   */
 /*   simulation_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 06:49:38 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 17:23:40 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 08:54:41 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
 
-double normalize_angle(double angle)
+void	draw_tile_pixel(t_game *game, t_minimap *vars, int i, int j)
 {
-    angle = remainder(angle, 2 * M_PI);
-    if (angle < 0)
-        angle = (2 * M_PI) + angle;
-    return angle;
+	if (game->map.map[i][j] == '1')
+	{
+		vars->color = ((unsigned int *)game->walls.wt.addr)[vars->ty
+			* (WALL_SIZE / 2) + vars->tx];
+		my_mlx_pixel_put(&game->minimap, vars->pixel_x,
+			vars->pixel_y, vars->color);
+	}
+	else if (game->map.map[i][j] == 'D')
+		my_mlx_pixel_put(&game->minimap, vars->pixel_x,
+			vars->pixel_y, 0x000000);
+	else if (game->map.map[i][j] == 'd')
+		my_mlx_pixel_put(&game->minimap, vars->pixel_x,
+			vars->pixel_y, 0xC8C8C8);
 }
 
-void collorCeilling(t_game *game)
+void	draw_tile(t_game *game, t_minimap *vars, int i, int j)
 {
-	int i;
-	int j;
-	bool	toggle = false;
+	int	x;
+	int	y;
 
-	i = 0;
-	while (i++ < WINDOW_WIDTH)
+	x = 0;
+	while (x < MINIMAP_SCALE)
 	{
-		j = 0;
-		while (j++ < WINDOW_HEIGHT / 2)
+		y = 0;
+		while (y < MINIMAP_SCALE)
 		{
-
-			my_mlx_pixel_put(&game->mlx.data, i, j, game->walls.ceilling);
+			vars->pixel_x = vars->screen_x + x;
+			vars->pixel_y = vars->screen_y + y;
+			if (vars->pixel_x >= 0 && vars->pixel_x < MINIMAP_WIDTH
+				&& vars->pixel_y >= 0 && vars->pixel_y < MINIMAP_HEIGHT)
+			{
+				vars->tx = x % (WALL_SIZE / 2);
+				vars->ty = y % (WALL_SIZE / 2);
+				draw_tile_pixel(game, vars, i, j);
+			}
+			y++;
 		}
+		x++;
 	}
 }
 
-void collorFloor(t_game *game)
+void	draw_rotated_map(t_game *game)
 {
-	int i;
-	int j;
+	t_point			pl;
+	t_minimap		vars;
+	int				i;
+	int				j;
+	int				col;
 
 	i = 0;
-	while (i < WINDOW_WIDTH)
+	pl.x = game->player.y;
+	pl.y = game->player.x;
+	vars.rotationAngle = game->player.dir;
+	while (i < game->map.rows)
 	{
-		j = WINDOW_HEIGHT / 2;
-		while (j < WINDOW_HEIGHT)
+		col = ft_strlen(game->map.map[i]);
+		j = 0;
+		while (j < col)
 		{
-			my_mlx_pixel_put(&game->mlx.data, i, j, game->walls.floor);
+			vars.screen_x = CENTER_X + (int)((j - pl.x) * MINIMAP_SCALE);
+			vars.screen_y = CENTER_Y + (int)((i - pl.y) * MINIMAP_SCALE);
+			draw_tile(game, &vars, i, j);
 			j++;
 		}
 		i++;
 	}
 }
-void drawRotatedMap(t_game *game)
+
+void	center_player_in_map(t_game *game)
 {
-   t_point P = {game->player.y, game->player.x};
-   double rotationAngle = game->player.dir;
+	int	radius;
+	int	pixel_x;
+	int	pixel_y;
+	int	y;
+	int	x;
 
-   for (int i = 0; i < game->map.rows; i++)
-   {
-		int col = ft_strlen(game->map.map[i]);
-       for (int j = 0; j < col; j++)
-       {
-           double mapX = (j - P.x) * MINIMAP_SCALE;
-           double mapY = (i - P.y) * MINIMAP_SCALE;
-           int screenX = CENTER_X + (int)mapX;
-           int screenY = CENTER_Y + (int)mapY;
-
-           if (game->map.map[i][j] == '1')
-           {
-				for (int x = 0; x < MINIMAP_SCALE; x++)
-				{
-					for (int y = 0; y < MINIMAP_SCALE; y++)
-					{
-						int pixelX = screenX + x;
-						int pixelY = screenY + y;
-						if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
-						{
-							int tx = (pixelX-screenX) % (WALL_SIZE/2);
-							int ty = (pixelY-screenY) % (WALL_SIZE/2);
-							unsigned int color = ((unsigned int *)game->walls.wt.addr)[ty * (WALL_SIZE/2) + tx];
-							my_mlx_pixel_put(&game->minimap, pixelX, pixelY, color);
-						}
-					}
-				}
-			}
-			else if (game->map.map[i][j] == 'D')
+	y = -4;
+	while (y <= 4)
+	{
+		x = -4;
+		while (x <= 4)
+		{
+			if (x * x + y * y <= 4 * 4)
 			{
-				for (int y = 0; y < MINIMAP_SCALE; y++)
-				{
-					for (int x = 0; x < MINIMAP_SCALE; x++)
-					{
-						int pixelX = screenX + x;
-						int pixelY = screenY + y;
-						if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
-						{
-							int tx = (pixelX-screenX) % (WALL_SIZE/2);
-							int ty = (pixelY-screenY) % (WALL_SIZE/2);
-							my_mlx_pixel_put(&game->minimap, pixelX, pixelY, 0x000000);
-						}
-					}
-				}
+				pixel_x = CENTER_X + x;
+				pixel_y = CENTER_Y + y;
+				if (pixel_x >= 0 && pixel_x < MINIMAP_WIDTH
+					&& pixel_y >= 0 && pixel_y < MINIMAP_HEIGHT)
+					my_mlx_pixel_put(&game->minimap, pixel_x,
+						pixel_y, 0X00FF0000);
 			}
-			else if (game->map.map[i][j] == 'd')
-			{
-				for (int y = 0; y < MINIMAP_SCALE; y++)
-				{
-					for (int x = 0; x < MINIMAP_SCALE; x++)
-					{
-						if (x % MINIMAP_SCALE > 2 && x % MINIMAP_SCALE < MINIMAP_SCALE-2 && y % MINIMAP_SCALE > 2 && y % MINIMAP_SCALE < MINIMAP_SCALE-2)
-							continue;
-
-						int pixelX = screenX + x;
-						int pixelY = screenY + y;
-						if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
-						{
-							int tx = (pixelX-screenX) % (WALL_SIZE/2);
-							int ty = (pixelY-screenY) % (WALL_SIZE/2);
-
-							my_mlx_pixel_put(&game->minimap, pixelX, pixelY, 0x000000);
-						}
-					}
-				}
-			}
-       }
-   }
+			x++;
+		}
+		y++;
+	}
 }
 
-void centerPlayerInMap(t_game *game)
+void	clear_minimap(t_game *game)
 {
-   int radius = 4;
-
-   for (int y = -radius; y <= radius; y++)
-   {
-       for (int x = -radius; x <= radius; x++)
-       {
-           if (x*x + y*y <= radius*radius)
-           {
-               int pixelX = CENTER_X + x;
-               int pixelY = CENTER_Y + y;
-
-               if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && 
-                   pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
-               {
-                   my_mlx_pixel_put(&game->minimap, pixelX, pixelY, 0X00FF0000);
-               }
-           }
-       }
-   }
-}
-void clear_minimap(t_game *game)
-{
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < MINIMAP_WIDTH)
@@ -169,19 +128,20 @@ void clear_minimap(t_game *game)
 		i++;
 	}
 }
-void drawMap(t_game *game)
+
+void	draw_map(t_game *game)
 {
 	clear_minimap(game);
-	drawRotatedMap(game);
-	centerPlayerInMap(game);
-	drawAngleInMap(game); 
-	drawFovInMap(game);
+	draw_rotated_map(game);
+	center_player_in_map(game);
+	draw_angle_in_map(game);
+	draw_fov_in_map(game);
 }
 
-void clean_window(t_data *data)
+void	clean_window(t_data *data)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < WINDOW_WIDTH)
@@ -195,21 +155,6 @@ void clean_window(t_data *data)
 		i++;
 	}
 }
-void draw_rayOnMinimap(t_game *game, double rayX, double rayY)
-{
-    int i;
-    int j;
-    int pixelX;
-    int pixelY;
-
-    pixelX = (int)(rayX * MINIMAP_SCALE);
-    pixelY = (int)(rayY * MINIMAP_SCALE);
-
-    if (pixelX >= 0 && pixelX < MINIMAP_WIDTH && pixelY >= 0 && pixelY < MINIMAP_HEIGHT)
-        for (i = 0; i < MINIMAP_SCALE; i++)
-            for (j = 0; j < MINIMAP_SCALE; j++)
-                my_mlx_pixel_put(&game->mlx.data, pixelX + i, pixelY + j, 0x00FF0000);
-}
 
 void	draw_diagonal_lines(t_game *game, int i)
 {
@@ -218,29 +163,31 @@ void	draw_diagonal_lines(t_game *game, int i)
 	t_intPoint	point1;
 	t_intPoint	point2;
 
-	j = -(game->crosshair.thickness / 2);
-	while (j <= game->crosshair.thickness / 2)
+	j = -(game->crosshair.thickness / 2) - 1;
+	while (++j <= game->crosshair.thickness / 2)
 	{
-		k = -(game->crosshair.thickness / 2);
-		while (k <= game->crosshair.thickness / 2)
+		k = -(game->crosshair.thickness / 2) - 1;
+		while (++k <= game->crosshair.thickness / 2)
 		{
 			point1.x = WIN_CENTER_X + i + j;
 			point1.y = WIN_CENTER_Y + i + k;
-			if (point1.x >= 0 && point1.x < WINDOW_WIDTH && point1.y >= 0 && point1.y < WINDOW_HEIGHT)
-				my_mlx_pixel_put(&game->mlx.data, point1.x, point1.y, 0X00FFFFFF);
+			if (point1.x >= 0 && point1.x < WINDOW_WIDTH && point1.y >= 0
+				&& point1.y < WINDOW_HEIGHT)
+				my_mlx_pixel_put(&game->mlx.data, point1.x, point1.y,
+					0X00FFFFFF);
 			point2.x = WIN_CENTER_X + i + j;
 			point2.y = WIN_CENTER_Y - i + k;
-			if (point2.x >= 0 && point2.x < WINDOW_WIDTH && point2.y >= 0 && point2.y < WINDOW_HEIGHT)
-				my_mlx_pixel_put(&game->mlx.data, point2.x, point2.y, 0X00FFFFFF);
-			k++;
+			if (point2.x >= 0 && point2.x < WINDOW_WIDTH && point2.y >= 0
+				&& point2.y < WINDOW_HEIGHT)
+				my_mlx_pixel_put(&game->mlx.data, point2.x, point2.y,
+					0X00FFFFFF);
 		}
-		j++;
 	}
 }
 
 void	draw_crosshair(t_game *game)
 {
-	int			i;
+	int	i;
 
 	i = -game->crosshair.size;
 	while (i <= game->crosshair.size)
@@ -250,22 +197,21 @@ void	draw_crosshair(t_game *game)
 	}
 }
 
-int simulate(t_game *game)
+int	simulate(t_game *game)
 {
-	int i;
-	double rayAngle;
-
 	mlx_clear_window(game->mlx.mlx, game->mlx.win);
 	clean_window(&game->mlx.data);
-	collorCeilling(game);
-	collorFloor(game);
+	collor_ceilling(game);
+	collor_floor(game);
 	cast_rays(game);
 	draw_crosshair(game);
-	drawMap(game);
-	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->mlx.data.img, 0, 0);
-	mlx_put_image_to_window(game->minimap.img, game->mlx.win, game->minimap.img, 0, 0);
-	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win, game->sprites_image, 0, 0);
-
+	draw_map(game);
+	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win,
+		game->mlx.data.img, 0, 0);
+	mlx_put_image_to_window(game->minimap.img, game->mlx.win,
+		game->minimap.img, 0, 0);
+	mlx_put_image_to_window(game->mlx.mlx, game->mlx.win,
+		game->sprites_image, 0, 0);
 	mlx_do_sync(game->mlx.mlx);
-	return 0;
+	return (0);
 }

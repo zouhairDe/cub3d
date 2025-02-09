@@ -3,248 +3,93 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 17:27:46 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 10:12:19 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
-#include <stdbool.h>
-#include <stdio.h>
 
-int start_map_allocation(t_game *game, char **line) {
-	char **tmp;
-	int i;
-
-	if (game->map.map == NULL) {
-	  game->map.map = g_malloc(game, sizeof(char *));
-	  if (!game->map.map)
-	    return (1);
-	  game->map.map[0] = ft_strdup(*line);
-	  game->map.rows++;
-	  game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
-		if (!game->map.map[0])
-			return (1);
-		ft_cut_char(game->map.map[0], '\n');
-	  return (0);
-	}
-	i = 0;
-	tmp = game->map.map;
-	game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));
-	if (!game->map.map)
-	  return (1);
-	while (i < game->map.rows) {
-	  game->map.map[i] = tmp[i];
-	  i++;
-	}
-	game->map.map[i] = ft_strdup(*line);
-	game->map.rows++;
-	if (game->map.max_cols < (int)ft_strlen(*line))
-	  game->map.max_cols = ft_strlen(*line) - 1;
-	game->map.map[i] = ft_replace(game->map.map[i], '\t', "    ");
-	if (!game->map.map[i])
-	  return (1);
-	ft_cut_char(game->map.map[i], '\n');
-	free_ptr(game, tmp);
-	tmp = NULL;
+int	init(char *path, t_game *game)
+{
+	init_game(game);
+	if (ft_path(path, game))
+		return (1);
+	if (ft_parse_map(game))
+		return (1);
+	if (check_map(game))
+		return (1);
+	printf("done initing\n");
 	return (0);
 }
 
-int manage_line_logic(char *line, t_game *game) {
-  char *tmp;
-
-  tmp = line;
-  dump_spaces(&line);
-  if (!ft_strncmp(line, "NO ", 3) || !ft_strncmp(line, "NO\t", 3))
-    return (ft_line_value(line, &game->map.no));
-  else if (!ft_strncmp(line, "SO ", 3) || !ft_strncmp(line, "SO\t", 3))
-    return (ft_line_value(line, &game->map.so));
-  else if (!ft_strncmp(line, "WE ", 3) || !ft_strncmp(line, "WE\t", 3))
-    return (ft_line_value(line, &game->map.we));
-  else if (!ft_strncmp(line, "EA ", 3) || !ft_strncmp(line, "EA\t", 3))
-    return (ft_line_value(line, &game->map.ea));
-  else if (!ft_strncmp(line, "C ", 2) || !ft_strncmp(line, "C\t", 2))
-    return (ft_line_value(line, &game->map.ceiling));
-  else if (!ft_strncmp(line, "F ", 2) || !ft_strncmp(line, "F\t", 2))
-    return (ft_line_value(line, &game->map.floor));
-  else if (ft_strchr(line, '1') || ft_strchr(line, '0'))
-    return (start_map_allocation(game, &tmp));
-  return (0);
-}
-
-int ft_parse_map(t_game *game) {
-	char *line;
-	char *tmp;
-	(void)tmp;
-
-	while ((line = get_next_line(game->map.fd)) != NULL) {
-		if (manage_line_logic(line, game))
-			return (free(line), 1);
-		free(line);
-	}
-  return (0);
-}
-
-int ft_path(char *path, t_game *game) {
-  int dot;
-
-  dot = path - ft_strrchr(path, '.');
-  if (dot == 0 || !ft_strncmp(&path[dot], ".cub", 4))
-    return (printf("Error\nInvalid file extension\n"));
-  game->map.fd = open(path, O_RDONLY);
-  if (game->map.fd == -1)
-    return (printf("Error\nFile not found\n"));
-  return (0);
-}
-
-void init_game(t_game *game) {
-	game->map.fd = 0;
-	game->map.no = NULL;
-	game->map.so = NULL;
-	game->map.we = NULL;
-	game->map.ea = NULL;
-	game->map.wt = NULL;
-	game->map.ceiling = NULL;
-	game->map.floor = NULL;
-	game->map.map = NULL;
-	game->map.rows = 0;
-	game->map.max_cols = 0;
-	game->check_map.fd = 0;
-	game->check_map.no = NULL;
-	game->check_map.so = NULL;
-	game->check_map.we = NULL;
-	game->check_map.ea = NULL;
-	game->check_map.ceiling = NULL;
-	game->check_map.floor = NULL;
-	game->check_map.map = NULL;
-	game->check_map.rows = 0;
-	game->check_map.max_cols = 0;
-	game->player.x = 0.0;
-	game->player.y = 0.0;
-	game->player.dir = 0;
-	game->player.fov = 0;
-	game->player.moving_speed = 0.15;
-	game->player.rotation_speed = 0.1;
-	game->mlx.mlx = NULL;
-	game->mlx.win = NULL;
-	game->setting.width = 0;
-	game->setting.height = 0;
-	game->setting.title = NULL;
-	game->setting.player_speed = 1;
-	game->setting.mlx.mlx = NULL;
-	game->setting.mlx.win = NULL;
-	game->mouse = false;
-	game->mouse_x = WINDOW_WIDTH / 2;
-	game->mouse_y = WINDOW_HEIGHT / 2;
-	game->crosshair.size = 4;
-	game->crosshair.thickness = 2;
-	game->sprites_index = 0;
-	game->sprites_image = NULL;
-	game->gc  = NULL;
-	game->walls.no.img = NULL;
-	game->walls.no.addr = NULL;
-	game->walls.so.img = NULL;
-	game->walls.so.addr = NULL;
-	game->walls.we.img = NULL;
-	game->walls.we.addr = NULL;
-	game->walls.ea.img = NULL;
-	game->walls.ea.addr = NULL;
-	game->walls.wt.img = NULL;
-	game->walls.wt.addr = NULL;
-	game->walls.ceilling = 0;
-	game->walls.floor = 0;
-}
-
-int init(char *path, t_game *game) {
-  init_game(game);
-  if (ft_path(path, game))
-    return (1);
-  if (ft_parse_map(game))
-    return (1);
-  if (check_map(game))
-    return (1);
-  printf("done initing\n");
-  return (0);
-}
-
-void fff() { system("leaks cub3D_bonus > bonus_leaks.leaks"); }
-
-void free_game(t_game *game)
+void	free_game(t_game *game)
 {
+	int	i;
+
+	i = 0;
 	if (game->walls.no.img)
-        mlx_destroy_image(game->mlx.mlx, game->walls.no.img);
-    if (game->walls.so.img)
-        mlx_destroy_image(game->mlx.mlx, game->walls.so.img);
-    if (game->walls.we.img)
-        mlx_destroy_image(game->mlx.mlx, game->walls.we.img);
-    if (game->walls.ea.img)
-        mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
-    if (game->mlx.win)
-        mlx_destroy_window(game->mlx.mlx, game->mlx.win);
-    free_all(game->gc);
-    close(game->map.fd);
+		mlx_destroy_image(game->mlx.mlx, game->walls.no.img);
+	if (game->walls.so.img)
+		mlx_destroy_image(game->mlx.mlx, game->walls.so.img);
+	if (game->walls.we.img)
+		mlx_destroy_image(game->mlx.mlx, game->walls.we.img);
+	if (game->walls.ea.img)
+		mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
+	if (game->minimap.img)
+		mlx_destroy_image(game->mlx.mlx, game->minimap.img);
+	if (game->sprites_image)
+		mlx_destroy_image(game->mlx.mlx, game->sprites_image);
+	if (game->mlx.win)
+		mlx_destroy_window(game->mlx.mlx, game->mlx.win);
+	free_all(game->gc);
+	close(game->map.fd);
 }
 
 bool	player_isnt_in_door(t_game *game)
 {
-	int mapX = (int)game->player.y;
-	int mapY = (int)game->player.x;
-	return (game->map.map[mapY][mapX] != 'D' && game->map.map[mapY][mapX] != 'd');
+	int	map_x;
+	int	map_y;
+
+	map_x = (int)game->player.y;
+	map_y = (int)game->player.x;
+	return (game->map.map[map_y][map_x] != 'D'
+	&& game->map.map[map_y][map_x] != 'd');
 }
 
-int handle_mouse_click(int button, int x, int y, void *param)
+int	handle_mouse_click(int button, int x, int y, void *param)
 {
-    t_game *game = (t_game *)param;
-    if (button == 1 && player_isnt_in_door(game))
-    {
-        double step = 0.1;
-        double max_dist = 1.0;
-        double curr_dist = 0.0;
+	t_game	*game;
+	double	curr_dist;
+	int		map_y;
+	int		map_x;
 
-        while (curr_dist <= max_dist)
-        {
-            double check_x = game->player.x + (sin(game->player.dir) * curr_dist);
-            double check_y = game->player.y + (cos(game->player.dir) * curr_dist);
-
-            int mapX = (int)check_y;
-            int mapY = (int)check_x;
-
-            if (mapX < 0 || mapY < 0 || mapX >= game->map.max_cols || mapY >= game->map.rows)
-            {
-				printf("out of bounds\n");
-				break;
-			}
-
-            if (game->map.map[mapY][mapX] == 'D')
-            {
-                game->map.map[mapY][mapX] = 'd';
-                printf("door opened at %d,%d\n", mapX, mapY);
-                return (0);
-            }
-            else if (game->map.map[mapY][mapX] == 'd')
-            {
-                game->map.map[mapY][mapX] = 'D';
-                printf("door closed at %d,%d\n", mapX, mapY);
-                return (0);
-            }
-            else if (game->map.map[mapY][mapX] == '1') 
+	game = (t_game *)param;
+	curr_dist = 0.0;
+	if (button == 1 && player_isnt_in_door(game))
+	{
+		while (curr_dist <= 1.0)
+		{
+			map_y = game->player.x + (sin(game->player.dir) * curr_dist);
+			map_x = game->player.y + (cos(game->player.dir) * curr_dist);
+			if (handle_mouse_checks(game, map_x, map_y))
+				return (1);
+			else if (game->map.map[map_y][map_x] == '1')
 				break ;
-
-            curr_dist += step;
-        }
-    }
-    return (0);
+			curr_dist += 0.1;
+		}
+	}
+	return (0);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-
-	t_game game;
+	t_game	game;
 
 	if (ac != 2)
-	 	return (printf("Error\nInvalid number of arguments\n"));
+		return (printf("Error\nInvalid number of arguments\n"));
 	if (init(av[1], &game))
 		return (printf("Error\nParsing error\n"));
 	mlx_hook(game.mlx.win, 2, 0L, handle_press, &game);
