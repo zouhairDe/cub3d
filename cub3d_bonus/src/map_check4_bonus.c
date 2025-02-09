@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:09:52 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:57:14 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/09 23:35:43 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	set_textures3(t_game *game)
 			&game->walls.ea.bits_per_pixel, &game->walls.ea.line_length,
 			&game->walls.ea.endian);
 	game->walls.closed_door.img = mlx_xpm_file_to_image(game->mlx.mlx,
-			"textures/spruce_door_bottom.xpm", &game->walls.closed_door.width,
+			"textures/portal.xpm", &game->walls.closed_door.width,
 			&game->walls.closed_door.height);
 	if (!game->walls.closed_door.img)
 		return (printf("Error\nCouldn't load closed_door texture\n"));
