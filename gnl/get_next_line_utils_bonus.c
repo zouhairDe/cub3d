@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 22:47:05 by zouddach          #+#    #+#             */
-/*   Updated: 2024/09/18 01:03:37 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/09 15:40:58 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,24 @@ size_t	ft_gnl_strlen(char *str)
 
 char	*ft_gnl_strdup(char *str)
 {
-    char	*dest;
-    int		len;
+	char	*dest;
+	int		len;
 
-    if (!str)
-        return (NULL);
-    len = ft_gnl_strlen(str);
-    dest = (char *)malloc(len + 1);
-    if (dest == NULL)
-        return (NULL);
-    while (*str && *str != '\n')
+	if (!str)
+		return (NULL);
+	len = ft_gnl_strlen(str);
+	dest = (char *)malloc(len + 1);
+	if (dest == NULL)
+		return (NULL);
+	while (*str && *str != '\n')
 		*dest++ = *str++;
-	// if (*str == '\n')
-	// 	*dest++ = *str++;
 	*dest = '\0';
-    return (dest);
+	return (dest);
 }
 
 char	*ft_gnl_strjoin(char *buffer, char *return_val)
 {
-	char	*result; 
+	char	*result;
 	int		i;
 	int		return_vall;
 	int		bufferl;
@@ -93,8 +91,8 @@ char	*ft_gnl_strchr(char *str, char arg)
 
 char	*ft_trim(char *buffer)
 {
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')

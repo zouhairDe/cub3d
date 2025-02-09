@@ -17,9 +17,9 @@
 #  define BUFFER_SIZE 1000
 # endif
 
-# include <unistd.h>
-# include <stdlib.h>
 # include <limits.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 char	*ft_trim(char *buffer);
 char	*ft_gnl_strchr(char *str, char arg);

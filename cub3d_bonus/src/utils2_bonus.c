@@ -43,11 +43,10 @@ void	init_walls(t_texture *walls)
 	walls->floor = 0;
 }
 
-void init_game(t_game *game) {
-
+void	init_game(t_game *game)
+{
 	init_game_map(&game->map);
-	init_game_map(&game->check_map);	
-	
+	init_game_map(&game->check_map);
 	game->player.x = 0.0;
 	game->player.y = 0.0;
 	game->player.dir = 0;
@@ -69,7 +68,7 @@ void init_game(t_game *game) {
 	game->crosshair.thickness = 2;
 	game->sprites_index = 0;
 	game->sprites_image = NULL;
-	game->gc  = NULL;
+	game->gc = NULL;
 	init_walls(&game->walls);
 }
 

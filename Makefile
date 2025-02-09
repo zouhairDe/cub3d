@@ -1,5 +1,5 @@
 CC = cc
-FLAGS =# -g -fsanitize=address #-Wall -Wextra -Werror
+FLAGS = -o3 -g -fsanitize=address #-Wall -Wextra -Werror
 LIBS = -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -17,7 +17,7 @@ BONUS_HEADER_DIR = $(BONUS_DIR)includes/
 BONUS_HEADER = $(BONUS_HEADER_DIR)cub3d_bonus.h
 BONUS_SRC_DIR = $(BONUS_DIR)src/
 BONUS_OBJ_DIR = $(BONUS_DIR)obj/
-BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c math_bonus.c funcs_bonus.c funcs1_bonus.c dda_funcs_bonus.c garbage_collector_bonus.c map_check2_bonus.c utils2_bonus.c utils4_bonus.c utils5_bonus.c
+BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c math_bonus.c funcs_bonus.c funcs1_bonus.c dda_funcs_bonus.c garbage_collector_bonus.c map_check2_bonus.c utils2_bonus.c utils4_bonus.c utils5_bonus.c map_check3_bonus.c map_check4_bonus.c key_handler_bonus.c map_check5_bonus.c map_check6_bonus.c simulation2_bonus.c
 
 SRC_DIR = mandatory/src/
 OBJ_DIR = mandatory/obj/

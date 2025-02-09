@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 10:13:56 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/09 15:26:22 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_ray
 	int				face;
 }					t_ray;
 
-typedef struct	s_minimap
+typedef struct s_minimap
 {
 	int				pixel_x;
 	int				pixel_y;
@@ -114,7 +114,7 @@ typedef struct	s_minimap
 	int				col;
 	int				screen_x;
 	int				screen_y;
-	double			rotationAngle;
+	double			rotation_angle;
 }				t_minimap;
 
 typedef struct s_drawing_data
@@ -251,9 +251,13 @@ int					handle_mouse(int x, int y, void *param);
 int					check_map_border(t_map *map);
 int					quite(t_game *game);
 int					is_wall(t_game *game, double pX, double pY);
+int					validate_elements(t_game *game);
+int					set_player(t_game *game);
+int					set_textures(t_game *game);
+int					copy_map(t_game *game);
 
 bool				check_wall_collision(t_game *game, int keycode);
-bool				check_up_collision(t_game *game, int *newX, int *newY);
+bool				check_up_collision(t_game *game, int *new_x, int *new_y);
 bool				check_right_collision(t_game *game, int *newX, int *newY);
 bool				check_left_collision(t_game *game, int *newX, int *newY);
 bool				check_down_collision(t_game *game, int *newX, int *newY);
@@ -271,11 +275,17 @@ char				**equalize_map(char **map, int row_count);
 char				*ft_replace(char *str, char c, char *news);
 
 void				init_game(t_game *game);
+void				draw_rotated_map(t_game *game);
+void				center_player_in_map(t_game *game);
+void				clear_minimap(t_game *game);
 void				put_player(t_game *game, int i);
 void				free_2d_arr(char **arr);
 void				floodfill(t_map *map, int x, int y);
 void				ft_cut_char(char *str, char c);
-void				printGame(t_game game);
+void				get_sprites(t_game *game, char *f, bool onRelease);
+void				sprites(t_game *game, bool onRelease);
+void				init_sprites(char **f1, char **f2, char **f3, char **f4);
+int					handle_press2(t_game *game, int keycode);
 void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void				init_ray(t_ray *ray, double angle);
 void				*g_malloc(t_game *game, size_t size);
@@ -291,7 +301,7 @@ void				info_init(t_dda *info);
 void				collor_floor(t_game *game);
 void				collor_ceilling(t_game *game);
 int					door(t_game *game, double pX, double pY, t_ray *ray);
-void				draw_line(t_game *game, int x1, int y1, int x2, int y2);
+void				draw_line(t_game *game, int x1, int x2, t_intPoint end);
 int					handle_mouse_checks(t_game *game, int map_x, int map_y);
 
 #endif

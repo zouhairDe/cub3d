@@ -56,7 +56,7 @@ bool	player_isnt_in_door(t_game *game)
 	map_x = (int)game->player.y;
 	map_y = (int)game->player.x;
 	return (game->map.map[map_y][map_x] != 'D'
-	&& game->map.map[map_y][map_x] != 'd');
+		&& game->map.map[map_y][map_x] != 'd');
 }
 
 int	handle_mouse_click(int button, int x, int y, void *param)

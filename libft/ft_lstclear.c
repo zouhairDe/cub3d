@@ -41,5 +41,5 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 // 	ft_lstclear(&first, del);
 // 	if (!first)
 // 		printf("donee\n");
-// 
+//
 // }

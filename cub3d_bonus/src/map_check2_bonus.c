@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 05:55:48 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/09 10:01:22 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/09 15:30:20 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,20 @@ int	init_map(t_game *game, char **line)
 	return (0);
 }
 
-int start_map_allocation(t_game *game, char **line) {
+int	start_map_allocation(t_game *game, char **line)
+{
 	char	**tmp;
 	int		i;
 
 	if (game->map.map == NULL)
-	{
-		game->map.map = g_malloc(game, sizeof(char *));
-		if (!game->map.map)
-			return (1);
-		game->map.map[0] = ft_strdup(*line);
-		game->map.rows++;
-		game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
-		if (!game->map.map[0])
-			return (1);
-		ft_cut_char(game->map.map[0], '\n');
-		return (0);
-	}
-	i = 0;
+		init_map(game, line);
+	i = -1;
 	tmp = game->map.map;
 	game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));
 	if (!game->map.map)
 		return (1);
-	while (i < game->map.rows)
-	{
+	while (++i < game->map.rows)
 		game->map.map[i] = tmp[i];
-		i++;
-	}
 	game->map.map[i] = ft_strdup(*line);
 	game->map.rows++;
 	if (game->map.max_cols < (int)ft_strlen(*line))
@@ -116,6 +103,13 @@ void	put_player(t_game *game, int i)
 
 int	set_textures2(t_game *game)
 {
+	if (!game->walls.wt.img)
+		return (printf("Error\nCouldn't load WT texture\n"));
+	game->walls.wt.addr = mlx_get_data_addr(game->walls.wt.img,
+			&game->walls.wt.bits_per_pixel, &game->walls.wt.line_length,
+			&game->walls.wt.endian);
+	game->walls.so.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.so,
+			&game->walls.so.width, &game->walls.so.height);
 	if (!game->walls.so.img)
 		return (printf("Error\nCouldn't load SO texture\n"));
 	game->walls.so.addr = mlx_get_data_addr(game->walls.so.img,
@@ -130,10 +124,5 @@ int	set_textures2(t_game *game)
 			&game->walls.we.endian);
 	game->walls.ea.img = mlx_xpm_file_to_image(game->mlx.mlx, game->map.ea,
 			&game->walls.ea.width, &game->walls.ea.height);
-	if (!game->walls.ea.img)
-		return (printf("Error\nCouldn't load EA texture\n"));
-	game->walls.ea.addr = mlx_get_data_addr(game->walls.ea.img,
-			&game->walls.ea.bits_per_pixel, &game->walls.ea.line_length,
-			&game->walls.ea.endian);
 	return (0);
 }

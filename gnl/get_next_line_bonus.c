@@ -58,8 +58,7 @@ char	*get_next_line(int fd)
 	static char	*buffer[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0
-		|| BUFFER_SIZE > 2147483647)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > 2147483647)
 		return (NULL);
 	if (read(fd, 0, 0) == -1)
 		return (free(buffer[fd]), buffer[fd] = NULL, NULL);
