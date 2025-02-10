@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 12:16:14 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 01:10:39 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int	init(char *path, t_game *game)
 {
 	init_game(game);
 	if (ft_path(path, game))
-		return (1);
+		free_all(game->gc);
 	if (ft_parse_map(game))
-		return (1);
+		free_all(game->gc);
 	if (check_map(game))
-		return (1);
+		free_all(game->gc);
 	printf("done initing\n");
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:50:19 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 01:16:05 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int	init(char *path, t_game *game)
 {
 	init_game(game);
 	if (ft_path(path, game))
-		return (1);
+		free_all(game->gc);
 	if (ft_parse_map(game))
-		return (1);
+		free_all(game->gc);
 	if (check_map(game))
-		return (1);
+		free_all(game->gc);
 	printf("done initing\n");
 	return (0);
 }
@@ -44,8 +44,8 @@ void	free_game(t_game *game)
 		mlx_destroy_image(game->mlx.mlx, game->sprites_image);
 	if (game->mlx.win)
 		mlx_destroy_window(game->mlx.mlx, game->mlx.win);
-	free_all(game->gc);
 	close(game->map.fd);
+	free_all(game->gc);
 }
 
 bool	player_isnt_in_door(t_game *game)

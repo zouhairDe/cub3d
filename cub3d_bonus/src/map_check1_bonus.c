@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:48:25 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 01:19:27 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	handle_press(int keycode, void *param)
 	if (keycode == H_BUTTON)
 		game->mouse = !game->mouse;
 	if (keycode == H_BUTTON && game->mouse)
-		mlx_mouse_hide();
-	else if (keycode == H_BUTTON && !game->mouse)
 		mlx_mouse_show();
+	else if (keycode == H_BUTTON && !game->mouse)
+		mlx_mouse_hide();
 	else if (keycode == LEFT_BUTTON)
 		game->player.dir -= game->player.rotation_speed;
 	else if (keycode == RIGHT_BUTTON)
@@ -97,28 +97,28 @@ int	set_mlx(t_game *game)
 int	check_map(t_game *game)
 {
 	if (copy_map(game))
-		return (1);
+		free_all(game->gc);
 	game->map.map = equalize_map(game->map.map, game->map.rows);
 	if (!game->map.map)
-		return (1);
+		free_all(game->gc);
 	if (check_chars(&game->check_map))
-		return (1);
+		free_all(game->gc);
 	if (check_map_border(&game->check_map))
-		return (1);
+		free_all(game->gc);
 	if (set_player(game))
-		return (1);
+		free_all(game->gc);
 	floodfill(&game->check_map, 5, 13);
 	if (not_surrounded(&game->check_map))
-		return (1);
+		free_all(game->gc);
 	if (convert_to_hex(game))
-		return (1);
+		free_all(game->gc);
 	if (validate_elements(game))
-		return (1);
+		free_all(game->gc);
 	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL
 		|| game->map.ea == NULL)
 		return (printf("Error\nMissing texture path\n"));
 	if (set_textures(game))
-		return (1);
+		free_all(game->gc);
 	sprites(game, false);
 	return (0);
 }
