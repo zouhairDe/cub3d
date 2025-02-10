@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 07:19:35 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 08:03:48 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int	init(char *path, t_game *game)
 {
 	init_game(game);
 	if (ft_path(path, game))
-		return (1);
+		free_all(game->gc);
 	if (ft_parse_map(game))
-		return (1);
+		free_all(game->gc);
 	if (check_map(game))
-		return (1);
+		free_all(game->gc);
 	return (0);
 }
 

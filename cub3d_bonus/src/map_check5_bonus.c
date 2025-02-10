@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:37:39 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 07:04:45 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 08:09:33 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ void	sprites(t_game *game, bool onRelease)
 	char	*f2;
 	char	*f3;
 	char	*f4;
-	char	*f5;
 
-	f5 = "textures/hand/hand5.xpm";
 	init_sprites(&f1, &f2, &f3, &f4);
 	if (game->sprites_index == 0 || game->sprites_index == 8)
 		get_sprites(game, f1, onRelease);
@@ -71,14 +69,14 @@ void	sprites(t_game *game, bool onRelease)
 	else if (game->sprites_index == 3 || game->sprites_index == 5)
 		get_sprites(game, f4, onRelease);
 	else if (game->sprites_index == 4)
-		get_sprites(game, f5, onRelease);
+		get_sprites(game, "textures/hand/hand5.xpm", onRelease);
 	if (onRelease)
 		get_sprites(game, f1, onRelease);
 	game->sprites_index++;
 	if (game->sprites_index == 9)
 		game->sprites_index = 1;
 	if (!game->sprites_image)
-		printf("Error\nCouldn't load sprite\n");
+		free_all(game->gc);
 }
 
 int	handle_press2(t_game *game, int keycode)

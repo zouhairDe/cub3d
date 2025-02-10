@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 02:31:45 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:46:20 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 01:15:17 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	free_all(t_gc *gc)
 		gc = tmp;
 	}
 	free(gc);
+	exit(1);
 }
 
 void	*init_cg(t_game *game, size_t size)

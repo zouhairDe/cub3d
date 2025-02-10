@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 02:31:45 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 19:23:27 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 01:06:44 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	free_all(t_gc *gc)
 {
 	t_gc	*tmp;
 
-	printf("Freeing all\n");
 	while (gc)
 	{
 		free(gc->ptr);
@@ -63,6 +62,7 @@ void	free_all(t_gc *gc)
 		gc = tmp;
 	}
 	free(gc);
+	exit(1);
 }
 
 void	*init_cg(t_game *game, size_t size)
