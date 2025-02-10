@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 21:26:44 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:50:02 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,7 @@ int					set_player(t_game *game);
 int					set_textures(t_game *game);
 int					copy_map(t_game *game);
 int					ft_strncmp(const char *str1, const char *str2, size_t n);
+int					ft_ignore_space(char *str);
 
 bool				check_wall_collision(t_game *game, int keycode);
 bool				check_up_collision(t_game *game, int *new_x, int *new_y);
@@ -318,7 +319,6 @@ int					door(t_game *game, double pX, double pY);
 void				draw_line(t_game *game, int x1, int x2, t_intPoint end);
 int					handle_mouse_checks(t_game *game, int map_x, int map_y);
 void				free_game(t_game *game);
-
-t_game				*get_game(int	option, t_game *og_game);
+t_game				*get_game(int option, t_game *og_game);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:42:15 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 21:28:59 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:42:19 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	manage_line_logic(char *line, t_game *game)
 	else if (game->map.map_started && line[0] == '\n')
 		game->map.map_done = true;
 	else if (game->map.map_started)
-		return (printf("Error\nInvalid content in map file\n"), free_all(1, game->gc), 1);
+		return (printf("Error\nInvalid content in map file\n")
+			, free_all(1, game->gc), 1);
 	return (0);
 }
 
@@ -111,4 +112,14 @@ int	set_textures2(t_game *game)
 			&game->walls.ea.bits_per_pixel, &game->walls.ea.line_length,
 			&game->walls.ea.endian);
 	return (0);
+}
+
+bool	check_collor_values(char **side, int *r, int *g, int *b)
+{
+	*r = ft_atoi2(side[0]);
+	*g = ft_atoi2(side[1]);
+	*b = ft_atoi2(side[2]);
+	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
+		return (false);
+	return (true);
 }

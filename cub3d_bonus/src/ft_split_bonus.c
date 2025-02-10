@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:01:14 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 18:20:22 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:35:27 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static char	*mallocwords(char *str, char **words, char c, int t)
 	j = 0;
 	i = 0;
 	word = (char *)g_malloc(get_game(2, NULL),
-		sizeof(char) * (sstrlen(str, c) + 1));
+			sizeof(char) * (sstrlen(str, c) + 1));
 	if (!word)
 	{
 		while (i < t)

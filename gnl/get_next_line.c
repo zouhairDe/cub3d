@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 22:46:11 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 17:43:21 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:43:56 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ void	when_recall(char **buffer, char **line)
 	}
 }
 
-char	*save_line(char **line, char **buffer, int fd)
+char	*save_line(char **ln, char **buffer, int fd)
 {
 	int	read_bytes;
 
 	while (1)
 	{
-		if (ft_gnl_strchr(*line, '\n'))
-			return (*line);
+		if (ft_gnl_strchr(*ln, '\n'))
+			return (*ln);
 		read_bytes = read(fd, buffer[fd], 1000);
 		if (read_bytes == -1)
 			return (NULL);
 		if (read_bytes == 0)
-			return (free_ptr(get_game(2, NULL), buffer[fd]), buffer[fd] = NULL, *line);
+			return (free_ptr(get_game(2, 0), buffer[fd]), buffer[fd] = 0, *ln);
 		buffer[fd][read_bytes] = '\0';
-		*line = ft_gnl_strjoin(buffer[fd], *line);
+		*ln = ft_gnl_strjoin(buffer[fd], *ln);
 	}
 }
 
@@ -61,7 +61,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || 1000 <= 0 || 1000 > 2147483647)
 		return (NULL);
 	if (read(fd, 0, 0) == -1)
-		return (free_ptr(get_game(2, NULL), buffer[fd]), buffer[fd] = NULL, NULL);
+		return (free_ptr(get_game(2, 0), buffer[fd]), buffer[fd] = NULL, NULL);
 	line = NULL;
 	if (buffer[fd] != NULL)
 		when_recall(&buffer[fd], &line);

@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   utils1_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:45:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 21:26:13 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:47:04 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
 
-char	*ft_replace(char *str, char c, char *news)
+char	*ft_replace(char *str, char chr, char *news)
 {
 	int		i;
-	int		c_count;
+	int		c;
 	char	*res;
 	char	*original_str;
 
 	if (!str)
 		return (NULL);
-	c_count = count_char(str, c);
-	if (c_count == 0)
+	c = count_char(str, chr);
+	if (c == 0)
 		return (str);
 	i = 0;
-	res = g_malloc(get_game(2, NULL), ft_strlen(str) + (ft_strlen(news) * c_count) + 1);
+	res = g_malloc(get_game(2, 0), ft_strlen(str) + (ft_strlen(news) * c) + 1);
 	if (!res)
 		return (NULL);
 	original_str = str;
 	while (*str)
 	{
-		if (*str == c)
+		if (*str == chr)
 			(ft_strlcpy(&res[i], news, ft_strlen(news) + 1),
 				i += ft_strlen(news));
 		else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:36:22 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 21:11:54 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:41:44 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,18 +109,5 @@ int	ft_parse_map(t_game *game)
 		free_ptr(get_game(2, NULL), line);
 		line = get_next_line(game->map.fd);
 	}
-	return (0);
-}
-
-int	ft_path(char *path, t_game *game)
-{
-	int	dot;
-
-	dot = path - ft_strrchr(path, '.');
-	if (dot == 0 || !ft_strncmp(&path[dot], ".cub", 4))
-		return (printf("Error\nInvalid file extension\n"));
-	game->map.fd = open(path, O_RDONLY);
-	if (game->map.fd == -1)
-		return (printf("Error\nFile not found\n"));
 	return (0);
 }

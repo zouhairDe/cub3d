@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:02:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 21:30:50 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:41:57 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_ignore_space(char *str)
 bool	is_all_data_valid(t_game *game)
 {
 	if (!game->map.no || !game->map.so || !game->map.we || !game->map.ea
-			|| !game->map.floor || !game->map.ceiling)
+		|| !game->map.floor || !game->map.ceiling)
 		return (true);
 	return (false);
 }
@@ -45,7 +45,7 @@ int	not_surrounded(t_map *map)
 		i++;
 	}
 	if (count_char(get_game(2, NULL)->map.floor, ',') > 2
-			|| count_char(get_game(2, NULL)->map.ceiling, ',') > 2)
+		|| count_char(get_game(2, NULL)->map.ceiling, ',') > 2)
 		return (printf("Error\nInvalid color format\n"));
 	if (is_all_data_valid(get_game(2, NULL)))
 		return (printf("Error\nmissing data\n"));
@@ -92,14 +92,4 @@ int	quit(t_game *game)
 		mlx_destroy_image(game->mlx.mlx, game->walls.wt.img);
 	free_all(0, game->gc);
 	return (0);
-}
-
-bool	check_collor_values(char **side, int *r, int *g, int *b)
-{
-	*r = ft_atoi2(side[0]);
-	*g = ft_atoi2(side[1]);
-	*b = ft_atoi2(side[2]);
-	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
-		return (false);
-	return (true);
 }

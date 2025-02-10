@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 02:31:45 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 21:27:33 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:35:57 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	*g_malloc(t_game *game, size_t size)
 	{
 		free(new_node);
 		return (free_all(1, game->gc), NULL);
-
 	}
 	new_node->next = game->gc;
 	game->gc = new_node;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check5.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:46:08 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 21:10:46 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:41:41 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,17 @@ char	**equalize_map(char **map, int row_count)
 	while (++i < row_count)
 		free_ptr(get_game(2, NULL), map[i]);
 	return (new_map);
+}
+
+int	ft_path(char *path, t_game *game)
+{
+	int	dot;
+
+	dot = path - ft_strrchr(path, '.');
+	if (dot == 0 || !ft_strncmp(&path[dot], ".cub", 4))
+		return (printf("Error\nInvalid file extension\n"));
+	game->map.fd = open(path, O_RDONLY);
+	if (game->map.fd == -1)
+		return (printf("Error\nFile not found\n"));
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils1_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:39:07 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 17:49:53 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:36:00 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ char	*ft_strchr(const char *str, int arg)
 	return (NULL);
 }
 
-
-
 char	*ft_strrchr(const char *str, int c)
 {
 	unsigned char	character;
@@ -63,7 +61,6 @@ char	*ft_strrchr(const char *str, int c)
 		return ((char *)&str[len]);
 	return (NULL);
 }
-
 
 size_t	ft_strlen(const char *str)
 {

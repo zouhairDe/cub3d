@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 05:55:48 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/10 21:29:12 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:36:21 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	manage_line_logic(char *line, t_game *game)
 	else if (game->map.map_started && line[0] == '\n')
 		game->map.map_done = true;
 	else if (game->map.map_started)
-		return (printf("Error\nInvalid content in map file\n"), free_all(1, game->gc), 1);
+		return (printf("Error\nInvalid content in map file\n")
+			, free_all(1, game->gc), 1);
 	return (0);
 }
 
