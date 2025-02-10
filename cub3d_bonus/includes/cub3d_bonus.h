@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:51:41 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ int					handle_press(int keycode, void *param);
 int					handle_release(int keycode, void *param);
 int					handle_mouse(int x, int y, void *param);
 int					check_map_border(t_map *map);
-int					quite(t_game *game);
+int					quit(t_game *game);
 int					is_wall(t_game *game, double pX, double pY);
 int					validate_elements(t_game *game);
 int					set_player(t_game *game);
@@ -303,5 +303,6 @@ void				collor_ceilling(t_game *game);
 int					door(t_game *game, double pX, double pY);
 void				draw_line(t_game *game, int x1, int x2, t_intPoint end);
 int					handle_mouse_checks(t_game *game, int map_x, int map_y);
+void				free_game(t_game *game);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 14:00:19 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ int					handle_press(int keycode, void *param);
 int					handle_release(int keycode, void *param);
 int					handle_mouse(int x, int y, void *param);
 int					check_map_border(t_map *map);
-int					quite(t_game *game);
+int					quit(t_game *game);
 int					is_wall(t_game *game, double pX, double pY);
 
 bool				check_wall_collision(t_game *game, int keycode);

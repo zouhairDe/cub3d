@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:48:25 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ int	handle_press(int keycode, void *param)
 
 	game = (t_game *)param;
 	if (keycode == 53)
-		return (quite(param));
+		return (quit(param));
 	if (keycode == H_BUTTON)
 		game->mouse = !game->mouse;
 	if (keycode == H_BUTTON && game->mouse)
-		mlx_mouse_hide();
-	else if (keycode == H_BUTTON && !game->mouse)
 		mlx_mouse_show();
+	else if (keycode == H_BUTTON && !game->mouse)
+		mlx_mouse_hide();
 	else if (keycode == LEFT_BUTTON)
 		game->player.dir -= game->player.rotation_speed;
 	else if (keycode == RIGHT_BUTTON)

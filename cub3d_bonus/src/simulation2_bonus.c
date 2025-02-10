@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 15:24:25 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:54:40 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 07:15:22 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,15 @@ void	draw_tile_pixel(t_game *game, t_minimap *vars, int i, int j)
 	{
 		vars->color = ((unsigned int *)game->walls.wt.addr)[vars->ty
 			* (WALL_SIZE / 2) + vars->tx];
-		my_mlx_pixel_put(&game->minimap, vars->pixel_x, vars->pixel_y,
-			vars->color);
+		my_mlx_pixel_put(&game->minimap, vars->pixel_x,
+			vars->pixel_y, vars->color);
 	}
 	else if (game->map.map[i][j] == 'D')
-		my_mlx_pixel_put(&game->minimap, vars->pixel_x, vars->pixel_y,
-			0x000000);
+		my_mlx_pixel_put(&game->minimap, vars->pixel_x,
+			vars->pixel_y, 0x000000);
 	else if (game->map.map[i][j] == 'd')
-		my_mlx_pixel_put(&game->minimap, vars->pixel_x, vars->pixel_y,
-			0xC8C8C8);
+		my_mlx_pixel_put(&game->minimap, vars->pixel_x,
+			vars->pixel_y, 0xC8C8C8);
 }
 
 void	draw_tile(t_game *game, t_minimap *vars, int i, int j)
@@ -103,11 +103,11 @@ void	draw_tile(t_game *game, t_minimap *vars, int i, int j)
 
 void	draw_rotated_map(t_game *game)
 {
-	t_point		pl;
-	t_minimap	vars;
-	int			i;
-	int			j;
-	int			col;
+	t_point			pl;
+	t_minimap		vars;
+	int				i;
+	int				j;
+	int				col;
 
 	i = 0;
 	pl.x = game->player.y;

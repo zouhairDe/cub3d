@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 12:16:14 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 07:19:35 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	init(char *path, t_game *game)
 		return (1);
 	if (check_map(game))
 		return (1);
-	printf("done initing\n");
 	return (0);
 }
 
@@ -57,7 +56,7 @@ int	main(int ac, char **av)
 	}
 	mlx_hook(game.mlx.win, 2, 0L, handle_press, &game);
 	mlx_hook(game.mlx.win, 3, 0L, handle_release, &game);
-	mlx_hook(game.mlx.win, 17, 0, quite, &game);
+	mlx_hook(game.mlx.win, 17, 0, quit, &game);
 	mlx_loop_hook(game.mlx.mlx, simulate, &game);
 	mlx_hook(game.mlx.win, ON_MOUSEMOVE, 0, handle_mouse, &game);
 	mlx_loop(game.mlx.mlx);

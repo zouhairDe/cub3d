@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:14:05 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 19:24:49 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	handle_press(int keycode, void *param)
 
 	game = (t_game *)param;
 	if (keycode == 53)
-		return (quite(param));
+		return (quit(param));
 	if (keycode == H_BUTTON && game->mouse)
 		(mlx_mouse_hide(), game->mouse = !game->mouse);
 	else if (keycode == H_BUTTON && !game->mouse)

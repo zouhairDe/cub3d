@@ -6,7 +6,7 @@
 /*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:09:52 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 23:35:43 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	set_textures(t_game *game)
 	return (0);
 }
 
-int	quite(t_game *game)
+int	quit(t_game *game)
 {
 	if (game->minimap.img)
 		mlx_destroy_image(game->mlx.mlx, game->minimap.img);
@@ -102,6 +102,10 @@ int	quite(t_game *game)
 		mlx_destroy_image(game->mlx.mlx, game->walls.ea.img);
 	if (game->walls.closed_door.img)
 		mlx_destroy_image(game->mlx.mlx, game->walls.closed_door.img);
+	if (game->sprites_image)
+		mlx_destroy_image(game->mlx.mlx, game->sprites_image);
+	if (game->mlx.win)
+		mlx_destroy_window(game->mlx.mlx, game->mlx.win);
 	free_all(game->gc);
 	close(game->map.fd);
 	printf("Exiting\n");

@@ -1,5 +1,5 @@
 CC = cc
-FLAGS = -o3 -g -fsanitize=address -Wall -Wextra -Werror
+FLAGS = -o3 -g  -Wall -Wextra -Werror #-fsanitize=address
 LIBS = -framework OpenGL -framework AppKit
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -30,9 +30,7 @@ OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))
 MLX = ./mlx/libmlx.a
 MLX_DIR = mlx/
 
-$(MLX):
-	@echo "$(GREEN)$(BOLD)Compiling mlx$(DEFAULT)"
-	@make -sC $(MLX_DIR)
+
 
 RED = \033[0;31m
 GREEN = \033[0;32m
@@ -56,11 +54,15 @@ endef
 
 all: $(OBJ_DIR) $(NAME) thanks
 
+$(MLX): ./mlx/mlx.h
+	@echo "$(GREEN)$(BOLD)Compiling mlx$(DEFAULT)"
+	@make -sC $(MLX_DIR)
+
 thanks:
 	@echo "$(BLACK)$(WHITE_BG)$(BOLD)Compilation complete.$(RESET)"
 	@rm -rf *.dSYM $(BONUS_DIR)*.dSYM *.vscode 
 		
-bonus: $(mlx) $(LIBFT) $(BONUS_OBJ_DIR) $(BONUS_NAME) thanks 
+bonus: $(LIBFT) $(BONUS_OBJ_DIR) $(BONUS_NAME) thanks 
 
 $(LIBFT): $(LIBFT_DIR)
 	@echo "$(GREEN)$(BOLD)Compiling libft$(DEFAULT)"
@@ -79,7 +81,7 @@ $(BONUS_NAME): $(MLX) $(BOBJ) $(LIBFT)
 	@$(CC) $(LIBS) $(MLX) $(FLAGS) $(BOBJ) $(LIBFT) $(GNL) -o $(BONUS_NAME)
 
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(CUB3D_HEADER) $(GNL_HEADER)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(CUB3D_HEADER) $(GNL_HEADER) ./mlx/mlx.h
 	@$(CC) $(FLAGS) -I $(HEADER_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) -c $< -o $@
 	$(update_progress)
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 05:55:48 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/09 15:30:20 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 03:40:00 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	start_map_allocation(t_game *game, char **line)
 	char	**tmp;
 	int		i;
 
-	if (game->map.map == NULL)
-		init_map(game, line);
+	//if (game->map.map == NULL)
+	//	init_map(game, line); fixed double lines at start 
 	i = -1;
 	tmp = game->map.map;
 	game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));

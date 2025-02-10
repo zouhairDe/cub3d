@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:02:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 19:23:38 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	set_textures(t_game *game)
 	return (set_textures2(game));
 }
 
-int	quite(t_game *game)
+int	quit(t_game *game)
 {
 	free_all(game->gc);
 	if (game->walls.no.img)

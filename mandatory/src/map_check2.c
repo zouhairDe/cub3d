@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:42:15 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 12:01:00 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 03:50:09 by mait-lah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	init_map(t_game *game, char **line)
 {
 	game->map.map = g_malloc(game, sizeof(char *));
 	if (!game->map.map)
-		return (1);
+		quit(game);
 	game->map.map[0] = ft_strdup(*line);
 	game->map.rows++;
 	game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
@@ -31,13 +31,13 @@ int	start_map_allocation(t_game *game, char **line)
 	char	**tmp;
 	int		i;
 
-	if (game->map.map == NULL)
-		init_map(game, line);
+	//if (game->map.map == NULL)
+	//	init_map(game, line);
 	i = -1;
 	tmp = game->map.map;
 	game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));
 	if (!game->map.map)
-		return (1);
+		quit(game);
 	while (++i < game->map.rows)
 		game->map.map[i] = tmp[i];
 	game->map.map[i] = ft_strdup(*line);
