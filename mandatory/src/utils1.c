@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:45:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 13:39:08 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:17:02 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	count_char(char *str, char c)
 
 	i = 0;
 	count = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if (str[i] == c)

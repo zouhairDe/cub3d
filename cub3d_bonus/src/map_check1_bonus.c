@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 08:04:24 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:26:13 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,28 +97,28 @@ int	set_mlx(t_game *game)
 int	check_map(t_game *game)
 {
 	if (copy_map(game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	game->map.map = equalize_map(game->map.map, game->map.rows);
 	if (!game->map.map)
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (check_chars(&game->check_map))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (check_map_border(&game->check_map))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (set_player(game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	floodfill(&game->check_map, 5, 13);
 	if (not_surrounded(&game->check_map))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (convert_to_hex(game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (validate_elements(game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (game->map.no == NULL || game->map.so == NULL || game->map.we == NULL
 		|| game->map.ea == NULL)
 		return (printf("Error\nMissing texture path\n"));
 	if (set_textures(game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	sprites(game, false);
 	return (0);
 }

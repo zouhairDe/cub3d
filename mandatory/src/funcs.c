@@ -60,8 +60,8 @@ void	draw_stripe(t_game *game, int x, t_ray *ray)
 	{
 		data.dft = data.y + ((data.strip_height / 2) - (WINDOW_HEIGHT / 2));
 		data.ty = data.dft * ((double)WALL_SIZE / data.strip_height);
-		my_mlx_pixel_put(&game->mlx.data, x, data.y,
-			get_color(game, ray, data.tx, data.ty));
+		my_mlx_pixel_put(&game->mlx.data, x, data.y, get_color(game, ray,
+				data.tx, data.ty));
 		data.y++;
 	}
 }

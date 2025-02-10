@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:36:22 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 23:09:35 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:11:54 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	init_game_map(t_map *map)
 	map->map = NULL;
 	map->rows = 0;
 	map->max_cols = 0;
+	map->map_done = false;
+	map->map_started = false;
 }
 
 void	init_walls(t_texture *walls)
@@ -39,8 +41,8 @@ void	init_walls(t_texture *walls)
 	walls->ea.addr = NULL;
 	walls->wt.img = NULL;
 	walls->wt.addr = NULL;
-	walls->ceilling = 0;
-	walls->floor = 0;
+	walls->ceilling = -1;
+	walls->floor = -1;
 }
 
 void	init_game(t_game *game)
@@ -71,6 +73,17 @@ void	init_game(t_game *game)
 	init_walls(&game->walls);
 }
 
+int	ft_is_empty_line(char *line)
+{
+	while (*line)
+	{
+		if (*line != ' ' && *line != '\t' && *line != '\n')
+			return (0);
+		line++;
+	}
+	return (1);
+}
+
 int	ft_parse_map(t_game *game)
 {
 	char	*line;
@@ -80,9 +93,20 @@ int	ft_parse_map(t_game *game)
 	line = get_next_line(game->map.fd);
 	while (line)
 	{
+		if (game->map.map_done)
+		{
+			if (ft_is_empty_line(line))
+			{
+				free_ptr(get_game(2, NULL), line);
+				line = get_next_line(game->map.fd);
+				continue ;
+			}
+			else
+				return (printf("Error\nInvalid content in map\n"));
+		}
 		if (manage_line_logic(line, game))
 			return (1);
-		free(line);
+		free_ptr(get_game(2, NULL), line);
 		line = get_next_line(game->map.fd);
 	}
 	return (0);

@@ -6,15 +6,13 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 13:52:09 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:26:44 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_BONUS_H
 # define CUB3D_BONUS_H
 
-# include "../../gnl/get_next_line_bonus.h"
-# include "../../libft/libft.h"
 # include "../../mlx/mlx.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -162,6 +160,8 @@ typedef struct s_map
 	char			*floor;
 	int				rows;
 	int				max_cols;
+	bool			map_started;
+	bool			map_done;
 }					t_map;
 
 typedef struct s_player
@@ -226,7 +226,12 @@ typedef struct s_game
 	t_gc			*gc;
 }					t_game;
 
-int					init_map(t_game *game, char **line);
+char				*ft_trim(char *buffer);
+char				*ft_gnl_strchr(char *str, char arg);
+char				*ft_gnl_strjoin(char *buffer, char *return_val);
+char				*ft_gnl_strdup(char *str);
+char				*get_next_line(int fd);
+
 int					ft_parse_map(t_game *game);
 int					ft_path(char *path, t_game *game);
 int					manage_line_logic(char *line, t_game *game);
@@ -255,6 +260,7 @@ int					validate_elements(t_game *game);
 int					set_player(t_game *game);
 int					set_textures(t_game *game);
 int					copy_map(t_game *game);
+int					ft_strncmp(const char *str1, const char *str2, size_t n);
 
 bool				check_wall_collision(t_game *game, int keycode);
 bool				check_up_collision(t_game *game, int *new_x, int *new_y);
@@ -266,6 +272,8 @@ bool				check_collor_values(char **side, int *r, int *g, int *b);
 unsigned int		rgb_to_hex(int r, int g, int b);
 
 size_t				ft_atoi2(char *str);
+size_t				ft_strlen(const char *str);
+size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 
 double				normalize_angle(double angle);
 double				distance(double x1, double y1, double x2, double y2);
@@ -274,6 +282,10 @@ double				rad_to_deg(double angle);
 
 char				*equalize_map_row(const char *row, int max_length);
 char				**equalize_map(char **map, int row_count);
+char				*ft_strchr(const char *str, int arg);
+char				*ft_strrchr(const char *str, int c);
+char				*ft_strdup(const char *str);
+char				**ft_split(char *str, char c);
 char				*ft_replace(char *str, char c, char *news);
 
 void				init_game(t_game *game);
@@ -291,7 +303,7 @@ int					handle_press2(t_game *game, int keycode);
 void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void				init_ray(t_ray *ray, double angle);
 void				*g_malloc(t_game *game, size_t size);
-void				free_all(t_gc *gc);
+void				free_all(int status, t_gc *gc);
 void				free_ptr(t_game *game, void *ptr);
 void				draw_angle_in_map(t_game *game);
 void				draw_fov_in_map(t_game *game);
@@ -306,5 +318,7 @@ int					door(t_game *game, double pX, double pY);
 void				draw_line(t_game *game, int x1, int x2, t_intPoint end);
 int					handle_mouse_checks(t_game *game, int map_x, int map_y);
 void				free_game(t_game *game);
+
+t_game				*get_game(int	option, t_game *og_game);
 
 #endif

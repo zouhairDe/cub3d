@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check5_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:37:39 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 08:09:33 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:26:13 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	sprites(t_game *game, bool onRelease)
 	if (game->sprites_index == 9)
 		game->sprites_index = 1;
 	if (!game->sprites_image)
-		free_all(game->gc);
+		free_all(1, game->gc);
 }
 
 int	handle_press2(t_game *game, int keycode)

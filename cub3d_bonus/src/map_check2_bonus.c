@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 05:55:48 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/10 13:57:19 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:29:12 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	start_map_allocation(t_game *game, char **line)
 	int		i;
 
 	i = -1;
+	game->map.map_started = true;
 	tmp = game->map.map;
 	game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));
 	if (!game->map.map)
@@ -56,6 +57,10 @@ int	manage_line_logic(char *line, t_game *game)
 		return (ft_line_value(line, &game->map.floor));
 	else if (ft_strchr(line, '1') || ft_strchr(line, '0'))
 		return (start_map_allocation(game, &tmp));
+	else if (game->map.map_started && line[0] == '\n')
+		game->map.map_done = true;
+	else if (game->map.map_started)
+		return (printf("Error\nInvalid content in map file\n"), free_all(1, game->gc), 1);
 	return (0);
 }
 

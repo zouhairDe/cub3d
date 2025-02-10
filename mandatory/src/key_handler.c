@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-void	handle_press2(int keycode, t_game	*game)
+void	handle_press2(int keycode, t_game *game)
 {
 	if (keycode == W_BUTTON && check_wall_collision(game, W_BUTTON))
 	{

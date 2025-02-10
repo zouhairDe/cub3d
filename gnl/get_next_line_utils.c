@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 22:47:05 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 17:35:30 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:36:12 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d_bonus/includes/cub3d_bonus.h"
+#include "../mandatory/includes/cub3d.h"
 
 size_t	ft_gnl_strlen(char *str)
 {

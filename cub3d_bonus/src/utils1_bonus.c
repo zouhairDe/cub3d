@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:45:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:43:08 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:26:13 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_replace(char *str, char c, char *news)
 	if (c_count == 0)
 		return (str);
 	i = 0;
-	res = malloc(ft_strlen(str) + (ft_strlen(news) * c_count) + 1);
+	res = g_malloc(get_game(2, NULL), ft_strlen(str) + (ft_strlen(news) * c_count) + 1);
 	if (!res)
 		return (NULL);
 	original_str = str;
@@ -38,7 +38,7 @@ char	*ft_replace(char *str, char c, char *news)
 			res[i++] = *str;
 		str++;
 	}
-	return (res[i] = '\0', free(original_str), res);
+	return (res[i] = '\0', free_ptr(get_game(2, NULL), original_str), res);
 }
 
 int	dump_spaces(char **line)
@@ -85,8 +85,8 @@ int	check_map_border(t_map *map)
 				|| map->map[i][j] == 'S' || map->map[i][j] == 'E'
 				|| map->map[i][j] == 'W')
 			{
-				if (check_map_boundaries(map, i, j, len) == -1)
-					return (-1);
+				if (check_map_boundaries(map, i, j, len))
+					return (free_all(1, get_game(2, NULL)->gc), -1);
 			}
 		}
 	}

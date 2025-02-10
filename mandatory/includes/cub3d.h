@@ -6,15 +6,13 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 14:20:30 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:28:23 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../../gnl/get_next_line_bonus.h"
-# include "../../libft/libft.h"
 # include "../../mlx/mlx.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -99,17 +97,17 @@ typedef struct s_ray
 
 typedef struct s_drawing_data
 {
-	double	angle_diff;
-	double	perp_dist;
-	double	projection_plan_dist;
-	int		strip_height;
-	int		start;
-	int		end;
-	int		tx;
-	int		y;
-	int		dft;
-	int		ty;
-}			t_drawing_data;
+	double			angle_diff;
+	double			perp_dist;
+	double			projection_plan_dist;
+	int				strip_height;
+	int				start;
+	int				end;
+	int				tx;
+	int				y;
+	int				dft;
+	int				ty;
+}					t_drawing_data;
 
 typedef struct s_data
 {
@@ -142,6 +140,8 @@ typedef struct s_map
 	char			*floor;
 	int				rows;
 	int				max_cols;
+	bool			map_done;
+	bool			map_started;
 }					t_map;
 
 typedef struct s_player
@@ -203,7 +203,12 @@ typedef struct s_game
 	t_gc			*gc;
 }					t_game;
 
-int					init_map(t_game *game, char **line);
+char				*ft_trim(char *buffer);
+char				*ft_gnl_strchr(char *str, char arg);
+char				*ft_gnl_strjoin(char *buffer, char *return_val);
+char				*ft_gnl_strdup(char *str);
+char				*get_next_line(int fd);
+
 int					ft_parse_map(t_game *game);
 int					ft_path(char *path, t_game *game);
 int					manage_line_logic(char *line, t_game *game);
@@ -228,10 +233,12 @@ int					handle_mouse(int x, int y, void *param);
 int					check_map_border(t_map *map);
 int					quit(t_game *game);
 int					is_wall(t_game *game, double pX, double pY);
-
+int					ft_strncmp(const char *str1, const char *str2, size_t n);
 unsigned int		rgb_to_hex(int r, int g, int b);
 
 size_t				ft_atoi2(char *str);
+size_t				ft_strlen(const char *str);
+size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 
 bool				check_wall_collision(t_game *game, int keycode);
 bool				check_up_collision(t_game *game, int *newX, int *newY);
@@ -247,8 +254,12 @@ double				deg_to_rad(double angle);
 double				rad_to_deg(double angle);
 
 char				*equalize_map_row(char *row, int max_length);
-char				**equalize_map(char **map, int row_count);
 char				*ft_replace(char *str, char c, char *news);
+char				*ft_strchr(const char *str, int arg);
+char				*ft_strrchr(const char *str, int c);
+char				*ft_strdup(const char *str);
+char				**ft_split(char *str, char c);
+char				**equalize_map(char **map, int row_count);
 
 void				init_game(t_game *game);
 void				put_player(t_game *game, int i);
@@ -258,7 +269,7 @@ void				ft_cut_char(char *str, char c);
 void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void				init_ray(t_ray *ray, double angle);
 void				*g_malloc(t_game *game, size_t size);
-void				free_all(t_gc *gc);
+void				free_all(int status, t_gc *gc);
 void				free_ptr(t_game *game, void *ptr);
 void				cast_rays(t_game *game);
 void				dda(t_game *game, t_ray *ray);
@@ -267,6 +278,7 @@ void				get_horizontal_info(t_game *game, t_ray *ray, t_dda *info);
 void				info_init(t_dda *info);
 void				collor_floor(t_game *game);
 void				collor_ceilling(t_game *game);
-void				free_map(t_map *map);
+
+t_game				*get_game(int option, t_game *og_game);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:21:56 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/10 13:52:39 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:47:01 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	free_2d_arr(char **arr)
 
 	i = 0;
 	while (arr[i])
-		free(arr[i++]);
-	free(arr);
+		free_ptr(get_game(2, NULL), arr[i++]);
+	free_ptr(get_game(2, NULL), arr);
 }
 
 bool	check_collor_values(char **side, int *r, int *g, int *b)

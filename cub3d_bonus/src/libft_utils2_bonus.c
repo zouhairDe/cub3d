@@ -1,16 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   libft_utils2_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/01 02:15:24 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 15:41:20 by zouddach         ###   ########.fr       */
+/*   Created: 2023/10/30 21:50:06 by zouddach          #+#    #+#             */
+/*   Updated: 2025/02/10 17:43:56 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/cub3d_bonus.h"
+
+t_game	*get_game(int	option, t_game *og_game)
+{
+	static t_game	*game;
+	
+	if (option == 1)
+	{
+		game = og_game;
+		return (NULL);
+	}
+	else
+		return (game);
+}
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
@@ -29,3 +42,4 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	*dest = '\0';
 	return (len);
 }
+

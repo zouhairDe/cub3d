@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 15:21:00 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 13:57:40 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:24:42 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*equalize_map_row(const char *row, int max_length)
 	char	*new_row;
 	int		i;
 
-	new_row = calloc(max_length + 1, sizeof(char));
+	new_row = g_malloc(get_game(2, NULL), max_length + 1);
 	if (!new_row)
 		return (NULL);
 	i = 0;
@@ -79,8 +79,8 @@ int	start_map_equalization(char **new_map, char **map, int row_count,
 		if (!new_map[i])
 		{
 			while (--i >= 0)
-				free(new_map[i]);
-			free(new_map);
+				free_ptr(get_game(2, NULL), new_map[i]);
+			free_ptr(get_game(2, NULL), new_map);
 			return (-1);
 		}
 	}
@@ -105,14 +105,14 @@ char	**equalize_map(char **map, int row_count)
 		if (len > max_length)
 			max_length = len;
 	}
-	new_map = malloc((row_count + 1) * sizeof(char *));
+	new_map = g_malloc(get_game(2, NULL), (row_count + 1) * sizeof(char *));
 	if (!new_map)
 		return (NULL);
 	if (start_map_equalization(new_map, map, row_count, max_length) == -1)
 		return (NULL);
 	i = -1;
 	while (++i < row_count)
-		free(map[i]);
+		free_ptr(get_game(2, NULL), map[i]);
 	return (new_map);
 }
 
@@ -123,10 +123,10 @@ int	validate_elements(t_game *game)
 	if (!game->map.no || !game->map.so || !game->map.we || !game->map.ea
 		|| !game->map.floor || !game->map.ceiling)
 		return (printf("Error\nMissing required elements\n"));
-	if (set_mlx(game))
-		return (1);
 	i = -1;
 	while (++i < game->check_map.rows)
-		free(game->check_map.map[i]);
+		free_ptr(get_game(2, NULL), game->check_map.map[i]);
+	if (set_mlx(game))
+		return (1);
 	return (0);
 }

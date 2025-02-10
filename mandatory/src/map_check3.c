@@ -125,17 +125,17 @@ bool	check_wall_collision(t_game *game, int keycode)
 	int	new_x;
 	int	new_y;
 
-	if (keycode == W_BUTTON
-		&& check_up_collision(game, &new_x, &new_y) == false)
+	if (keycode == W_BUTTON && check_up_collision(game, &new_x,
+			&new_y) == false)
 		return (false);
-	else if (keycode == S_BUTTON
-		&& check_down_collision(game, &new_x, &new_y) == false)
+	else if (keycode == S_BUTTON && check_down_collision(game, &new_x,
+			&new_y) == false)
 		return (false);
-	else if (keycode == A_BUTTON
-		&& check_left_collision(game, &new_x, &new_y) == false)
+	else if (keycode == A_BUTTON && check_left_collision(game, &new_x,
+			&new_y) == false)
 		return (false);
-	else if (keycode == D_BUTTON
-		&& check_right_collision(game, &new_x, &new_y) == false)
+	else if (keycode == D_BUTTON && check_right_collision(game, &new_x,
+			&new_y) == false)
 		return (false);
 	if (new_x < 0 || new_y < 0 || new_x >= game->map.rows
 		|| (size_t)new_y >= ft_strlen(game->map.map[(int)new_x]))

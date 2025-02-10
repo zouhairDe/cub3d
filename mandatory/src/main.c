@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:29:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 14:20:19 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:26:13 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ int	init(char *path, t_game *game)
 {
 	init_game(game);
 	if (ft_path(path, game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (ft_parse_map(game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	if (check_map(game))
-		free_all(game->gc);
+		free_all(1, game->gc);
 	return (0);
 }
 
@@ -54,30 +54,29 @@ void	free_game(t_game *game)
 	if (game->mlx.win)
 		mlx_destroy_window(game->mlx.mlx, game->mlx.win);
 	close(game->map.fd);
-	free_all(game->gc);
+	free_all(1, game->gc);
 }
 
-void	free_map(t_map *map)
+t_game	*get_game(int option, t_game *og_game)
 {
-	int	i;
-	
-	i = 0;
-	while (i < map->rows)
-		free(map->map[i++]);
-}
+	static t_game	*game;
 
-void	f(void)
-{
-	system("leaks cub3D");
+	if (option == 1)
+	{
+		game = og_game;
+		return (NULL);
+	}
+	else
+		return (game);
 }
 
 int	main(int ac, char **av)
 {
-	atexit(f);
 	t_game	game;
 
 	if (ac != 2)
 		return (printf("Error\nInvalid number of arguments\n"));
+	get_game(1, &game);
 	if (init(av[1], &game))
 	{
 		free_game(&game);

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zouddach <zouddach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 21:05:16 by zouddach          #+#    #+#             */
-/*   Updated: 2023/11/07 18:13:36 by zouddach         ###   ########.fr       */
+/*   Created: 2025/02/10 16:01:14 by zouddach          #+#    #+#             */
+/*   Updated: 2025/02/10 17:52:01 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/cub3d.h"
 
 static int	checksep(char c, char sep)
 {
@@ -59,11 +59,12 @@ static char	*mallocwords(char *str, char **words, char c, int t)
 
 	j = 0;
 	i = 0;
-	word = (char *)malloc(sizeof(char) * (sstrlen(str, c) + 1));
+	word = (char *)g_malloc(get_game(2, NULL), sizeof(char) * (sstrlen(str, c)
+				+ 1));
 	if (!word)
 	{
 		while (i < t)
-			free(words[i++]);
+			free_ptr(get_game(2, NULL), words[i++]);
 		return (NULL);
 	}
 	while (str[i] && !checksep(str[i], c))
@@ -84,7 +85,7 @@ char	**ft_split(char *str, char c)
 	j = 0;
 	if (!str)
 		return (NULL);
-	words = (char **)malloc(sizeof(char *) * (ft_countwords(str, c) + 1));
+	words = g_malloc(get_game(2, NULL), 8 * (ft_countwords(str, c) + 1));
 	if (!words)
 		return (NULL);
 	while (*str)
@@ -95,7 +96,7 @@ char	**ft_split(char *str, char c)
 		{
 			words[j] = mallocwords(str, words, c, j);
 			if (!words[j])
-				return (free(words), NULL);
+				return (free_ptr(get_game(2, NULL), words), NULL);
 			j++;
 		}
 		while (*str && !checksep(*str, c))

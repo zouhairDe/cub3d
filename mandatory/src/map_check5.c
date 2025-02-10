@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:46:08 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 19:25:12 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:10:46 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_chars(t_map *map)
 				&& map->map[i][j] != 'W' && map->map[i][j] != '\n'
 				&& map->map[i][j] != ' ')
 				return (printf("Error\nInvalid character in line: %s, Col\
-						%d --> '%c'\n", map->map[i], j, map->map[i][j]));
+ %d --> '%c'\n", map->map[i], j, map->map[i][j]));
 			j++;
 		}
 		i++;
@@ -53,7 +53,7 @@ int	check_chars(t_map *map)
 }
 
 int	start_map_equalization(char **new_map, char **map, int row_count,
-	int max_length)
+		int max_length)
 {
 	int	i;
 
@@ -64,8 +64,8 @@ int	start_map_equalization(char **new_map, char **map, int row_count,
 		if (!new_map[i])
 		{
 			while (--i >= 0)
-				free(new_map[i]);
-			free(new_map);
+				free_ptr(get_game(2, NULL), new_map[i]);
+			free_ptr(get_game(2, NULL), new_map);
 			return (-1);
 		}
 	}
@@ -90,13 +90,13 @@ char	**equalize_map(char **map, int row_count)
 		if (len > max_length)
 			max_length = len;
 	}
-	new_map = malloc((row_count + 1) * sizeof(char *));
+	new_map = g_malloc(get_game(2, NULL), (row_count + 1) * sizeof(char *));
 	if (!new_map)
 		return (NULL);
 	if (start_map_equalization(new_map, map, row_count, max_length) == -1)
 		return (NULL);
 	i = -1;
 	while (++i < row_count)
-		free(map[i]);
+		free_ptr(get_game(2, NULL), map[i]);
 	return (new_map);
 }

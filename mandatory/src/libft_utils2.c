@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/01 01:54:58 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 15:41:34 by zouddach         ###   ########.fr       */
+/*   Created: 2023/10/30 21:50:06 by zouddach          #+#    #+#             */
+/*   Updated: 2025/02/10 15:53:06 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/cub3d.h"
 
-char	*ft_strrchr(const char *str, int c)
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
-	unsigned char	character;
-	int				len;
+	size_t	len;
 
-	len = ft_strlen(str);
-	if (len == 0)
-		return (NULL);
-	character = (unsigned char)c;
-	if (c == '\0')
-		return ((char *)&str[len]);
-	while (len > 0 && str[len] != character)
-		len--;
-	if (str[len] == character)
-		return ((char *)&str[len]);
-	return (NULL);
+	len = ft_strlen(src);
+	if (size == 0)
+		return (ft_strlen(src));
+	while ((size - 1 > 0) && *src)
+	{
+		*dest = *src;
+		dest++;
+		src++;
+		size--;
+	}
+	*dest = '\0';
+	return (len);
 }

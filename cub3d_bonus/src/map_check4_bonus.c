@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check4_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:09:52 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:30:24 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ int	ft_ignore_space(char *str)
 	while (str[i] == ' ')
 		i++;
 	return (i);
+}
+
+bool	is_all_data_valid(t_game *game)
+{
+	if (!game->map.no || !game->map.so || !game->map.we || !game->map.ea
+			|| !game->map.floor || !game->map.ceiling)
+		return (true);
+	return (false);
 }
 
 int	not_surrounded(t_map *map)
@@ -36,6 +44,11 @@ int	not_surrounded(t_map *map)
 			return (printf("Error\nMap not surrounded by walls\n"));
 		i++;
 	}
+	if (count_char(get_game(2, NULL)->map.floor, ',') > 2
+			|| count_char(get_game(2, NULL)->map.ceiling, ',') > 2)
+		return (printf("Error\nInvalid color format\n"));
+	if (is_all_data_valid(get_game(2, NULL)))
+		return (printf("Error\nmissing data\n"));
 	return (0);
 }
 
@@ -106,9 +119,6 @@ int	quit(t_game *game)
 		mlx_destroy_image(game->mlx.mlx, game->sprites_image);
 	if (game->mlx.win)
 		mlx_destroy_window(game->mlx.mlx, game->mlx.win);
-	free_all(game->gc);
-	close(game->map.fd);
-	printf("Exiting\n");
-	exit(0);
+	free_all(0, game->gc);
 	return (0);
 }

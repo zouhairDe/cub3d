@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check3_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 14:05:39 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 22:54:28 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:10:50 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	check_chars(t_map *map)
 				&& map->map[i][j] != 'W' && map->map[i][j] != '\n'
 				&& map->map[i][j] != ' ' && map->map[i][j] != 'D')
 				return (printf("Error\nInvalid character in map %s\nat %d -->\
-						%c\n", map->map[i], j, map->map[i][j]));
+ %c\n", map->map[i], j, map->map[i][j]));
 			j++;
 		}
 		i++;

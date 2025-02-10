@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:20:49 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 14:08:10 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:52:59 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,15 @@ void	free_2d_arr(char **arr)
 	int	i;
 
 	i = 0;
+	if (!arr)
+		return ;
 	while (arr[i])
-		free(arr[i++]);
-	free(arr);
+	{
+		if (arr[i])
+			free_ptr(get_game(2, NULL), arr[i]);
+		i++;
+	}
+	free_ptr(get_game(2, NULL), arr);
 }
 
 int	convert_to_hex(t_game *game)
@@ -64,8 +70,8 @@ int	convert_to_hex(t_game *game)
 		(free_2d_arr(floor), free_2d_arr(ceiling));
 		return (printf("Error\nInvalid color values\n"));
 	}
-	game->walls.floor = rgb_to_hex(ft_atoi2(floor[0]),
-			ft_atoi2(floor[1]), ft_atoi2(floor[2]));
+	game->walls.floor = rgb_to_hex(ft_atoi2(floor[0]), ft_atoi2(floor[1]),
+			ft_atoi2(floor[2]));
 	game->walls.ceilling = rgb_to_hex(ft_atoi2(ceiling[0]),
 			ft_atoi2(ceiling[1]), ft_atoi2(ceiling[2]));
 	free_2d_arr(floor);
@@ -75,14 +81,6 @@ int	convert_to_hex(t_game *game)
 
 int	validate_elements(t_game *game)
 {
-	int	i;
-
-	i = 0;
-	while (i < game->check_map.rows)
-	{
-		free(game->check_map.map[i]);
-		i++;
-	}
 	if (!game->map.no || !game->map.so || !game->map.we || !game->map.ea
 		|| !game->map.floor || !game->map.ceiling)
 		return (printf("Error\nMissing required elements\n"));
@@ -96,7 +94,7 @@ char	*equalize_map_row(char *row, int max_length)
 	char	*new_row;
 	int		i;
 
-	new_row = calloc(max_length + 1, sizeof(char));
+	new_row = g_malloc(get_game(2, NULL), max_length + 1);
 	if (!new_row)
 		return (NULL);
 	i = 0;

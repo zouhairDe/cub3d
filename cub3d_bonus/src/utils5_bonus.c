@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:13:15 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/10 13:57:48 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:19:01 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	count_char(char *str, char c)
 
 	i = 0;
 	count = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if (str[i] == c)
@@ -74,16 +76,16 @@ int	handle_mouse_checks(t_game *game, int map_x, int map_y)
 {
 	if (map_x < 0 || map_y < 0 || map_x >= game->map.max_cols
 		|| map_y >= game->map.rows)
-		return (printf("out of bounds\n"));
+		return (1);
 	if (game->map.map[map_y][map_x] == 'D')
 	{
 		game->map.map[map_y][map_x] = 'd';
-		return (printf("door opened at %d,%d\n", map_x, map_y));
+		return (1);
 	}
 	else if (game->map.map[map_y][map_x] == 'd')
 	{
 		game->map.map[map_y][map_x] = 'D';
-		return (printf("door closed at %d,%d\n", map_x, map_y));
+		return (1);
 	}
 	return (0);
 }
