@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 13:20:52 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/09 19:25:34 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:56:34 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,31 @@ int	check_map_border(t_map *map)
 		}
 	}
 	return (0);
+}
+
+size_t	ft_atoi2(char *str)
+{
+	size_t	i;
+	size_t	sign;
+	size_t	res;
+
+	sign = 1;
+	res = 0;
+	i = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] && (str[i] == '-' || str[i] == '+'))
+	{
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+	{
+		res = (10 * res) + (str[i] - '0') * sign;
+		i++;
+	}
+	if (res > 2147483647 || res < 0 || !is_end_clean(str + i))
+		return (-1);
+	return (res);
 }

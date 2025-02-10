@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:21:56 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/09 15:32:54 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:52:39 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	free_2d_arr(char **arr)
 
 bool	check_collor_values(char **side, int *r, int *g, int *b)
 {
-	*r = ft_atoi(side[0]);
-	*g = ft_atoi(side[1]);
-	*b = ft_atoi(side[2]);
+	*r = ft_atoi2(side[0]);
+	*g = ft_atoi2(side[1]);
+	*b = ft_atoi2(side[2]);
 	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
 		return (false);
 	return (true);

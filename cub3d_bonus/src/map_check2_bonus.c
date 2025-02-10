@@ -3,36 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 05:55:48 by mait-lah          #+#    #+#             */
-/*   Updated: 2025/02/10 03:40:00 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:57:19 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
-
-int	init_map(t_game *game, char **line)
-{
-	game->map.map = g_malloc(game, sizeof(char *));
-	if (!game->map.map)
-		return (1);
-	game->map.map[0] = ft_strdup(*line);
-	game->map.rows++;
-	game->map.map[0] = ft_replace(game->map.map[0], '\t', "    ");
-	if (!game->map.map[0])
-		return (1);
-	ft_cut_char(game->map.map[0], '\n');
-	return (0);
-}
 
 int	start_map_allocation(t_game *game, char **line)
 {
 	char	**tmp;
 	int		i;
 
-	//if (game->map.map == NULL)
-	//	init_map(game, line); fixed double lines at start 
 	i = -1;
 	tmp = game->map.map;
 	game->map.map = g_malloc(game, sizeof(char *) * (game->map.rows + 1));
@@ -44,7 +28,6 @@ int	start_map_allocation(t_game *game, char **line)
 	game->map.rows++;
 	if (game->map.max_cols < (int)ft_strlen(*line))
 		game->map.max_cols = ft_strlen(*line) - 1;
-	game->map.map[i] = ft_replace(game->map.map[i], '\t', "    ");
 	if (!game->map.map[i])
 		return (1);
 	ft_cut_char(game->map.map[i], '\n');

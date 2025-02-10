@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 04:48:13 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 08:06:30 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:20:19 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	set_player(t_game *game)
 int	check_map(t_game *game)
 {
 	if (copy_map(game))
-		return (1);
+		free_all(game->gc);
 	game->map.map = equalize_map(game->map.map, game->map.rows);
 	if (!game->map.map)
 		free_all(game->gc);

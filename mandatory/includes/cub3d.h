@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:20:30 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,14 +229,17 @@ int					check_map_border(t_map *map);
 int					quit(t_game *game);
 int					is_wall(t_game *game, double pX, double pY);
 
+unsigned int		rgb_to_hex(int r, int g, int b);
+
+size_t				ft_atoi2(char *str);
+
 bool				check_wall_collision(t_game *game, int keycode);
 bool				check_up_collision(t_game *game, int *newX, int *newY);
 bool				check_right_collision(t_game *game, int *newX, int *newY);
 bool				check_left_collision(t_game *game, int *newX, int *newY);
 bool				check_down_collision(t_game *game, int *newX, int *newY);
 bool				check_collor_values(char **side, int *r, int *g, int *b);
-
-unsigned int		rgb_to_hex(int r, int g, int b);
+bool				is_end_clean(char *str);
 
 double				normalize_angle(double angle);
 double				distance(double x1, double y1, double x2, double y2);
@@ -252,14 +255,11 @@ void				put_player(t_game *game, int i);
 void				free_2d_arr(char **arr);
 void				floodfill(t_map *map, int x, int y);
 void				ft_cut_char(char *str, char c);
-void				printGame(t_game game);
 void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void				init_ray(t_ray *ray, double angle);
 void				*g_malloc(t_game *game, size_t size);
 void				free_all(t_gc *gc);
 void				free_ptr(t_game *game, void *ptr);
-void				drawAngleInMap(t_game *game);
-void				drawFovInMap(t_game *game);
 void				cast_rays(t_game *game);
 void				dda(t_game *game, t_ray *ray);
 void				get_vertical_info(t_game *game, t_ray *ray, t_dda *info);
@@ -267,5 +267,6 @@ void				get_horizontal_info(t_game *game, t_ray *ray, t_dda *info);
 void				info_init(t_dda *info);
 void				collor_floor(t_game *game);
 void				collor_ceilling(t_game *game);
+void				free_map(t_map *map);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:20:49 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/08 13:00:38 by zouddach         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:08:10 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ int	convert_to_hex(t_game *game)
 		(free_2d_arr(floor), free_2d_arr(ceiling));
 		return (printf("Error\nInvalid color values\n"));
 	}
-	game->walls.floor = rgb_to_hex(ft_atoi(floor[0]), ft_atoi(floor[1]),
-			ft_atoi(floor[2]));
-	game->walls.ceilling = rgb_to_hex(ft_atoi(ceiling[0]), ft_atoi(ceiling[1]),
-			ft_atoi(ceiling[2]));
+	game->walls.floor = rgb_to_hex(ft_atoi2(floor[0]),
+			ft_atoi2(floor[1]), ft_atoi2(floor[2]));
+	game->walls.ceilling = rgb_to_hex(ft_atoi2(ceiling[0]),
+			ft_atoi2(ceiling[1]), ft_atoi2(ceiling[2]));
 	free_2d_arr(floor);
 	free_2d_arr(ceiling);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 18:30:03 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:52:09 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,8 @@ bool				check_down_collision(t_game *game, int *newX, int *newY);
 bool				check_collor_values(char **side, int *r, int *g, int *b);
 
 unsigned int		rgb_to_hex(int r, int g, int b);
+
+size_t				ft_atoi2(char *str);
 
 double				normalize_angle(double angle);
 double				distance(double x1, double y1, double x2, double y2);

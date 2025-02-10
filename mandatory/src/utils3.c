@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-lah <mait-lah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:02:47 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 02:50:29 by mait-lah         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:20:19 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ int	quit(t_game *game)
 
 bool	check_collor_values(char **side, int *r, int *g, int *b)
 {
-	*r = ft_atoi(side[0]);
-	*g = ft_atoi(side[1]);
-	*b = ft_atoi(side[2]);
+	*r = ft_atoi2(side[0]);
+	*g = ft_atoi2(side[1]);
+	*b = ft_atoi2(side[2]);
 	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
 		return (false);
 	return (true);

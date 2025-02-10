@@ -17,11 +17,15 @@ BONUS_HEADER_DIR = $(BONUS_DIR)includes/
 BONUS_HEADER = $(BONUS_HEADER_DIR)cub3d_bonus.h
 BONUS_SRC_DIR = $(BONUS_DIR)src/
 BONUS_OBJ_DIR = $(BONUS_DIR)obj/
-BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c math_bonus.c funcs_bonus.c funcs1_bonus.c dda_funcs_bonus.c garbage_collector_bonus.c map_check2_bonus.c utils2_bonus.c utils4_bonus.c utils5_bonus.c map_check3_bonus.c map_check4_bonus.c key_handler_bonus.c map_check5_bonus.c map_check6_bonus.c simulation2_bonus.c
+BONUS_FILES = main_bonus.c utils1_bonus.c map_check1_bonus.c simulation_bonus.c math_bonus.c funcs_bonus.c\
+	funcs1_bonus.c dda_funcs_bonus.c garbage_collector_bonus.c map_check2_bonus.c utils2_bonus.c\
+	utils4_bonus.c utils5_bonus.c map_check3_bonus.c map_check4_bonus.c key_handler_bonus.c\
+	map_check5_bonus.c map_check6_bonus.c simulation2_bonus.c utils6_bonus.c
 
 SRC_DIR = mandatory/src/
 OBJ_DIR = mandatory/obj/
-FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c dda_funcs.c garbage_collector.c utils2.c map_check2.c utils3.c map_check3.c key_handler.c map_check4.c map_check5.c utils4.c utils5.c
+FILES = main.c utils1.c map_check1.c simulation.c math.c funcs.c dda_funcs.c garbage_collector.c\
+	utils2.c map_check2.c utils3.c map_check3.c key_handler.c map_check4.c map_check5.c utils4.c utils5.c
 
 BOBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_FILES:.c=.o))
 SRC = $(addprefix $(SRC_DIR), $(FILES))

@@ -1,31 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   utils6_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zouddach <zouddach@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 00:57:45 by zouddach          #+#    #+#             */
-/*   Updated: 2025/02/10 13:24:56 by zouddach         ###   ########.fr       */
+/*   Created: 2025/02/10 13:51:25 by zouddach          #+#    #+#             */
+/*   Updated: 2025/02/10 13:57:54 by zouddach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/cub3d_bonus.h"
 
-static int	handleoverflow(int sign)
+bool	is_end_clean(char *str)
 {
-	if (sign == 1)
-		return (-1);
-	else if (sign == -1)
-		return (0);
-	return (-1);
+	if (!str)
+		return (true);
+	while (*str)
+	{
+		if (*str == ' ' || (*str >= 9 && *str <= 13))
+			str++;
+		else
+			return (false);
+	}
+	return (true);
 }
 
-int	ft_atoi(const char *str)
+size_t	ft_atoi2(char *str)
 {
-	int	i;
-	int	sign;
-	int	res;
+	size_t	i;
+	size_t	sign;
+	size_t	res;
 
 	sign = 1;
 	res = 0;
@@ -40,10 +45,10 @@ int	ft_atoi(const char *str)
 	}
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
-		if (res > 214748364 || (res == 214748364 && str[i] - '0' > 7))
-			return (handleoverflow(sign));
 		res = (10 * res) + (str[i] - '0') * sign;
 		i++;
 	}
+	if (res > 2147483647 || res < 0 || !is_end_clean(str + i))
+		return (-1);
 	return (res);
 }
