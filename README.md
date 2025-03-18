@@ -32,7 +32,7 @@ gcc or clang (C compiler)
 
 Clone & Compile
 
-git clone https://github.com/yourusername/cub3d.git
+git clone https://github.com/zouhairDe/cub3d.git
 cd cub3d
 make
 ./cub3D maps/example.cub
